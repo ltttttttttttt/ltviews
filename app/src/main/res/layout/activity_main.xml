@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.lt.ltviews.lt_doubletextview.LtDoubleTextView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftText="hhh"
+        app:rightText="123" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.lt.ltviews.lt_recyclerview.LTRecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:dividerColor="@color/color"
+            app:dividerHeight="30px"
+            app:noItemText="12">
+            <TextView
+                android:layout_width="100dp"
+                android:onClick="onClicka"
+                android:layout_height="100dp"
+                android:background="@drawable/lt_arrow" />
+        </com.lt.ltviews.lt_recyclerview.LTRecyclerView>
+
+
+    </FrameLayout>
+
+    <com.lt.ltviews.lt_scrollimageview.LtScrollImageView
+        android:id="@+id/siv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+    </com.lt.ltviews.lt_scrollimageview.LtScrollImageView>
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Hello World!" />
+
+</LinearLayout>
