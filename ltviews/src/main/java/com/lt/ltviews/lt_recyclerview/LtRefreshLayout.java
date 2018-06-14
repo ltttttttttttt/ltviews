@@ -18,15 +18,15 @@ import android.widget.FrameLayout;
  */
 
 public abstract class LtRefreshLayout extends FrameLayout implements BaseRefreshLayout {
-    boolean isRefresh = false;//是否刷新的状态,用户使用
-    boolean rvIsMove;//RecyclerView是否跟着下拉移动
-    SwipeRefreshLayout.OnRefreshListener listener;//刷新的回调
-    float y = 0, fastY = -1.0f;//当前的y和第一次按下的y(近似)
-    RecyclerView rv;//内部的rv
-    View refreshView;//刷新的view
-    float refreshThreshold;//下拉刷新位置的阈值
-    int status;//当前状态值
-    int animationTime = 300, waitTime = 500;//动画时间和等待时间
+    protected boolean isRefresh = false;//是否刷新的状态,用户使用
+    protected boolean rvIsMove;//RecyclerView是否跟着下拉移动
+    protected SwipeRefreshLayout.OnRefreshListener listener;//刷新的回调
+    protected float y = 0, fastY = -1.0f;//当前的y和第一次按下的y(近似)
+    protected RecyclerView rv;//内部的rv
+    protected View refreshView;//刷新的view
+    protected float refreshThreshold;//下拉刷新位置的阈值
+    protected int status;//当前状态值
+    protected int animationTime = 300, waitTime = 500;//动画时间和等待时间
 
     public final static int REFRESH_DOWN = 0;//下拉中
     public final static int REFRESH_RELEASE = 1;//松开刷新
@@ -38,19 +38,19 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      *
      * @param status 状态值
      */
-    public abstract void onStatus(int status);
+    protected abstract void onStatus(int status);
 
     /**
      * 请在此方法内做额外操作
      *
      * @param y 当前下拉的y轴
      */
-    public abstract void onProgress(float y);
+    protected abstract void onProgress(float y);
 
     /**
      * 返回刷新的View
      */
-    public abstract View getRefreshView();
+    protected abstract View getRefreshView();
 
     public LtRefreshLayout() {
         this(LtRecyclerViewManager.create().getContext());
@@ -122,7 +122,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     /**
      * 下拉的进度
      */
-    void progress(float y, int time) {
+    protected void progress(float y, int time) {
         if (time == 0) {
             if (rvIsMove)//todo 如果rv跟着动,就调用这个,rv不动的时候在进行测试
                 refreshView.setTranslationY(rv.getTranslationY());
