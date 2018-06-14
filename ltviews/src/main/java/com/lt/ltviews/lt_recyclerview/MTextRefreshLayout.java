@@ -49,7 +49,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
     }
 
     @Override
-    void onStatus(int status) {
+    public void onStatus(int status) {
         switch (status) {
             case REFRESH_DOWN:
                 //下拉中
@@ -97,12 +97,12 @@ public class MTextRefreshLayout extends LtRefreshLayout {
     }
 
     @Override
-    void onProgress(float y) {
+    public void onProgress(float y) {
 
     }
 
     @Override
-    View getRefreshView() {
+    public View getRefreshView() {
         View view = View.inflate(getContext(), R.layout.lt_refresh_view, null);
         tv = view.findViewById(R.id.tv_lt_refresh);
         tvDate = view.findViewById(R.id.tv_lt_date);
