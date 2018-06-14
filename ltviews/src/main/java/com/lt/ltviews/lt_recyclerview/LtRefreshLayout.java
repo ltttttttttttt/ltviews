@@ -38,19 +38,19 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      *
      * @param status 状态值
      */
-    abstract void onStatus(int status);
+    public abstract void onStatus(int status);
 
     /**
      * 请在此方法内做额外操作
      *
      * @param y 当前下拉的y轴
      */
-    abstract void onProgress(float y);
+    public abstract void onProgress(float y);
 
     /**
      * 返回刷新的View
      */
-    abstract View getRefreshView();
+    public abstract View getRefreshView();
 
     public LtRefreshLayout() {
         this(LtRecyclerViewManager.create().getContext());
