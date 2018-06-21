@@ -8,6 +8,6 @@
 <h5>5.添加分割线(也可以用图片)</h5>
 <h5>6.自定义上拉加载的View</h5>
 <h5>7.自定义下拉刷新的View(包括RecyclerView移动和不移动)</h5>
-(一)基本使用:<a hear="https://blog.csdn.net/qq_33505109/article/details/80653174">https://blog.csdn.net/qq_33505109/article/details/80653174</a></br>
-(二)更多api:<a hear="https://blog.csdn.net/qq_33505109/article/details/80677331">https://blog.csdn.net/qq_33505109/article/details/80677331</a></br>
-(三)自定义刷新View(包括上拉和下拉):<a hear="https://blog.csdn.net/qq_33505109/article/details/80677778">https://blog.csdn.net/qq_33505109/article/details/80677778</a></br>
+(一)基本使用:<a href="https://blog.csdn.net/qq_33505109/article/details/80653174">https://blog.csdn.net/qq_33505109/article/details/80653174</a></br>
+(二)更多api:<a href="https://blog.csdn.net/qq_33505109/article/details/80677331">https://blog.csdn.net/qq_33505109/article/details/80677331</a></br>
+(三)自定义刷新View(包括上拉和下拉):<a href="https://blog.csdn.net/qq_33505109/article/details/80677778">https://blog.csdn.net/qq_33505109/article/details/80677778</a></br>
