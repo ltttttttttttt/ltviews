@@ -1,1 +1,1 @@
-include ':app', ':ltviews'
+include ':app', ':ltviews' ,':ltviews2'
