@@ -124,7 +124,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      */
     protected void progress(float y, int time) {
         if (time == 0) {
-            if (rvIsMove)//todo 如果rv跟着动,就调用这个,rv不动的时候在进行测试
+            if (rvIsMove)//如果rv跟着动,就调用这个
                 refreshView.setTranslationY(rv.getTranslationY());
             else
                 refreshView.setTranslationY(y / 2 + refreshView.getTranslationY());

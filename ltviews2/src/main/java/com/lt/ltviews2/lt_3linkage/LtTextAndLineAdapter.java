@@ -1,4 +1,4 @@
-package com.lt.ltviews.lt_3linkage;
+package com.lt.ltviews2.lt_3linkage;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lt.ltviews.R;
-import com.lt.ltviews.lt_listener.OnListener;
-import com.lt.ltviews.lt_listener.OnLt3LinkageListener;
+import com.lt.ltviews2.R;
+import com.lt.ltviews2.lt_listener.OnListener;
+import com.lt.ltviews2.lt_listener.OnLt3LinkageListener;
 
 import java.util.List;
 

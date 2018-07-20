@@ -1,4 +1,4 @@
-package com.lt.ltviews.lt_doubletextview;
+package com.lt.ltviews2.lt_doubletextview;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -8,7 +8,8 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.lt.ltviews.R;
+import com.lt.ltviews2.R;
+
 
 /**
  * 创    建:  lt  2018/1/5--11:53

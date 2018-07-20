@@ -1,29 +1,29 @@
 package com.lt.view;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lt.ltviews.lt_3linkage.Lt3LinkageManager;
-import com.lt.ltviews.lt_doubletextview.LtDoubleTextView;
-import com.lt.ltviews.lt_listener.OnLt3LinkageListener;
+import com.lt.ltviews.lt_listener.OnNoItemListener;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
+import com.lt.ltviews.lt_listener.OnRvItemLongClickListener;
 import com.lt.ltviews.lt_listener.OnUpAndDownListener;
 import com.lt.ltviews.lt_recyclerview.LTRecyclerView;
 import com.lt.ltviews.lt_recyclerview.LtAdapter;
 import com.lt.ltviews.lt_scrollimageview.LtPosition;
 import com.lt.ltviews.lt_scrollimageview.LtScrollImageView;
+import com.lt.ltviews2.lt_3linkage.Lt3LinkageManager;
+import com.lt.ltviews2.lt_doubletextview.LtDoubleTextView;
+import com.lt.ltviews2.lt_listener.OnLt3LinkageListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -48,9 +48,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         ll1 = (LinearLayout) findViewById(R.id.ll1);
-        iv = (LtDoubleTextView) findViewById(R.id.iv);
+//        iv = (LtDoubleTextView) findViewById(R.id.iv);
         siv = (LtScrollImageView) findViewById(R.id.siv);
-        rv = (LTRecyclerView) findViewById(R.id.rv);
+//        rv = (LTRecyclerView) findViewById(R.id.rv);
         tv = (TextView) findViewById(R.id.tv);
         tv.setOnClickListener(this);
 
@@ -75,59 +75,143 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initRv() {
-//        rv.setSpanCount(10);
-        final LtAdapter adapter = new LtAdapter(null) {
+        rv = (LTRecyclerView) findViewById(R.id.rv);
+        //创建一个适配器
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < 99999; i++) {
+            list.add("" + i);
+        }
+        final LtAdapter adapter = new TextAdapter(this, list);
+//        final LtAdapter adapter = new LtAdapter(null) {
+//
+//            @Override
+//            public RecyclerView.ViewHolder onLtCreateViewHolder(ViewGroup parent, int viewType) {
+//                return new MViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_test1, parent, false));
+//            }
+//
+//            @Override
+//            public int getLtItemCount() {
+//                //适配器展示多少条数据
+//                return 99999;
+//            }
+//
+//            @Override
+//            public void onLtBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+//                MViewHolder h = (MViewHolder) holder;
+//                h.l.setText("" + position);
+//                h.r.setText("右边的" + position);
+//            }
+//        };
+//        //禁用上拉加载:传一个什么都没有的View
+//        new LtAdapter(new View(this));
+//        //禁用下拉刷新:获取刷新View,并设置为不可用
+//        rv.getRefreshLayout().setEnabled(false);
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public RecyclerView.ViewHolder onLtCreateViewHolder(ViewGroup parent, int viewType) {
-                return new RecyclerView.ViewHolder(new TextView(getApplicationContext())) {
-                };
-            }
-
-            @Override
-            public int getLtItemCount() {
-                return count;
-            }
-
-            @Override
-            public void onLtBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                ((TextView) holder.itemView).setText("" + position);
-                holder.itemView.setBackgroundColor(Color.parseColor("#" + new Random().nextInt(9) + new Random().nextInt(9) + new Random().nextInt(9) + new Random().nextInt(9) + new Random().nextInt(9) + new Random().nextInt(9)));
-            }
-        };
-        rv.setAdapter(adapter);
-        rv.setOnUpAndDownListener(new OnUpAndDownListener() {
-            @Override
-            public void up() {
-                LogUtil.i("lllttt", "MainActivity.up : ");
-            }
-
-            @Override
-            public void down() {
-                LogUtil.i("lllttt", "MainActivity.down : ");
-                adapter.notifyDataSetChanged();
-                new Handler().postDelayed(new Runnable() {
+            public void run() {
+                adapter.setOnRvItemClickListener(new OnRvItemClickListener() {
                     @Override
-                    public void run() {
-                        rv.setTopRefresh(false);
+                    public void onItemClick(View itemView, int position) {
+                        //条目的点击事件
+                        Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
                     }
-                }, 2000);
+                });
+            }
+        }, 2000);
+        adapter.setOnRvItemLongClickListener(new OnRvItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View itemView, int position) {
+                //条目的长按事件
             }
         });
-//        rv.getRefreshLayout().setEnabled(false);
+        rv.setAdapter(adapter)
+                .setOnUpAndDownListener(new OnUpAndDownListener() {
+                    @Override
+                    public void up() {
+                        //上拉加载时的回调
+                    }
+
+                    @Override
+                    public void down() {
+                        //下拉刷新时的回调
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                rv.setTopRefresh(false);
+                            }
+                        }, 2000);
+                    }
+                });
+//        rv.setSpanCount(3);
+        rv.setTopRefresh(false);
         rv.setBottomRefresh(false);
-//        adapter.setOnRvItemClickListener(new OnRvItemClickListener() {
-//            @Override
-//            public void onItemClick(View itemView, int position) {
-//                LogUtil.i("lllttt", "MainActivity.onItemClick : " + position);
-//            }
-//        });
-//        adapter.setOnRvItemLongClickListener(new OnRvItemLongClickListener() {
-//            @Override
-//            public void onItemLongClick(View itemView, int position) {
-//                LogUtil.i("lllttt", "MainActivity.onItemLongClick : " + position);
-//            }
-//        });
-//        rv.getRecyclerView().addItemDecoration(new LtDivider(this, LinearLayoutManager.HORIZONTAL));
+//        //添加头布局
+//        adapter.addHeadView(new View(this));
+//        //添加头布局到指定位置,注意可能会数组越界异常
+//        adapter.addHeadView(new View(this), 0);
+//        //移除头布局,根据引用地址
+//        adapter.removeHeadView(view);
+//        //移除头布局,根据索引,注意可能会数组越界异常
+//        adapter.removeHeadView(0);
+//        //获取头布局的数量
+//        int headSize = adapter.getHeadListSize();
+//
+//        //添加尾布局(添加到最下面)
+//        adapter.addTailView(new View(this));
+//        //添加尾布局到指定位置,注意可能会数组越界异常
+//        adapter.addTailView(new View(this), 0);
+//        //移除尾布局,根据引用地址
+//        adapter.removeTailView(view);
+//        //移除尾布局,根据索引,注意可能会数组越界异常
+//        adapter.removeTailView(0);
+//        //获取尾布局的数量
+//        int size = adapter.getTailListSize();
+
+        //设置没数据时展示的TextView
+//        rv.setNoItemText("暂无数据");
+        //设置没数据时展示的View
+//        rv.setNoItemView(new View(this));
+
+        //没有条目时的回调
+        adapter.addOnNoItemListener(new OnNoItemListener() {
+            @Override
+            public void noItem() {
+                //从有数据变为没有数据时触发
+            }
+
+            @Override
+            public void haveItem() {
+                //从没有数据变为有数据是触发
+            }
+        });
+
+//        //添加2px,d5d5d5的分割线
+//        rv.addItemDecoration_line();
+//        //添加d5d5d5颜色的分割线,并指定高度
+//        rv.addItemDecoration_line(1);
+//        //添加分割线,指定高度和颜色
+//        rv.addItemDecoration_line(1, getResources().getColor(R.color.colorAccent));
+//        //添加图片分割线
+//        rv.addItemDecoration_drawable(R.mipmap.ic_launcher);
+
+//        //设置分割线高度,可以和颜色一起设置
+//        app:dividerHeight="1dp"
+//        //设置分割线颜色
+//        app:dividerColor="@color/colorAccent"
+//        //设置图片分割线,和颜色,高度冲突
+//        app:dividerDrawable="@mipmap/ic_launcher"
+    }
+
+    class MViewHolder extends RecyclerView.ViewHolder {
+        TextView l;
+        TextView r;
+
+        public MViewHolder(View itemView) {
+            super(itemView);
+            l = itemView.findViewById(R.id.tvLeft);
+            r = itemView.findViewById(R.id.tvRight);
+        }
     }
 
     @Override

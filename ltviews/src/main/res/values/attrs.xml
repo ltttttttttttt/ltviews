@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <declare-styleable name="LtDoubleTextView">
-        <attr name="leftText" format="string" />
-        <attr name="rightText" format="string" />
-        <attr name="leftTextColor" format="reference|color" />
-        <attr name="rightTextColor" format="reference|color" />
-        <attr name="leftTextSize" format="float|dimension" />
-        <attr name="rightTextSize" format="float|dimension" />
-    </declare-styleable>
     <declare-styleable name="LTRecyclerView">
         <attr name="noItemView" format="reference" />
         <attr name="noItemText" format="string" />

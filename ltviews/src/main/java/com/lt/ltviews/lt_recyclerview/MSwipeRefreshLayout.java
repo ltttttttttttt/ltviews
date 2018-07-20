@@ -15,7 +15,6 @@ import com.lt.ltviews.R;
 public class MSwipeRefreshLayout extends SwipeRefreshLayout implements BaseRefreshLayout {
     public MSwipeRefreshLayout() {
         super(LtRecyclerViewManager.create().getContext());
-        setColorSchemeResources(R.color.colorAccent);
     }
 
     public MSwipeRefreshLayout(Context context) {
@@ -24,5 +23,6 @@ public class MSwipeRefreshLayout extends SwipeRefreshLayout implements BaseRefre
 
     public MSwipeRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setColorSchemeResources(R.color.colorAccent);
     }
 }

@@ -1,4 +1,4 @@
-package com.lt.ltviews.lt_3linkage;
+package com.lt.ltviews2.lt_3linkage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,9 +11,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lt.ltviews.R;
-import com.lt.ltviews.lt_listener.OnListener;
-import com.lt.ltviews.lt_listener.OnLt3LinkageListener;
+import com.lt.ltviews2.R;
+import com.lt.ltviews2.lt_listener.OnListener;
+import com.lt.ltviews2.lt_listener.OnLt3LinkageListener;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -93,6 +93,8 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 iv.setVisibility(View.INVISIBLE);
                 iv.setImageResource(R.drawable.lt_arrow);
                 break;
+                default:
+                    break;
         }
     }
 

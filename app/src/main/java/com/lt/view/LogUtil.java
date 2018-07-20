@@ -1,9 +1,13 @@
-﻿package com.lt.view;
+package com.lt.view;
 
 import android.util.Log;
 
 /**
+ * 所在包名:  com.hkzr.liangquan.utils
+ * 创建日期:  2017/8/14--15:03
  * 作   用:   打印log之类的帮助类
+ * 使用方法:
+ * 注意事项:
  */
 
 public class LogUtil {

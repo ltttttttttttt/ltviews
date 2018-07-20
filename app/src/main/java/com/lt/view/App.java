@@ -16,8 +16,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         LtRecyclerViewManager.create().init(this)
+                .setUpLayoutId(R.layout.lt_up_loading)
 //                .setRvIsMove(false)
-//                .setNoDataIsLoad(true)
+//                .setNoDataIsLoad( true)
                 .setRefreshLayoutClazz(MTextRefreshLayout.class);
     }
 }

@@ -158,24 +158,26 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         //条目长按事件
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (onRvItemLongClickListener == null)
-                    return false;
-                onRvItemLongClickListener.onItemLongClick(view, position);
-                return true;
-            }
-        });
+        if (onRvItemLongClickListener != null)
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (onRvItemLongClickListener == null)
+                        return false;
+                    onRvItemLongClickListener.onItemLongClick(view, position);
+                    return true;
+                }
+            });
         //条目点击事件
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onRvItemClickListener == null)
-                    return;
-                onRvItemClickListener.onItemClick(view, position);
-            }
-        });
+        if (onRvItemClickListener != null)
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onRvItemClickListener == null)
+                        return;
+                    onRvItemClickListener.onItemClick(view, position);
+                }
+            });
         //给不是头部,不是尾部,不是上拉的布局提供方法,并减去头部的条目数
         if (headList != null) {
             if (position <= headList.size() - 1) {
@@ -373,6 +375,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public LtAdapter setOnRvItemClickListener(OnRvItemClickListener onRvItemClickListener) {
         this.onRvItemClickListener = onRvItemClickListener;
+        notifyDataSetChanged();
         return this;
     }
 
@@ -381,6 +384,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public LtAdapter setOnRvItemLongClickListener(OnRvItemLongClickListener onRvItemLongClickListener) {
         this.onRvItemLongClickListener = onRvItemLongClickListener;
+        notifyDataSetChanged();
         return this;
     }
 

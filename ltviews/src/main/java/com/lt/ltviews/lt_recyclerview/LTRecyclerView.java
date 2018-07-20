@@ -34,7 +34,7 @@ public class LTRecyclerView extends FrameLayout {
     private BaseRefreshLayout refreshLayout;
     private RecyclerView rv;
     private OnUpAndDownListener onUpAndDownListener;
-    private LtAdapter adapter;
+    private RecyclerView.Adapter adapter;
     private GridLayoutManager gridLayoutManager;
     private View noItemView;
 
@@ -83,18 +83,20 @@ public class LTRecyclerView extends FrameLayout {
         }
         //没有条目时的布局或图片
         int noItemViewId = a.getResourceId(R.styleable.LTRecyclerView_noItemView, 0);
-        if (noItemViewId != 0) {
-            View noItemView = null;
-            try {
-                noItemView = View.inflate(context, noItemViewId, null);
-            } catch (Exception e) {
-                try {
-                    noItemView = new ImageView(context);
-                    ((ImageView) noItemView).setImageResource(noItemViewId);
-                } catch (Exception e1) {
-                }
+        if (noItemViewId > 0) {
+            switch (context.getResources().getResourceTypeName(noItemViewId)) {
+                case "layout":
+                    setNoItemView(View.inflate(context, noItemViewId, null));
+                    break;
+                case "mipmap":
+                case "drawable":
+                    ImageView noItemView = new ImageView(context);
+                    noItemView.setImageResource(noItemViewId);
+                    setNoItemView(noItemView);
+                    break;
+                default:
+                    break;
             }
-            setNoItemView(noItemView);
         }
         //分割线高度
         float dHeight = a.getDimension(R.styleable.LTRecyclerView_dividerHeight, 0);
@@ -119,17 +121,17 @@ public class LTRecyclerView extends FrameLayout {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (onUpAndDownListener == null)//没有回调就没必要走
+                        return;
                     if (refreshLayout != null && refreshLayout.isRefreshing())
                         return;
                     if (adapter == null)//如果没有适配器
                         return;
-                    if (!adapter.getIsHaveData())//如果已标记为没数据
+                    if (adapter instanceof LtAdapter && !((LtAdapter) adapter).getIsHaveData())//如果已标记为没数据
                         return;
                     if (gridLayoutManager.findLastVisibleItemPosition() + 1 == adapter.getItemCount()) {
                         //如果是最后一个条目,表示是上拉加载
-                        if (onUpAndDownListener != null) {
-                            onUpAndDownListener.up();
-                        }
+                        onUpAndDownListener.up();
                     }
                 }
             }
@@ -184,32 +186,32 @@ public class LTRecyclerView extends FrameLayout {
      *
      * @param adapter 继承自RecyclerView.Adapter的适配器
      */
-    public LTRecyclerView setAdapter(LtAdapter adapter) {
-        if (adapter == null)
-            throw new RuntimeException("适配器为空(Adapter is null)");
+    public LTRecyclerView setAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
-        this.adapter.addOnNoItemListener(new OnNoItemListener() {
-            @Override
-            public void noItem() {
-                //没有条目时隐藏rl,然后展示没条目时的布局
-                if (noItemView != null) {
-                    noItemView.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.GONE);
+        if (this.adapter != null && this.adapter instanceof LtAdapter)
+            ((LtAdapter) this.adapter).addOnNoItemListener(new OnNoItemListener() {
+                @Override
+                public void noItem() {
+                    //没有条目时隐藏rl,然后展示没条目时的布局
+                    if (noItemView != null) {
+                        noItemView.setVisibility(View.VISIBLE);
+                        rv.setVisibility(View.GONE);
+                    }
                 }
-            }
 
-            @Override
-            public void haveItem() {
-                //有条目了就显示rv,并且隐藏noItemView
-                rv.setVisibility(View.VISIBLE);
-                if (noItemView != null) {
-                    noItemView.setVisibility(View.GONE);
+                @Override
+                public void haveItem() {
+                    //有条目了就显示rv,并且隐藏noItemView
+                    rv.setVisibility(View.VISIBLE);
+                    if (noItemView != null) {
+                        noItemView.setVisibility(View.GONE);
+                    }
                 }
-            }
-        });
+            });
         rv.setAdapter(this.adapter);
-        if (this.adapter.getLtItemCount() == 0 && this.adapter.getHeadListSize() == 0 && this.adapter.getTailListSize() == 0)
-            rv.setVisibility(View.GONE);
+        if (this.adapter != null && this.adapter instanceof LtAdapter)
+            if (((LtAdapter) this.adapter).getLtItemCount() == 0 && ((LtAdapter) this.adapter).getHeadListSize() == 0 && ((LtAdapter) this.adapter).getTailListSize() == 0)
+                rv.setVisibility(View.GONE);
         return this;
     }
 
@@ -274,8 +276,11 @@ public class LTRecyclerView extends FrameLayout {
      * 设置是否上拉加载
      */
     public LTRecyclerView setBottomRefresh(boolean b) {
-        if (adapter != null)
-            adapter.setRefresh(b);
+        if (this.adapter != null)
+            if (this.adapter instanceof LtAdapter)
+                ((LtAdapter) this.adapter).setRefresh(b);
+            else
+                adapter.notifyDataSetChanged();
         return this;
     }
 
@@ -292,8 +297,11 @@ public class LTRecyclerView extends FrameLayout {
      */
     public LTRecyclerView setRefresh(boolean top, boolean bottom) {
         refreshLayout.setRefreshing(top);
-        if (adapter != null)
-            adapter.setRefresh(bottom);
+        if (this.adapter != null)
+            if (this.adapter instanceof LtAdapter)
+                ((LtAdapter) this.adapter).setRefresh(bottom);
+            else
+                adapter.notifyDataSetChanged();
         return this;
     }
 

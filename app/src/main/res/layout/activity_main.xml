@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.lt.ltviews.lt_doubletextview.LtDoubleTextView
-        android:id="@+id/iv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:leftText="hhh"
-        app:rightText="123" />
+    <!--<com.lt.ltviews.lt_doubletextview.LtDoubleTextView-->
+        <!--android:id="@+id/iv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"-->
+        <!--app:leftText="hhh"-->
+        <!--app:rightText="123" />-->
 
 
     <FrameLayout
@@ -21,15 +22,14 @@
         <com.lt.ltviews.lt_recyclerview.LTRecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:dividerColor="@color/color"
-            app:dividerHeight="30px"
-            app:noItemText="12">
+            android:layout_height="match_parent">
+
             <TextView
                 android:layout_width="100dp"
-                android:onClick="onClicka"
                 android:layout_height="100dp"
-                android:background="@drawable/lt_arrow" />
+                android:background="@drawable/lt_arrow"
+                android:onClick="onClicka"
+                android:visibility="gone" />
         </com.lt.ltviews.lt_recyclerview.LTRecyclerView>
 
 
