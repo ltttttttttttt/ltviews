@@ -209,8 +209,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         public MViewHolder(View itemView) {
             super(itemView);
-            l = itemView.findViewById(R.id.tvLeft);
-            r = itemView.findViewById(R.id.tvRight);
+            l = (TextView) itemView.findViewById(R.id.tvLeft);
+            r = (TextView) itemView.findViewById(R.id.tvRight);
         }
     }
 

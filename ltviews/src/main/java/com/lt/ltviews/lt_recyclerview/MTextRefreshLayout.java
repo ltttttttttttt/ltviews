@@ -93,8 +93,8 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 iv.setVisibility(View.INVISIBLE);
                 iv.setImageResource(R.drawable.lt_arrow);
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
@@ -106,9 +106,9 @@ public class MTextRefreshLayout extends LtRefreshLayout {
     @Override
     protected View getRefreshView() {
         View view = View.inflate(getContext(), R.layout.lt_refresh_view, null);
-        tv = view.findViewById(R.id.tv_lt_refresh);
-        tvDate = view.findViewById(R.id.tv_lt_date);
-        iv = view.findViewById(R.id.iv_lt_refresh);
+        tv = (TextView) view.findViewById(R.id.tv_lt_refresh);
+        tvDate = (TextView) view.findViewById(R.id.tv_lt_date);
+        iv = (ImageView) view.findViewById(R.id.iv_lt_refresh);
         tvDate.setText("上次更新: " + date);
         return view;
     }
