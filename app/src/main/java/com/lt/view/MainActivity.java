@@ -78,7 +78,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         rv = (LTRecyclerView) findViewById(R.id.rv);
         //创建一个适配器
         ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 99999; i++) {
+        for (int i = 0; i < 10; i++) {
             list.add("" + i);
         }
         final LtAdapter adapter = new TextAdapter(this, list);
@@ -146,6 +146,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        rv.setSpanCount(3);
         rv.setTopRefresh(false);
         rv.setBottomRefresh(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rv.setBottomRefresh(true);
+            }
+        },2000);
 //        //添加头布局
 //        adapter.addHeadView(new View(this));
 //        //添加头布局到指定位置,注意可能会数组越界异常

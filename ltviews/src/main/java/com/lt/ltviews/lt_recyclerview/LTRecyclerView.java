@@ -225,23 +225,23 @@ public class LTRecyclerView extends FrameLayout {
         LayoutParams lp = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
+        if (this.noItemView == null)
+            return this;
         noItemView.setLayoutParams(lp);
         noItemView.setVisibility(adapter == null ? VISIBLE : INVISIBLE);
-        try {
-            this.addView(noItemView);
-        } catch (IllegalStateException e) {
-            throw new RuntimeException("指定的View已经有另一个父布局了(The specified View has another parent layout)");
-        }
+        this.addView(noItemView);
         return this;
     }
 
     public LTRecyclerView setNoItemText(String text) {
         TextView tv = new TextView(getContext());
         tv.setText(text);
-        setNoItemView(tv);
-        return this;
+        return setNoItemView(tv);
     }
 
+    /**
+     * 获取没有条目时展示的View
+     */
     public View getNoItemView() {
         return noItemView;
     }
@@ -264,9 +264,14 @@ public class LTRecyclerView extends FrameLayout {
     }
 
     /**
+     * 获取适配器对象
+     */
+    public RecyclerView.Adapter getAdapter() {
+        return adapter;
+    }
+
+    /**
      * 获取线性多列布局的管理者
-     *
-     * @return
      */
     public GridLayoutManager getLayoutManager() {
         return gridLayoutManager;
@@ -279,8 +284,6 @@ public class LTRecyclerView extends FrameLayout {
         if (this.adapter != null)
             if (this.adapter instanceof LtAdapter)
                 ((LtAdapter) this.adapter).setRefresh(b);
-            else
-                adapter.notifyDataSetChanged();
         return this;
     }
 
@@ -296,13 +299,7 @@ public class LTRecyclerView extends FrameLayout {
      * 设置是否上拉加载(底部)和下拉刷新(顶部)
      */
     public LTRecyclerView setRefresh(boolean top, boolean bottom) {
-        refreshLayout.setRefreshing(top);
-        if (this.adapter != null)
-            if (this.adapter instanceof LtAdapter)
-                ((LtAdapter) this.adapter).setRefresh(bottom);
-            else
-                adapter.notifyDataSetChanged();
-        return this;
+        return setTopRefresh(top).setBottomRefresh(bottom);
     }
 
     /**

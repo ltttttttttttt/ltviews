@@ -141,12 +141,10 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public LtAdapter setRefresh(boolean b) {
         if (ll1 == null || ll2 == null) {
-            notifyDataSetChanged();
             return this;
         }
         ll1.setVisibility(b ? View.VISIBLE : View.GONE);
         ll2.setVisibility(!b ? View.VISIBLE : View.GONE);
-        notifyDataSetChanged();
         return this;
     }
 
@@ -213,8 +211,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
 
     /**
      * 添加没有数据时的回调
-     *
-     * @param onNoItemListener 回调
      */
     public LtAdapter addOnNoItemListener(OnNoItemListener onNoItemListener) {
         if (onNoItemListenerList == null)
@@ -230,15 +226,21 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
         return this;
     }
 
+    /**
+     * 移除没有数据时的回调
+     */
     public LtAdapter removeOnNoItemListener(OnNoItemListener onNoItemListener) {
         if (onNoItemListenerList == null || onNoItemListenerList.size() == 0)
             return this;
-        try {
-            onNoItemListenerList.remove(onNoItemListener);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        onNoItemListenerList.remove(onNoItemListener);
         return this;
+    }
+
+    /**
+     * 获取没有数据时的回调
+     */
+    public List<OnNoItemListener> getOnNoItemListenerList() {
+        return onNoItemListenerList;
     }
 
     /**
@@ -252,9 +254,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
         return this;
     }
 
-    /**
-     * 添加头部的布局
-     */
     public LtAdapter addHeadView(View view, int position) {
         if (headList == null) {
             headList = new ArrayList<>();
@@ -273,9 +272,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
         return this;
     }
 
-    /**
-     * 删除头部的布局
-     */
     public LtAdapter removeHeadView(int position) {
         if (headList != null) {
             headList.remove(position);
@@ -284,21 +280,17 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * @return 获取头条目的个数
+     * 获取头条目的个数
      */
     public int getHeadListSize() {
-        if (headList == null)
-            return 0;
-        return headList.size();
+        return headList == null ? 0 : headList.size();
     }
 
     /**
-     * @return 获取尾条目的个数
+     * 获取尾条目的个数
      */
     public int getTailListSize() {
-        if (tailList == null)
-            return 0;
-        return tailList.size();
+        return tailList == null ? 0 : tailList.size();
     }
 
     /**
@@ -312,9 +304,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
         return this;
     }
 
-    /**
-     * 添加底部的布局
-     */
     public LtAdapter addTailView(View view, int position) {
         if (tailList == null) {
             tailList = new ArrayList<>();
@@ -333,9 +322,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
         return this;
     }
 
-    /**
-     * 删除底部的布局
-     */
     public LtAdapter removeTailView(int position) {
         if (tailList != null) {
             tailList.remove(position);
@@ -344,7 +330,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 获取刷新的View
+     * 获取上拉刷新的View
      */
     public View getRefreshView() {
         return this.view;
@@ -352,8 +338,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
 
     /**
      * 适用于GridView,使条目跨列
-     *
-     * @param recyclerView
      */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
