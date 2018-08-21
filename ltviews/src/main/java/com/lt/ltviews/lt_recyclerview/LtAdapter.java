@@ -38,8 +38,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
 
     /**
      * 传入null会使用默认的上拉View
-     *
-     * @param view
      */
     public LtAdapter(View view) {
         if (view == null)
@@ -54,17 +52,13 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
 
     /**
      * 创建ViewHolder
-     *
-     * @param parent
-     * @param viewType
-     * @return
      */
     public abstract RecyclerView.ViewHolder onLtCreateViewHolder(ViewGroup parent, int viewType);
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //顶部和底部返回特定的ViewHolder
-        if (viewType == 12345679) return new RecyclerView.ViewHolder(view) {
+        if (viewType == 12345701) return new RecyclerView.ViewHolder(view) {
         };
         else if (viewType >= 12345500 && viewType < 12345600)
             return new RecyclerView.ViewHolder(headList.get(viewType - 12345500)) {
@@ -77,9 +71,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
 
     /**
      * 获取Type
-     *
-     * @param position
-     * @return
      */
     public int getLtItemViewType(int position) {
         return 0;
@@ -99,14 +90,12 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
             }
         }
         if (position == getItemCount() - 1) {
-            return 12345679;//表示是底部的上拉加载布局
+            return 12345701;//表示是底部的上拉加载布局
         } else return getLtItemViewType(position - (headList == null ? 0 : headList.size()));
     }
 
     /**
      * 返回显示的条目的数量
-     *
-     * @return
      */
     public abstract int getLtItemCount();
 
@@ -346,7 +335,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
             @Override
             public int getSpanSize(int position) {
                 int itemViewType = getItemViewType(position);
-                return ((itemViewType == 12345679)
+                return ((itemViewType == 12345701)
                         || (itemViewType >= 12345500 && itemViewType < 12345600)
                         || (itemViewType >= 12345600 && itemViewType < 12345700))
                         ? gridManager.getSpanCount() : 1;

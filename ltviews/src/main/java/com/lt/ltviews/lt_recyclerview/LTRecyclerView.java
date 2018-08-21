@@ -21,6 +21,8 @@ import com.lt.ltviews.R;
 import com.lt.ltviews.lt_listener.OnNoItemListener;
 import com.lt.ltviews.lt_listener.OnUpAndDownListener;
 
+import java.lang.reflect.InvocationTargetException;
+
 
 /**
  * 所在包名:  com.lt.ltrecyclerview
@@ -50,12 +52,12 @@ public class LTRecyclerView extends FrameLayout {
         super(context, attrs, defStyleAttr);
 
         //创建rv
-        rv = new MRecyclerView(context);
+        rv = new RecyclerView(context);
         //添加下拉刷新
         try {
             refreshLayout = thisRefreshLayout();
         } catch (Exception e) {
-            throw new RuntimeException("请给下拉刷新的类留一个公有的空参构造(Please leave a public empty parameter structure for the RefreshLayout class)");
+            throw new RuntimeException("请将类继承ViewGroup类或子类并实现BaseRefreshLayout接口");
         }
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -114,7 +116,7 @@ public class LTRecyclerView extends FrameLayout {
 
         gridLayoutManager = new GridLayoutManager(context, 1);//根据要显示的类型获得 ViewGroup 管理者
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置为竖直的 GridView
-        rv.setLayoutManager(gridLayoutManager);//ViewGroup 管理者设置给 rv
+        rv.setLayoutManager(gridLayoutManager);//ViewGroup 管理者设置给 view
 
         //添加上拉加载,这个是滚动的监听
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -141,8 +143,8 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 类内部获取下拉刷新的View,可以继承并重写该方法来实现项目内不同的下拉刷新效果
      */
-    protected BaseRefreshLayout thisRefreshLayout() throws InstantiationException, IllegalAccessException {
-        return (BaseRefreshLayout) LtRecyclerViewManager.create().getRefreshLayoutClazz().newInstance();
+    protected BaseRefreshLayout thisRefreshLayout() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        return (BaseRefreshLayout) LtRecyclerViewManager.create().getRefreshLayoutClazz().getConstructor(Context.class).newInstance(getContext());
     }
 
     /**

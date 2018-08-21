@@ -52,10 +52,6 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      */
     protected abstract View getRefreshView();
 
-    public LtRefreshLayout() {
-        this(LtRecyclerViewManager.create().getContext());
-    }
-
     public LtRefreshLayout(Context context) {
         this(context, null);
     }
@@ -196,8 +192,9 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //实现触摸响应
-        if (!isEnabled())//如果不启用下拉则结束
-            return super.onTouchEvent(event);
+        if (!isEnabled() || status == REFRESHING || status == REFRESH_FINISH)//如果不启用下拉则结束,或者刷新中和刷新完成阶段
+//            return super.onTouchEvent(event);
+            return false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 float newY = event.getY();

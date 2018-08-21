@@ -30,10 +30,6 @@ public class MTextRefreshLayout extends LtRefreshLayout {
     String date;
     SimpleDateFormat sdf;
 
-    public MTextRefreshLayout() {
-        this(LtRecyclerViewManager.create().getContext());
-    }
-
     public MTextRefreshLayout(Context context) {
         this(context, null);
     }

@@ -13,12 +13,9 @@ import com.lt.ltviews.R;
  */
 
 public class MSwipeRefreshLayout extends SwipeRefreshLayout implements BaseRefreshLayout {
-    public MSwipeRefreshLayout() {
-        super(LtRecyclerViewManager.create().getContext());
-    }
 
     public MSwipeRefreshLayout(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public MSwipeRefreshLayout(Context context, AttributeSet attrs) {
