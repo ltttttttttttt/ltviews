@@ -36,6 +36,10 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     private OnRvItemClickListener onRvItemClickListener;
     private OnRvItemLongClickListener onRvItemLongClickListener;
 
+    public LtAdapter(){
+        this(null);
+    }
+    
     /**
      * 传入null会使用默认的上拉View
      */
