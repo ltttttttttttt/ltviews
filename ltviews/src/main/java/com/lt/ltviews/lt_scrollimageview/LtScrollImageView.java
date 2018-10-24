@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
+import com.lt.ltviews.lt_listener.OnScrollListener;
 
 /**
  * 创    建:  lt  2018/1/4--14:12
@@ -71,6 +72,14 @@ public class LtScrollImageView extends FrameLayout {
      */
     public LtScrollImageView setIvMargin(int margin) {
         ltAdGallery.setIvMargin(margin);
+        return this;
+    }
+
+    /**
+     * 设置滚动条目监听
+     */
+    public LtScrollImageView setOnScrollListener(OnScrollListener listener) {
+        ltAdGallery.setOnScrollListener(listener);
         return this;
     }
 

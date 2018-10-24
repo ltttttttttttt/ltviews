@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
+import com.lt.ltviews.lt_listener.OnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,10 @@ class LtAdGallery extends Gallery implements
      * 条目单击事件接口
      */
     private OnRvItemClickListener mOnRvItemClickListener;
+    /**
+     * 滚动事件监听
+     */
+    private OnScrollListener mOnScrollListener;
     /**
      * 图片切换时间
      */
@@ -407,6 +412,8 @@ class LtAdGallery extends Gallery implements
                 img_video.setTag(-1);
             }
         }
+        if (mOnScrollListener != null)
+            mOnScrollListener.onScroll(position);
     }
 
     @Override
@@ -429,6 +436,13 @@ class LtAdGallery extends Gallery implements
      */
     public void setOnRvItemClickListener(OnRvItemClickListener listener) {
         mOnRvItemClickListener = listener;
+    }
+
+    /**
+     * 设置滚动条目监听
+     */
+    public void setOnScrollListener(OnScrollListener listener) {
+        mOnScrollListener = listener;
     }
 
     /**
