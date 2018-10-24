@@ -31,7 +31,7 @@ import java.util.TimerTask;
 /**
  * 无限滚动广告栏组件
  */
-class LtAdGallery extends Gallery implements
+public class LtAdGallery extends Gallery implements
         AdapterView.OnItemClickListener,
         AdapterView.OnItemSelectedListener, OnTouchListener {
 //	private ImageLoader imageLoader = ImageLoader.getInstance();
