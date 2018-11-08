@@ -28,7 +28,7 @@ final public class LtRecyclerViewManager {
     }
 
     /**
-     * 获取实例
+     * 获取单实例
      */
     public static LtRecyclerViewManager create() {
         return LtRecyclerViewManagerInstance.mLtRecyclerViewManager;

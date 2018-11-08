@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lt.view.Main2Activity">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
+    <com.lt.ltviews.lt_recyclerview.MTextRefreshLayout
+        android:id="@+id/rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+        <CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </CalendarView>
+
+    </com.lt.ltviews.lt_recyclerview.MTextRefreshLayout>
+
+</LinearLayout>

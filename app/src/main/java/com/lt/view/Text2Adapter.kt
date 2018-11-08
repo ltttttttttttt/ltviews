@@ -10,8 +10,12 @@ import kotlinx.android.synthetic.main.layout_test1.view.*
  * 注意事项:
  */
 class Text2Adapter(context: Context, list: ArrayList<String>?) : BaseAdapterOneType<String>(list, R.layout.layout_test1) {
-    override fun setData(v: View, b: String, i: Int) {
+    override fun setData(v: View, b: String, i: Int, h: BaseLtViewHolder) {
         v.tvLeft.text = b
         v.tvRight.text = "右边的$b"
+        v.setOnClickListener {
+            LogUtil.i("lllttt", "TextAdapter.setData : $it")
+            v.tvLeft.text = "更改之后的$it"
+        }
     }
 }

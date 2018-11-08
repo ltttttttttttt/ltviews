@@ -47,7 +47,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
     @Override
     protected void onStatus(int status) {
         switch (status) {
-            case REFRESH_DOWN:
+            case STATE_REFRESH_DOWN:
                 //下拉中
                 tv.setText("下拉可以刷新");
                 iv.setVisibility(View.VISIBLE);
@@ -58,7 +58,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 oa.setRepeatCount(0);//设置动画执行的次数
                 oa.start();//开始动画
                 break;
-            case REFRESH_RELEASE:
+            case STATE_REFRESH_RELEASE:
                 //松开刷新
                 tv.setText("释放立即刷新");
                 iv.setVisibility(View.VISIBLE);
@@ -68,7 +68,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 oa.setRepeatCount(0);//设置动画执行的次数
                 oa.start();//开始动画
                 break;
-            case REFRESHING:
+            case STATE_REFRESHING:
                 //刷新中
                 tv.setText("正在刷新...");
                 iv.setVisibility(View.VISIBLE);
@@ -79,7 +79,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 oa.setRepeatCount(ObjectAnimator.INFINITE);//设置动画执行的次数,这个是无限
                 oa.start();//开始动画
                 break;
-            case REFRESH_FINISH:
+            case STATE_REFRESH_FINISH:
                 //刷新完成
                 date = setDate();
                 tv.setText("刷新完成");
@@ -88,6 +88,13 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 oa.cancel();
                 iv.setVisibility(View.INVISIBLE);
                 iv.setImageResource(R.drawable.lt_arrow);
+                break;
+            case STATE_BACK:
+                //刷新头回到重新隐藏了回去,此时重置箭头的动画
+                oa = ObjectAnimator.ofFloat(iv, "rotation", iv.getRotation(), 0)
+                        .setDuration(animationTime);
+                oa.setRepeatCount(0);//设置动画执行的次数
+                oa.start();//开始动画
                 break;
             default:
                 break;

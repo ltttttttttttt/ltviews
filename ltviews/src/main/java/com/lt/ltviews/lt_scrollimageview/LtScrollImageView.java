@@ -95,4 +95,11 @@ public class LtScrollImageView extends FrameLayout {
             ll.setGravity(Gravity.CENTER);
         return this;
     }
+
+    /**
+     * 获取内部的LtAdGallery控件
+     */
+    public LtAdGallery getLtAdGallery(){
+        return ltAdGallery;
+    }
 }

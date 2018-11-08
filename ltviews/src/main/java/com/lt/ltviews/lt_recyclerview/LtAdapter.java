@@ -39,7 +39,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     public LtAdapter(){
         this(null);
     }
-    
+
     /**
      * 传入null会使用默认的上拉View
      */

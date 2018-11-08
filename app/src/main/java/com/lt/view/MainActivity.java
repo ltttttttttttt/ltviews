@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.lt.ltviews.lt_listener.OnNoItemListener;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
-import com.lt.ltviews.lt_listener.OnRvItemLongClickListener;
 import com.lt.ltviews.lt_listener.OnUpAndDownListener;
 import com.lt.ltviews.lt_recyclerview.LTRecyclerView;
 import com.lt.ltviews.lt_recyclerview.LtAdapter;
@@ -50,7 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         ll1 = (LinearLayout) findViewById(R.id.ll1);
 //        iv = (LtDoubleTextView) findViewById(R.id.iv);
         siv = (LtScrollImageView) findViewById(R.id.siv);
-//        rv = (LTRecyclerView) findViewById(R.id.rv);
+//        view = (LTRecyclerView) findViewById(R.id.view);
         tv = (TextView) findViewById(R.id.tv);
         tv.setOnClickListener(this);
 
@@ -72,13 +71,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         LogUtil.i("lllttt", "MainActivity.onItemClick : " + position);
                     }
                 });
+
     }
 
     private void initRv() {
         rv = (LTRecyclerView) findViewById(R.id.rv);
         //创建一个适配器
         ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             list.add("" + i);
         }
         final LtAdapter adapter = new TextAdapter(this, list);
@@ -105,31 +105,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        //禁用上拉加载:传一个什么都没有的View
 //        new LtAdapter(new View(this));
 //        //禁用下拉刷新:获取刷新View,并设置为不可用
-//        rv.getRefreshLayout().setEnabled(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.setOnRvItemClickListener(new OnRvItemClickListener() {
-                    @Override
-                    public void onItemClick(View itemView, int position) {
-                        //条目的点击事件
-                        Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
-                    }
-                });
-            }
-        }, 2000);
-        adapter.setOnRvItemLongClickListener(new OnRvItemLongClickListener() {
-            @Override
-            public void onItemLongClick(View itemView, int position) {
-                //条目的长按事件
-            }
-        });
+//        view.getRefreshLayout().setEnabled(false);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                adapter.setOnRvItemClickListener(new OnRvItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View itemView, int position) {
+//                        //条目的点击事件
+//                        Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+//                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
+//                    }
+//                });
+//            }
+//        }, 2000);
+//        adapter.setOnRvItemLongClickListener(new OnRvItemLongClickListener() {
+//            @Override
+//            public void onItemLongClick(View itemView, int position) {
+//                //条目的长按事件
+//            }
+//        });
+        TextView textView = new TextView(this);
+        textView.setText("我是头部局");
+        adapter.addHeadView(textView);
+//        contentView.getRecyclerView()
+//                .setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         rv.setAdapter(adapter)
                 .setOnUpAndDownListener(new OnUpAndDownListener() {
                     @Override
                     public void up() {
                         //上拉加载时的回调
+                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
                     }
 
                     @Override
@@ -143,15 +149,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         }, 2000);
                     }
                 });
-//        rv.setSpanCount(3);
+//        view.setSpanCount(3);
         rv.setTopRefresh(false);
         rv.setBottomRefresh(false);
+//        contentView.getRecyclerView().setBackgroundResource(R.color.colorPrimary);
+//        view.getRefreshLayout().setEnabled(false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 rv.setBottomRefresh(true);
             }
-        },2000);
+        }, 2000);
 //        //添加头布局
 //        adapter.addHeadView(new View(this));
 //        //添加头布局到指定位置,注意可能会数组越界异常
@@ -175,9 +183,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        int size = adapter.getTailListSize();
 
         //设置没数据时展示的TextView
-//        rv.setNoItemText("暂无数据");
+//        view.setNoItemText("暂无数据");
         //设置没数据时展示的View
-//        rv.setNoItemView(new View(this));
+//        view.setNoItemView(new View(this));
 
         //没有条目时的回调
         adapter.addOnNoItemListener(new OnNoItemListener() {
@@ -193,13 +201,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
 
 //        //添加2px,d5d5d5的分割线
-//        rv.addItemDecoration_line();
+//        view.addItemDecoration_line();
 //        //添加d5d5d5颜色的分割线,并指定高度
-//        rv.addItemDecoration_line(1);
+//        view.addItemDecoration_line(1);
 //        //添加分割线,指定高度和颜色
-//        rv.addItemDecoration_line(1, getResources().getColor(R.color.colorAccent));
+//        view.addItemDecoration_line(1, getResources().getColor(R.color.colorAccent));
 //        //添加图片分割线
-//        rv.addItemDecoration_drawable(R.mipmap.ic_launcher);
+//        view.addItemDecoration_drawable(R.mipmap.ic_launcher);
 
 //        //设置分割线高度,可以和颜色一起设置
 //        app:dividerHeight="1dp"

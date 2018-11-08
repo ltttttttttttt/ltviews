@@ -22,11 +22,9 @@ class MAdapter(context: Context, list: ArrayList<ClassBean>?) : BaseLtAdapterOne
 //LtAdapter
 abstract class BaseLtAdapterOneType<T>(var view: View?, var list: ArrayList<T>?, var itemLayoutId: Int) : LtAdapter(view) {
 
-    abstract fun setData(v: View, b: T, i: Int)
+    abstract fun setData(v: View, b: T, i: Int, h: BaseLtViewHolder)
 
-    override fun onLtBindViewHolder(p0: RecyclerView.ViewHolder?, p1: Int) {
-        setData((p0 as BaseLtViewHolder).itemView, list!![p1], p1)
-    }
+    override fun onLtBindViewHolder(p0: RecyclerView.ViewHolder?, p1: Int) = setData((p0 as BaseLtViewHolder).itemView, list!![p1], p1, p0)
 
     override fun getLtItemCount() = list?.size ?: 0
 
@@ -35,11 +33,9 @@ abstract class BaseLtAdapterOneType<T>(var view: View?, var list: ArrayList<T>?,
 
 //普通的
 abstract class BaseAdapterOneType<T>(var list: ArrayList<T>?, var itemLayoutId: Int) : RecyclerView.Adapter<BaseLtViewHolder>() {
-    abstract fun setData(v: View, b: T, i: Int)
+    abstract fun setData(v: View, b: T, i: Int, h: BaseLtViewHolder)
 
-    override fun onBindViewHolder(holder: BaseLtViewHolder?, position: Int) {
-        setData(holder!!.itemView, list!![position], position)
-    }
+    override fun onBindViewHolder(holder: BaseLtViewHolder?, position: Int) = setData(holder!!.itemView, list!![position], position, holder)
 
     override fun getItemCount() = list?.size ?: 0
 
