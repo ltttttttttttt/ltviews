@@ -26,6 +26,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     protected int state = STATE_BACK;//当前状态值
     protected int animationTime = 300, waitTime = 500;//动画时间和等待时间
     protected float mLastY;//判断拦截事件用的第一次触摸的y轴
+    protected int refreshViewHeight;//设置刷新View的高度,学疏才浅,只能这样写
 
     public final static int STATE_REFRESH_DOWN = 0;//下拉中
     public final static int STATE_REFRESH_RELEASE = 1;//松开刷新
@@ -62,8 +63,9 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
 
     public LtRefreshLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        refreshThreshold = LtRecyclerViewManager.create().getRefreshThreshold();//设置阈值
-        rvIsMove = LtRecyclerViewManager.create().isRvIsMove();//设置rv是否移动
+        refreshThreshold = LtRecyclerViewManager.getInstance().getRefreshThreshold();//设置阈值
+        refreshViewHeight = (int) refreshThreshold;
+        rvIsMove = LtRecyclerViewManager.getInstance().isRvIsMove();//设置rv是否移动
         this.y = rvIsMove ? 9999 : 0;//设置第一次的y
     }
 
@@ -112,6 +114,8 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
         } else {//如果isr变为true,并且当前状态不是刷新中状态,变更为刷新中状态,rv和刷新view置为-阈值
             state = STATE_REFRESHING;
             onStatus(state);
+            if (listener != null)
+                listener.onRefresh();
             progress(refreshThreshold, animationTime);
             ObjectAnimator.ofFloat(contentView, "translationY", contentView.getTranslationY(), refreshThreshold).setDuration(animationTime).start();
             if (listener != null)
@@ -188,16 +192,18 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (getChildCount() > 2)
             throw new RuntimeException("this method can only be called once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        super.addView(child, index, params);
-        if (getChildCount() == 2)
-            return;
-        this.contentView = child;
-        this.refreshView = getRefreshView();
-        //设置为负的阈值位置
-        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) refreshThreshold);
-        lp.topMargin = -(int) refreshThreshold;
-        refreshView.setLayoutParams(lp);
-        super.addView(refreshView);
+        if (getChildCount() == 0 && refreshView == null) {
+            this.refreshView = getRefreshView();
+            //设置为负的阈值位置
+            LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, refreshViewHeight);
+            lp.topMargin = -refreshViewHeight;
+            refreshView.setLayoutParams(lp);
+            super.addView(refreshView);
+            this.contentView = child;
+            super.addView(child, index, params);
+        } else if (getChildCount() == 0) {
+            super.addView(child, index, params);
+        }
     }
 
     /**
@@ -243,6 +249,10 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
         if (!isEnabled() || state == STATE_REFRESHING || state == STATE_REFRESH_FINISH)//如果不启用下拉则结束,或者刷新中和刷新完成阶段
             return false;
         switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                //如果子View被隐藏则拦截事件
+                if (contentView.getVisibility() != VISIBLE)
+                    return true;
             case MotionEvent.ACTION_MOVE:
                 float newY = event.getY();
                 if (fastY == -1.0f) {

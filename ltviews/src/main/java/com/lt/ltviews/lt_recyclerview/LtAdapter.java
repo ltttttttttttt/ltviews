@@ -45,13 +45,13 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public LtAdapter(View view) {
         if (view == null)
-            view = View.inflate(LtRecyclerViewManager.create().getContext(), LtRecyclerViewManager.create().getUpLayoutId(), null);
+            view = View.inflate(LtRecyclerViewManager.getInstance().getContext(), LtRecyclerViewManager.getInstance().getUpLayoutId(), null);
         this.view = view;
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         ll1 = view.findViewById(R.id.ll1);
         ll2 = view.findViewById(R.id.ll2);
-        noDataIsLoad = LtRecyclerViewManager.create().isNoDataIsLoad();
+        noDataIsLoad = LtRecyclerViewManager.getInstance().isNoDataIsLoad();
     }
 
     /**

@@ -22,8 +22,7 @@
         <com.lt.ltviews.lt_recyclerview.LTRecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="200dp">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="100dp"
@@ -39,7 +38,8 @@
     <com.lt.ltviews.lt_scrollimageview.LtScrollImageView
         android:id="@+id/siv"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:visibility="gone">
 
     </com.lt.ltviews.lt_scrollimageview.LtScrollImageView>
 

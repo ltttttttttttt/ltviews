@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lt.ltviews.lt_listener.OnNoItemListener;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
 import com.lt.ltviews.lt_listener.OnUpAndDownListener;
 import com.lt.ltviews.lt_recyclerview.LTRecyclerView;
@@ -77,11 +76,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void initRv() {
         rv = (LTRecyclerView) findViewById(R.id.rv);
         //创建一个适配器
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add("" + i);
-        }
+        final ArrayList<String> list = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            list.add("" + i);
+//        }
         final LtAdapter adapter = new TextAdapter(this, list);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 100; i++) {
+//                    list.add("" + i);
+//                }
+//                adapter.notifyDataSetChanged();
+//                LogUtil.e("lllttt",rv.getRecyclerView().getHeight()+"");
+//            }
+//        }, 2000);
 //        final LtAdapter adapter = new LtAdapter(null) {
 //
 //            @Override
@@ -127,7 +136,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        });
         TextView textView = new TextView(this);
         textView.setText("我是头部局");
-        adapter.addHeadView(textView);
+        rv.setNoItemText("123");
+//        adapter.addHeadView(textView);
 //        contentView.getRecyclerView()
 //                .setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         rv.setAdapter(adapter)
@@ -144,13 +154,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                for (int i = 0; i < 100; i++) {
+                                    list.add("" + i);
+                                }
+                                adapter.notifyDataSetChanged();
                                 rv.setTopRefresh(false);
                             }
                         }, 2000);
                     }
                 });
+//        rv.setTopRefresh(true);
 //        view.setSpanCount(3);
-        rv.setTopRefresh(false);
+//        rv.setTopRefresh(false);
         rv.setBottomRefresh(false);
 //        contentView.getRecyclerView().setBackgroundResource(R.color.colorPrimary);
 //        view.getRefreshLayout().setEnabled(false);
@@ -188,17 +203,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        view.setNoItemView(new View(this));
 
         //没有条目时的回调
-        adapter.addOnNoItemListener(new OnNoItemListener() {
-            @Override
-            public void noItem() {
-                //从有数据变为没有数据时触发
-            }
-
-            @Override
-            public void haveItem() {
-                //从没有数据变为有数据是触发
-            }
-        });
+//        adapter.addOnNoItemListener(new OnNoItemListener() {
+//            @Override
+//            public void noItem() {
+//                //从有数据变为没有数据时触发
+//            }
+//
+//            @Override
+//            public void haveItem() {
+//                //从没有数据变为有数据是触发
+//            }
+//        });
 
 //        //添加2px,d5d5d5的分割线
 //        view.addItemDecoration_line();

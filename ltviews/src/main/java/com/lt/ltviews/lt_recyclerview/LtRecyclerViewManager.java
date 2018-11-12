@@ -30,7 +30,7 @@ final public class LtRecyclerViewManager {
     /**
      * 获取单实例
      */
-    public static LtRecyclerViewManager create() {
+    public static LtRecyclerViewManager getInstance() {
         return LtRecyclerViewManagerInstance.mLtRecyclerViewManager;
     }
 

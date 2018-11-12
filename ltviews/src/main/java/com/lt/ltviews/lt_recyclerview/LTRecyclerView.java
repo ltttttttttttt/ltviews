@@ -57,7 +57,7 @@ public class LTRecyclerView extends FrameLayout {
         try {
             refreshLayout = thisRefreshLayout();
         } catch (Exception e) {
-            throw new RuntimeException("请将类继承ViewGroup类或子类并实现BaseRefreshLayout接口");
+            throw new RuntimeException("请将刷新的类继承ViewGroup类或子类并实现BaseRefreshLayout接口");
         }
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -74,7 +74,7 @@ public class LTRecyclerView extends FrameLayout {
         });
 
         refreshLayout.addView(rv);
-        this.addView((View) refreshLayout);
+        this.addView((ViewGroup) refreshLayout);
 
         //设置自定义属性
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LTRecyclerView);
@@ -144,7 +144,7 @@ public class LTRecyclerView extends FrameLayout {
      * 类内部获取下拉刷新的View,可以继承并重写该方法来实现项目内不同的下拉刷新效果
      */
     protected BaseRefreshLayout thisRefreshLayout() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return (BaseRefreshLayout) LtRecyclerViewManager.create().getRefreshLayoutClazz().getConstructor(Context.class).newInstance(getContext());
+        return (BaseRefreshLayout) LtRecyclerViewManager.getInstance().getRefreshLayoutClazz().getConstructor(Context.class).newInstance(getContext());
     }
 
     /**
@@ -190,14 +190,14 @@ public class LTRecyclerView extends FrameLayout {
      */
     public LTRecyclerView setAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
-        if (this.adapter != null && this.adapter instanceof LtAdapter)
+        if (this.adapter instanceof LtAdapter)
             ((LtAdapter) this.adapter).addOnNoItemListener(new OnNoItemListener() {
                 @Override
                 public void noItem() {
                     //没有条目时隐藏rl,然后展示没条目时的布局
+                    rv.setVisibility(View.INVISIBLE);
                     if (noItemView != null) {
                         noItemView.setVisibility(View.VISIBLE);
-                        rv.setVisibility(View.GONE);
                     }
                 }
 
@@ -211,9 +211,9 @@ public class LTRecyclerView extends FrameLayout {
                 }
             });
         rv.setAdapter(this.adapter);
-        if (this.adapter != null && this.adapter instanceof LtAdapter)
+        if (this.adapter instanceof LtAdapter)
             if (((LtAdapter) this.adapter).getLtItemCount() == 0 && ((LtAdapter) this.adapter).getHeadListSize() == 0 && ((LtAdapter) this.adapter).getTailListSize() == 0)
-                rv.setVisibility(View.GONE);
+                rv.setVisibility(View.INVISIBLE);
         return this;
     }
 

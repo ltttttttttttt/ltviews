@@ -15,7 +15,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LtRecyclerViewManager.create().init(this)
+        LtRecyclerViewManager.getInstance().init(this)
                 .setUpLayoutId(R.layout.lt_up_loading)
 //                .setRvIsMove(false)
 //                .setNoDataIsLoad( true)
