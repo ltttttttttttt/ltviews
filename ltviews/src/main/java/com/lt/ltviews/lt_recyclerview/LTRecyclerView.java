@@ -224,13 +224,23 @@ public class LTRecyclerView extends FrameLayout {
         if (this.noItemView != null)
             this.removeView(this.noItemView);
         this.noItemView = view;
+        if (this.noItemView == null)
+            return this;
         LayoutParams lp = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
-        if (this.noItemView == null)
-            return this;
         noItemView.setLayoutParams(lp);
-        noItemView.setVisibility(adapter == null ? VISIBLE : INVISIBLE);
+        if (adapter == null) {
+            noItemView.setVisibility(VISIBLE);
+        } else {
+            if (adapter instanceof LtAdapter && ((LtAdapter) adapter).getLtItemCount() == 0) {
+                noItemView.setVisibility(VISIBLE);
+            } else if (adapter.getItemCount() == 0) {
+                noItemView.setVisibility(VISIBLE);
+            } else {
+                noItemView.setVisibility(INVISIBLE);
+            }
+        }
         this.addView(noItemView);
         return this;
     }
