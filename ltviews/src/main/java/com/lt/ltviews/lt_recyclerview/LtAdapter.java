@@ -30,7 +30,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     private View ll1;//有数据时的view
     private View ll2;//没数据时的view
     private List<OnNoItemListener> onNoItemListenerList;
-    private boolean noData = true;//true表示没数据
     private List<View> headList;//头部的条目集合
     private List<View> tailList;//尾部的条目集合
     private OnRvItemClickListener onRvItemClickListener;
@@ -106,17 +105,15 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //如果调用了一次无数据,下次有数据的时候就调用有数据,如果之前没调过无数据,就不相应有数据
-        if (!noData && (onNoItemListenerList != null && onNoItemListenerList.size() != 0) && getLtItemCount() == 0 && (headList == null || headList.size() == 0) && (tailList == null || tailList.size() == 0)) {
+        if ((onNoItemListenerList != null && onNoItemListenerList.size() != 0) && getLtItemCount() == 0 && (headList == null || headList.size() == 0) && (tailList == null || tailList.size() == 0)) {
             for (OnNoItemListener onNoItemListener : onNoItemListenerList) {
                 onNoItemListener.noItem();
             }
-            noData = true;
             //如果没数据,但是变成有数据了,就调用有数据的回调,并修改为有数据
-        } else if (noData && (onNoItemListenerList != null && onNoItemListenerList.size() != 0) && (getLtItemCount() != 0 || (headList != null && headList.size() != 0) || (tailList != null && tailList.size() != 0))) {
+        } else if ((onNoItemListenerList != null && onNoItemListenerList.size() != 0) && (getLtItemCount() != 0 || (headList != null && headList.size() != 0) || (tailList != null && tailList.size() != 0))) {
             for (OnNoItemListener onNoItemListener : onNoItemListenerList) {
                 onNoItemListener.haveItem();
             }
-            noData = false;
         }
         //加上多的顶部和底部的条目
         int plus = 1;
