@@ -219,7 +219,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!isEnabled() || state != STATE_BACK)//如果不启用下拉则结束,或者刷新view已经出来了
+        if (!isEnabled() && state != STATE_BACK)//如果不启用下拉则结束,或者刷新view已经出来了
             return true;
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -237,7 +237,8 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
 //                if (Math.abs(mark) >= 10)
                 return true;
         }
-        return super.onInterceptTouchEvent(ev);
+//        return super.onInterceptTouchEvent(ev);
+        return false;
     }
 
     /**

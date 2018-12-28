@@ -35,7 +35,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     private OnRvItemClickListener onRvItemClickListener;
     private OnRvItemLongClickListener onRvItemLongClickListener;
 
-    public LtAdapter(){
+    public LtAdapter() {
         this(null);
     }
 
@@ -331,6 +331,8 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        if (!(recyclerView.getLayoutManager() instanceof GridLayoutManager))
+            return;
         final GridLayoutManager gridManager = ((GridLayoutManager) recyclerView.getLayoutManager());
         gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override

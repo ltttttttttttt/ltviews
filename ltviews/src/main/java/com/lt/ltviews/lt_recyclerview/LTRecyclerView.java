@@ -326,7 +326,7 @@ public class LTRecyclerView extends FrameLayout {
     }
 
     public LTRecyclerView addItemDecoration_line(int px, int color) {
-        rv.addItemDecoration(new LtDivider(getContext(), LinearLayoutManager.HORIZONTAL, px, color));
+        rv.addItemDecoration(new LtDivider(rv, px, color));
         return this;
     }
 
@@ -335,7 +335,7 @@ public class LTRecyclerView extends FrameLayout {
     }
 
     public LTRecyclerView addItemDecoration_drawable(Drawable drawable) {
-        rv.addItemDecoration(new LtDivider(getContext(), LinearLayoutManager.HORIZONTAL, drawable));
+        rv.addItemDecoration(new LtDivider(rv, drawable));
         return this;
     }
 }
