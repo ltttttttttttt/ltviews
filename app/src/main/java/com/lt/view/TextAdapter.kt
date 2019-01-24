@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.layout_test1.view.*
 class TextAdapter(context: Context, list: ArrayList<String>?) : BaseLtAdapterOneType<String>(null, list, R.layout.layout_test1) {
     override fun setData(v: View, b: String, i: Int, h: BaseLtViewHolder) {
         v.tvLeft.text = b
-        v.setBackgroundResource(R.color.notification_icon_bg_color)
+//        v.setBackgroundResource(R.color.notification_icon_bg_color)
         v.tvRight.text = "右边的$b"
         setViewClick(v, h) {
             LogUtil.i("lllttt", "TextAdapter.setData : $it")

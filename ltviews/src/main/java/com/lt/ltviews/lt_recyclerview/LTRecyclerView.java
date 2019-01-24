@@ -144,7 +144,12 @@ public class LTRecyclerView extends FrameLayout {
      * 类内部获取下拉刷新的View,可以继承并重写该方法来实现项目内不同的下拉刷新效果
      */
     protected BaseRefreshLayout thisRefreshLayout() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return (BaseRefreshLayout) LtRecyclerViewManager.getInstance().getRefreshLayoutClazz().getConstructor(Context.class).newInstance(getContext());
+        Class clazz = LtRecyclerViewManager.getInstance().getRefreshLayoutClazz();
+        if (clazz == MSwipeRefreshLayout.class)
+            return new MSwipeRefreshLayout(getContext());
+        if (clazz == MTextRefreshLayout.class)
+            return new MTextRefreshLayout(getContext());
+        return (BaseRefreshLayout) clazz.getConstructor(Context.class).newInstance(getContext());
     }
 
     /**

@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+    <ImageView
+        android:src="#000"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
     <com.lt.ltviews.lt_recyclerview.MTextRefreshLayout
         android:id="@+id/rl"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,4 +29,4 @@
 
     </com.lt.ltviews.lt_recyclerview.MTextRefreshLayout>
 
-</LinearLayout>
+</FrameLayout>

@@ -19,6 +19,7 @@ public class App extends Application {
                 .setUpLayoutId(R.layout.lt_up_loading)
 //                .setRvIsMove(false)
 //                .setNoDataIsLoad( true)
-                .setRefreshLayoutClazz(MTextRefreshLayout.class);
+                .setRefreshLayoutClazz(MTextRefreshLayout.class)
+ ;
     }
 }
