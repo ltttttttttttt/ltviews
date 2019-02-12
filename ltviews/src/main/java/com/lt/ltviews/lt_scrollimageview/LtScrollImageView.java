@@ -6,8 +6,11 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.lt.ltviews.lt_listener.OnImageViewLoadUrlListener;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
 import com.lt.ltviews.lt_listener.OnScrollListener;
+
+import java.util.List;
 
 /**
  * 创    建:  lt  2018/1/4--14:12
@@ -47,15 +50,15 @@ public class LtScrollImageView extends FrameLayout {
     /**
      * 初始化
      *
-     * @param aTime        中间过度的动画播放时间
      * @param imageUrl     图片的网络路径数组 ,为空时 加载 adsId
      * @param switchTime   图片切换时间 写0 为不自动切换
+     * @param aTime        中间过度的动画播放时间
      * @param focusedId    圆点选中时的背景ID,圆点容器可为空写0
      * @param normalId     圆点正常时的背景ID,圆点容器为空写0
-     * @param backgroundId 默认图或加载失败时的图
      */
-    public LtScrollImageView init(String[] imageUrl, int switchTime, int aTime, int focusedId, int normalId, int backgroundId) {
-        ltAdGallery.start(getContext(), imageUrl, switchTime, aTime, ll, focusedId, normalId, backgroundId);
+    public LtScrollImageView init(List<String> imageUrl, int switchTime, int aTime, int focusedId, int normalId, OnImageViewLoadUrlListener listener) {
+        ltAdGallery.setOnImageViewLoadUrlListener(listener)
+                .start(getContext(), imageUrl, switchTime, aTime, ll, focusedId, normalId);
         return this;
     }
 
@@ -99,7 +102,7 @@ public class LtScrollImageView extends FrameLayout {
     /**
      * 获取内部的LtAdGallery控件
      */
-    public LtAdGallery getLtAdGallery(){
+    public LtAdGallery getLtAdGallery() {
         return ltAdGallery;
     }
 }

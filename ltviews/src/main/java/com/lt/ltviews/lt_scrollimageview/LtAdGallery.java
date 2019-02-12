@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.lt.ltviews.lt_listener.OnImageViewLoadUrlListener;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
 import com.lt.ltviews.lt_listener.OnScrollListener;
 
@@ -88,17 +88,17 @@ public class LtAdGallery extends Gallery implements
      */
     private int mNormalId;
     /**
-     * 默认图或图片失败时的背景ID
-     */
-    private int backgroundId;
-    /**
      * 图片资源ID组
      */
-    private String[] mUris;
+    private List<String> mUris;
     /**
      * ImageView组
      */
     List<View> listImgs = new ArrayList<View>(); // 图片组;
+    /**
+     * 加载图片的监听
+     */
+    private OnImageViewLoadUrlListener listener;
     private int ovalmargin = 0;
 
     public LtAdGallery(Context context, AttributeSet attrs, int defStyle) {
@@ -114,6 +114,14 @@ public class LtAdGallery extends Gallery implements
     }
 
     /**
+     * 设置加载图片的监听,用户自己来加载图片
+     */
+    public LtAdGallery setOnImageViewLoadUrlListener(OnImageViewLoadUrlListener listener) {
+        this.listener = listener;
+        return this;
+    }
+
+    /**
      * @param context    显示的Activity ,不能为null
      * @param mris       图片的网络路径数组 ,为空时 加载 adsId
      * @param switchTime 图片切换时间 写0 为不自动切换
@@ -122,15 +130,14 @@ public class LtAdGallery extends Gallery implements
      * @param focusedId  圆点选中时的背景ID,圆点容器可为空写0
      * @param normalId   圆点正常时的背景ID,圆点容器为空写0
      */
-    public void start(Context context, String[] mris, int switchTime, int aTime,
-                      LinearLayout ovalLayout, int focusedId, int normalId, int backgroundId) {
+    public void start(Context context, List<String> mris, int switchTime, int aTime,
+                      LinearLayout ovalLayout, int focusedId, int normalId) {
         this.mContext = context;
         this.mUris = mris;
         this.mSwitchTime = switchTime;
         this.mOvalLayout = ovalLayout;
         this.mFocusedId = focusedId;
         this.mNormalId = normalId;
-        this.backgroundId = backgroundId;
         ininImages(context);// 初始化图片组
         setAdapter(new AdAdapter());
         this.setOnItemClickListener(this);
@@ -148,7 +155,7 @@ public class LtAdGallery extends Gallery implements
         startTimer();// 开始自动滚动任务
     }
 
-    public void start(Context context, String[] mris, int switchTime,
+    public void start(Context context, List<String> mris, int switchTime,
                       TextView tv_page) {
         this.mContext = context;
         this.mUris = mris;
@@ -171,7 +178,7 @@ public class LtAdGallery extends Gallery implements
         startTimer();// 开始自动滚动任务
     }
 
-    public void start(Context context, String[] mris, int switchTime,
+    public void start(Context context, List<String> mris, int switchTime,
                       TextView tv_page, ImageView img_video) {
         this.mContext = context;
         this.mUris = mris;
@@ -210,11 +217,11 @@ public class LtAdGallery extends Gallery implements
     private void ininImages(Context context) {
 
         listImgs.clear();
-        if (mUris == null || mUris.length == 0) {
+        if (mUris == null || mUris.size() == 0) {
             clear();
             return;
         }
-        int len = mUris.length;
+        int len = mUris.size();
         for (int i = 0; i < len; i++) {
             ImageView imageview = new ImageView(mContext); // 实例化ImageView的对象
             imageview.setLayoutParams(new Gallery.LayoutParams(
@@ -240,12 +247,8 @@ public class LtAdGallery extends Gallery implements
             // {
             // img_video.setVisibility(View.GONE);
             // }
-            Glide.with(context)
-                    .load(mUris[i])
-                    .placeholder(backgroundId)
-                    .error(backgroundId)
-                    .centerCrop()
-                    .into(imageview);
+            if (listener != null)
+                listener.onLoad(imageview, mUris.get(i));
 //            Picasso.with(context).load(mUris[i])/*.placeholder(R.mipmap.ic_launcher)*/.into(imageview);
 //			imageLoader.displayImage(mUris[i], imageview, options, null);
             // listImgs.add(imageview);
@@ -403,7 +406,7 @@ public class LtAdGallery extends Gallery implements
             tv_page.setText((curIndex + 1) + "/" + listImgs.size());
         }
         if (img_video != null) {
-            if (mUris[curIndex].contains("/video/")) {
+            if (mUris.get(curIndex).contains("/video/")) {
                 // img_video.setVisibility(View.VISIBLE);
                 img_video.setVisibility(View.GONE);
                 img_video.setTag(curIndex);

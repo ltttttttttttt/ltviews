@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.lt.ltviews.lt_listener.OnImageViewLoadUrlListener;
 import com.lt.ltviews.lt_listener.OnRvItemClickListener;
 import com.lt.ltviews.lt_listener.OnUpAndDownListener;
 import com.lt.ltviews.lt_recyclerview.LTRecyclerView;
@@ -57,11 +60,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initSiv() {
-        String[] srr = {"http://112.126.83.45:8066/Upload/2017/02/18/201702181702598486328.png",
+       /* String[] srr = {"http://112.126.83.45:8066/Upload/2017/02/18/201702181702598486328.png",
                 "http://112.126.83.45:8066/Upload/2017/02/18/201702181703078955078.png",
                 "http://img.zcool.cn/community/01711b59426ca1a8012193a31e5398.gif",
-                "http://pic4.nipic.com/20091217/3885730_124701000519_2.jpg"};
-        siv.init(srr, 3000, 500, R.drawable.banner_xuanzhong, R.drawable.banner_weixuanzhong, R.drawable.ic_launcher_background)
+                "http://pic4.nipic.com/20091217/3885730_124701000519_2.jpg"};*/
+        List<String> srr = new ArrayList<String>();
+        srr.add("http://112.126.83.45:8066/Upload/2017/02/18/201702181702598486328.png");
+        srr.add("http://112.126.83.45:8066/Upload/2017/02/18/201702181703078955078.png");
+        srr.add("http://img.zcool.cn/community/01711b59426ca1a8012193a31e5398.gif");
+        srr.add("http://pic4.nipic.com/20091217/3885730_124701000519_2.jpg");
+        siv.init(srr, 3000, 500, R.drawable.banner_xuanzhong, R.drawable.banner_weixuanzhong, new OnImageViewLoadUrlListener() {
+            @Override
+            public void onLoad(ImageView iv, String url) {
+                Glide.with(MainActivity.this)
+                        .load(url)
+                        .error(R.drawable.ic_launcher_background)
+                        .centerCrop()
+                        .into(iv);
+            }
+        })
                 .setIvMargin(10)
                 .setPosition(LtPosition.RIGHT)
                 .setOnRvItemClickListener(new OnRvItemClickListener() {
