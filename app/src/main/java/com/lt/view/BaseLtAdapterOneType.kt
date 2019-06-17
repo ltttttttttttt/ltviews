@@ -13,7 +13,7 @@ import com.lt.ltviews.lt_recyclerview.LtAdapter
  */
 
 /*  示例代码
-class MAdapter(context: Context, list: ArrayList<ClassBean>?) : BaseLtAdapterOneType<ClassBean>(null, list, 0) {
+class CountryAdapter(context: Context, list: ArrayList<ClassBean>?) : BaseLtAdapterOneType<ClassBean>(null, list, 0) {
         override fun setData(v: View, b: ClassBean, i: Int) {
         }
     }

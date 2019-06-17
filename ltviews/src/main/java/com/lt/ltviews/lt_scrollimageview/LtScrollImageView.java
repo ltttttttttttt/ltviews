@@ -50,11 +50,12 @@ public class LtScrollImageView extends FrameLayout {
     /**
      * 初始化
      *
-     * @param imageUrl     图片的网络路径数组 ,为空时 加载 adsId
-     * @param switchTime   图片切换时间 写0 为不自动切换
-     * @param aTime        中间过度的动画播放时间
-     * @param focusedId    圆点选中时的背景ID,圆点容器可为空写0
-     * @param normalId     圆点正常时的背景ID,圆点容器为空写0
+     * @param imageUrl   图片的网络路径数组 ,为空时 加载 adsId
+     * @param switchTime 图片切换时间 写0 为不自动切换
+     * @param aTime      中间过度的动画播放时间
+     * @param focusedId  圆点选中时的背景ID,圆点容器可为空写0
+     * @param normalId   圆点正常时的背景ID,圆点容器为空写0
+     * @param listener   设置加载图片的监听,用户自己来加载图片
      */
     public LtScrollImageView init(List<String> imageUrl, int switchTime, int aTime, int focusedId, int normalId, OnImageViewLoadUrlListener listener) {
         ltAdGallery.setOnImageViewLoadUrlListener(listener)

@@ -20,8 +20,9 @@ import com.lt.ltviews.lt_recyclerview.LtAdapter;
 import com.lt.ltviews.lt_scrollimageview.LtPosition;
 import com.lt.ltviews.lt_scrollimageview.LtScrollImageView;
 import com.lt.ltviews2.lt_3linkage.Lt3LinkageManager;
-import com.lt.ltviews2.lt_doubletextview.LtDoubleTextView;
 import com.lt.ltviews2.lt_listener.OnLt3LinkageListener;
+import com.lt.select_country.CountryBean;
+import com.lt.select_country.SelectCountryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     TextView tv;
     LTRecyclerView rv;
     LtScrollImageView siv;
-    LtDoubleTextView iv;
     int count = 100;
 
     private Lt3LinkageManager linkageManager;
@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //
 //            @Override
 //            public RecyclerView.ViewHolder onLtCreateViewHolder(ViewGroup parent, int viewType) {
-//                return new MViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_test1, parent, false));
+//                return new CountryHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_test1, parent, false));
 //            }
 //
 //            @Override
@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //
 //            @Override
 //            public void onLtBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//                MViewHolder h = (MViewHolder) holder;
+//                CountryHolder h = (CountryHolder) holder;
 //                h.l.setText("" + position);
 //                h.r.setText("右边的" + position);
 //            }
@@ -264,6 +264,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        startActivityForResult(new Intent(this, SelectCountryActivity.class), 0);
+        /*SelectCountryActivity.setSelectListener(new Function1<String, Boolean>() {
+            @Override
+            public Boolean invoke(String s) {
+                Toast.makeText(MainActivity.this,s,Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });*/
+
         list1 = new ArrayList<>();
         list2 = new ArrayList<>();
         list3 = new ArrayList<>();
@@ -302,5 +311,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     public void onClicka(View view) {
         Toast.makeText(this, "123", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            CountryBean bean = (CountryBean) data.getSerializableExtra("bean");
+            Toast.makeText(this, bean.getCode()+bean.getEn()+bean.getLocale()+bean.getShoupinyin()+bean.getZh(), Toast.LENGTH_LONG).show();
+        }
     }
 }
