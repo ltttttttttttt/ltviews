@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'//this
-group='com.github.ltttttttttttt'//this
+group='com.github.ltttttttttttt.selectcountry'//this
 
 android {
     compileSdkVersion 28
