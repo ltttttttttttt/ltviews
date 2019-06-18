@@ -323,9 +323,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      * 获取头布局列表
      */
     public List<View> getHeadList() {
-        if (headList == null) {
-            return new ArrayList<>();
-        }
         return headList;
     }
 
@@ -333,9 +330,6 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      * 获取尾布局列表
      */
     public List<View> getTailList() {
-        if (tailList == null) {
-            return new ArrayList<>();
-        }
         return tailList;
     }
 
