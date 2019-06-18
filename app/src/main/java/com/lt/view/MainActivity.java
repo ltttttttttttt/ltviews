@@ -21,8 +21,6 @@ import com.lt.ltviews.lt_scrollimageview.LtPosition;
 import com.lt.ltviews.lt_scrollimageview.LtScrollImageView;
 import com.lt.ltviews2.lt_3linkage.Lt3LinkageManager;
 import com.lt.ltviews2.lt_listener.OnLt3LinkageListener;
-import com.lt.select_country.CountryBean;
-import com.lt.select_country.SelectCountryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,7 +262,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        startActivityForResult(new Intent(this, SelectCountryActivity.class), 0);
         /*SelectCountryActivity.setSelectListener(new Function1<String, Boolean>() {
             @Override
             public Boolean invoke(String s) {
@@ -311,14 +308,5 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     public void onClicka(View view) {
         Toast.makeText(this, "123", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            CountryBean bean = (CountryBean) data.getSerializableExtra("bean");
-            Toast.makeText(this, bean.getCode()+bean.getEn()+bean.getLocale()+bean.getShoupinyin()+bean.getZh(), Toast.LENGTH_LONG).show();
-        }
     }
 }

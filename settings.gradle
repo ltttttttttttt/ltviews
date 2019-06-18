@@ -1,1 +1,1 @@
-include ':app', ':ltviews', ':ltviews2', 'select_country'
+include ':app', ':ltviews', ':ltviews2'
