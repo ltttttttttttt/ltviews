@@ -18,6 +18,7 @@ final public class LtRecyclerViewManager {
     private float refreshThreshold;//设置下拉的阈值
     private boolean rvIsMove = true;//RecyclerView是否跟着下拉移动
     private boolean noDataIsLoad = false;//上拉已经没数据了,再次上拉是否加载数据
+    private int noItemTextColor = 0;//没条目的tv的字体颜色
 
     //单例
     private LtRecyclerViewManager() {
@@ -40,7 +41,22 @@ final public class LtRecyclerViewManager {
     public LtRecyclerViewManager init(Context context) {
         this.context = context;
         this.refreshThreshold = 80 * context.getResources().getDisplayMetrics().density;
+        noItemTextColor = context.getResources().getColor(R.color.color_333);
         return this;
+    }
+
+    /**
+     * 获取没条目的tv的字体颜色
+     */
+    public int getNoItemTextColor() {
+        return noItemTextColor;
+    }
+
+    /**
+     * 设置没条目的tv的字体颜色
+     */
+    public void setNoItemTextColor(int noItemTextColor) {
+        this.noItemTextColor = noItemTextColor;
     }
 
     /**
@@ -99,8 +115,9 @@ final public class LtRecyclerViewManager {
     /**
      * 重新设置上下文
      */
-    public void setContext(Context context) {
+    public LtRecyclerViewManager setContext(Context context) {
         this.context = context;
+        return this;
     }
 
     /**

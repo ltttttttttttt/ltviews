@@ -58,6 +58,10 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public abstract RecyclerView.ViewHolder onLtCreateViewHolder(ViewGroup parent, int viewType);
 
+    /**
+     * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtCreateViewHolder}
+     */
+    @Deprecated
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //顶部和底部返回特定的ViewHolder
@@ -79,6 +83,10 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
+    /**
+     * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#getLtItemViewType}
+     */
+    @Deprecated
     @Override
     public int getItemViewType(int position) {
         //给顶部和底部的布局加上特定的type
@@ -102,6 +110,10 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public abstract int getLtItemCount();
 
+    /**
+     * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#getLtItemCount}
+     */
+    @Deprecated
     @Override
     public int getItemCount() {
         //如果调用了一次无数据,下次有数据的时候就调用有数据,如果之前没调过无数据,就不相应有数据
@@ -143,29 +155,36 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
      */
     public abstract void onLtBindViewHolder(RecyclerView.ViewHolder holder, int position);
 
+    /**
+     * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtBindViewHolder}
+     */
+    @Deprecated
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         //条目长按事件
         if (onRvItemLongClickListener != null)
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if (onRvItemLongClickListener == null)
+                    if (onRvItemLongClickListener == null) {
                         return false;
+                    }
                     onRvItemLongClickListener.onItemLongClick(view, position);
                     return true;
                 }
             });
         //条目点击事件
         if (onRvItemClickListener != null)
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (onRvItemClickListener == null)
-                        return;
-                    onRvItemClickListener.onItemClick(view, position);
-                }
-            });
+            if (!holder.itemView.hasOnClickListeners()) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (onRvItemClickListener == null)
+                            return;
+                        onRvItemClickListener.onItemClick(view, holder.getAdapterPosition());
+                    }
+                });
+            }
         //给不是头部,不是尾部,不是上拉的布局提供方法,并减去头部的条目数
         if (headList != null) {
             if (position <= headList.size() - 1) {
@@ -186,8 +205,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 设置没有数据时的回调,调用后,则不会自动显示和隐藏没条目的view
-     * 建议使用addOnNoItemListener
+     * @deprecated 设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,请使用{@link LtAdapter#addOnNoItemListener}
      */
     @Deprecated
     public LtAdapter setOnNoItemListener(OnNoItemListener onNoItemListener) {
@@ -361,7 +379,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 设置条目的点击事件监听
+     * 设置条目的点击事件监听,请注意不要同时设置此回调和给holder.itemView设置长按事件
      */
     public LtAdapter setOnRvItemClickListener(OnRvItemClickListener onRvItemClickListener) {
         this.onRvItemClickListener = onRvItemClickListener;
@@ -370,7 +388,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 设置条目的长按事件监听
+     * 设置条目的长按事件监听,请注意不要同时设置此回调和给holder.itemView设置点击事件
      */
     public LtAdapter setOnRvItemLongClickListener(OnRvItemLongClickListener onRvItemLongClickListener) {
         this.onRvItemLongClickListener = onRvItemLongClickListener;

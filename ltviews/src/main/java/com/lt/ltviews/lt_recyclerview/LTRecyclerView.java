@@ -83,7 +83,7 @@ public class LTRecyclerView extends FrameLayout {
         if (!TextUtils.isEmpty(noItemText)) {
             setNoItemText(noItemText);
         }
-        //没有条目时的布局或图片
+        //没有条目时的布局或图片,或字符串,或颜色...
         int noItemViewId = a.getResourceId(R.styleable.LTRecyclerView_noItemView, 0);
         if (noItemViewId > 0) {
             switch (context.getResources().getResourceTypeName(noItemViewId)) {
@@ -95,6 +95,14 @@ public class LTRecyclerView extends FrameLayout {
                     ImageView noItemView = new ImageView(context);
                     noItemView.setImageResource(noItemViewId);
                     setNoItemView(noItemView);
+                    break;
+                case "string":
+                    setNoItemText(getResources().getString(noItemViewId));
+                    break;
+                case "color":
+                    ImageView noItemViewIv = new ImageView(context);
+                    noItemViewIv.setBackgroundResource(noItemViewId);
+                    setNoItemView(noItemViewIv, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     break;
                 default:
                     break;
@@ -226,15 +234,19 @@ public class LTRecyclerView extends FrameLayout {
      * 设置没有条目时展示的View,默认是居中的
      */
     public LTRecyclerView setNoItemView(View view) {
+        LayoutParams lp = new LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.gravity = Gravity.CENTER;
+        return setNoItemView(view, lp);
+    }
+
+    public LTRecyclerView setNoItemView(View view, ViewGroup.LayoutParams layoutParams) {
         if (this.noItemView != null)
             this.removeView(this.noItemView);
         this.noItemView = view;
         if (this.noItemView == null)
             return this;
-        LayoutParams lp = new LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.gravity = Gravity.CENTER;
-        noItemView.setLayoutParams(lp);
+        noItemView.setLayoutParams(layoutParams);
         if (adapter == null) {
             noItemView.setVisibility(VISIBLE);
         } else {
