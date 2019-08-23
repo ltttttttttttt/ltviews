@@ -264,6 +264,7 @@ public class LTRecyclerView extends FrameLayout {
 
     public LTRecyclerView setNoItemText(String text) {
         TextView tv = new TextView(getContext());
+        tv.setTextColor(LtRecyclerViewManager.getInstance().getNoItemTextColor());
         tv.setText(text);
         return setNoItemView(tv);
     }
