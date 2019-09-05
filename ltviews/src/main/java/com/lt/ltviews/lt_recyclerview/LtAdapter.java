@@ -21,7 +21,7 @@ import java.util.List;
  * 注意事项:
  */
 
-public abstract class LtAdapter extends RecyclerView.Adapter {
+public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter {
     /**
      * 上拉刷新的View
      */
@@ -56,7 +56,7 @@ public abstract class LtAdapter extends RecyclerView.Adapter {
     /**
      * 创建ViewHolder
      */
-    public abstract RecyclerView.ViewHolder onLtCreateViewHolder(ViewGroup parent, int viewType);
+    public abstract VH onLtCreateViewHolder(ViewGroup parent, int viewType);
 
     /**
      * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtCreateViewHolder}
