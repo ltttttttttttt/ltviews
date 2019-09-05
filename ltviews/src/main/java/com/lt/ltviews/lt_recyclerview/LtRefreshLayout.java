@@ -3,6 +3,8 @@ package com.lt.ltviews.lt_recyclerview;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -53,15 +55,15 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      */
     protected abstract View getRefreshView();
 
-    public LtRefreshLayout(Context context) {
+    public LtRefreshLayout(@NonNull Context context) {
         this(context, null);
     }
 
-    public LtRefreshLayout(Context context, AttributeSet attrs) {
+    public LtRefreshLayout(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LtRefreshLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LtRefreshLayout(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         refreshThreshold = LtRecyclerViewManager.getInstance().getRefreshThreshold();//设置阈值
         refreshViewHeight = (int) refreshThreshold;
@@ -73,7 +75,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      * 设置刷新时的回调
      */
     @Override
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
+    public void setOnRefreshListener(@Nullable SwipeRefreshLayout.OnRefreshListener listener) {
         this.listener = listener;
     }
 
@@ -189,7 +191,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      * 用来添加rv,会自动添加刷新的view,只能调用一次
      */
     @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+    public void addView(@NonNull View child, int index, @NonNull ViewGroup.LayoutParams params) {
         if (getChildCount() > 2)
             throw new RuntimeException("this method can only be called once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (getChildCount() == 0 && refreshView == null) {

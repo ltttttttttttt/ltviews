@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +28,7 @@ public class LtDivider extends RecyclerView.ItemDecoration {
      *
      * @param rv
      */
-    public LtDivider(RecyclerView rv) {
+    public LtDivider(@NonNull RecyclerView rv) {
         final TypedArray a = rv.getContext().obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
@@ -40,11 +41,11 @@ public class LtDivider extends RecyclerView.ItemDecoration {
      * @param rv
      * @param drawableId 分割线图片
      */
-    public LtDivider(RecyclerView rv, int drawableId) {
+    public LtDivider(@NonNull RecyclerView rv, int drawableId) {
         this(rv, ContextCompat.getDrawable(rv.getContext(), drawableId));
     }
 
-    public LtDivider(RecyclerView rv, Drawable drawable) {
+    public LtDivider(@NonNull RecyclerView rv, @NonNull Drawable drawable) {
         this(rv);
         mDivider = drawable;
         mDividerHeight = mDivider.getIntrinsicHeight();
@@ -57,7 +58,7 @@ public class LtDivider extends RecyclerView.ItemDecoration {
      * @param dividerHeight 分割线高度
      * @param dividerColor  分割线颜色
      */
-    public LtDivider(RecyclerView rv, int dividerHeight, int dividerColor) {
+    public LtDivider(@NonNull RecyclerView rv, int dividerHeight, int dividerColor) {
         this(rv);
         mDividerHeight = dividerHeight;
         mDivider = new GradientDrawable();

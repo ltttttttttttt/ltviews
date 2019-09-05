@@ -22,7 +22,7 @@ inline fun RecyclerView.Adapter<*>.setViewClick(view: View, holder: RecyclerView
         return
     view.setOnClickListener {
         click(when (this@setViewClick) {
-            is LtAdapter -> holder.adapterPosition - headListSize
+            is LtAdapter<*> -> holder.adapterPosition - this.headListSize
             else -> holder.adapterPosition
         })
     }

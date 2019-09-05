@@ -3,6 +3,7 @@ package com.lt.ltviews.lt_recyclerview;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -30,15 +31,15 @@ public class MTextRefreshLayout extends LtRefreshLayout {
     String date;
     SimpleDateFormat sdf;
 
-    public MTextRefreshLayout(Context context) {
+    public MTextRefreshLayout(@NonNull Context context) {
         this(context, null);
     }
 
-    public MTextRefreshLayout(Context context, AttributeSet attrs) {
+    public MTextRefreshLayout(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MTextRefreshLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MTextRefreshLayout(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         sdf = new SimpleDateFormat("M-d H:m");
         date = getDate();

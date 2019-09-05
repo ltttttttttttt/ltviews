@@ -1,6 +1,8 @@
 package com.lt.ltviews.lt_recyclerview;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.lt.ltviews.R;
 
@@ -31,14 +33,16 @@ final public class LtRecyclerViewManager {
     /**
      * 获取单实例
      */
-    public static LtRecyclerViewManager getInstance() {
+    public static @NonNull
+    LtRecyclerViewManager getInstance() {
         return LtRecyclerViewManagerInstance.mLtRecyclerViewManager;
     }
 
     /**
      * 初始化,在application的onCreate中调用
      */
-    public LtRecyclerViewManager init(Context context) {
+    public @NonNull
+    LtRecyclerViewManager init(@NonNull Context context) {
         this.context = context;
         this.refreshThreshold = 80 * context.getResources().getDisplayMetrics().density;
         noItemTextColor = context.getResources().getColor(R.color.color_333);
@@ -62,14 +66,16 @@ final public class LtRecyclerViewManager {
     /**
      * 获取实例化时传入的上下文
      */
-    public Context getContext() {
+    public @NonNull
+    Context getContext() {
         return context;
     }
 
     /**
      * 设置下拉刷新的View的class
      */
-    public LtRecyclerViewManager setRefreshLayoutClazz(Class refreshLayoutClazz) {
+    public @NonNull
+    LtRecyclerViewManager setRefreshLayoutClazz(@NonNull Class refreshLayoutClazz) {
         this.refreshLayoutClazz = refreshLayoutClazz;
         return this;
     }
@@ -77,14 +83,16 @@ final public class LtRecyclerViewManager {
     /**
      * 获取下拉刷新的View的class
      */
-    public Class getRefreshLayoutClazz() {
+    public @Nullable
+    Class getRefreshLayoutClazz() {
         return refreshLayoutClazz;
     }
 
     /**
      * 设置上拉加载的布局id
      */
-    public LtRecyclerViewManager setUpLayoutId(int upLayoutId) {
+    public @NonNull
+    LtRecyclerViewManager setUpLayoutId(int upLayoutId) {
         this.upLayoutId = upLayoutId;
         return this;
 
@@ -107,7 +115,8 @@ final public class LtRecyclerViewManager {
     /**
      * 设置下拉阈值
      */
-    public LtRecyclerViewManager setRefreshThreshold(float refreshThreshold) {
+    public @NonNull
+    LtRecyclerViewManager setRefreshThreshold(float refreshThreshold) {
         this.refreshThreshold = refreshThreshold;
         return this;
     }
@@ -115,7 +124,8 @@ final public class LtRecyclerViewManager {
     /**
      * 重新设置上下文
      */
-    public LtRecyclerViewManager setContext(Context context) {
+    public @NonNull
+    LtRecyclerViewManager setContext(@NonNull Context context) {
         this.context = context;
         return this;
     }
@@ -130,7 +140,8 @@ final public class LtRecyclerViewManager {
     /**
      * 设置是否下拉时RecyclerView跟着向下移动
      */
-    public LtRecyclerViewManager setRvIsMove(boolean rvIsMove) {
+    public @NonNull
+    LtRecyclerViewManager setRvIsMove(boolean rvIsMove) {
         this.rvIsMove = rvIsMove;
         return this;
     }
@@ -145,7 +156,8 @@ final public class LtRecyclerViewManager {
     /**
      * 上拉已经没数据了,再次上拉是否加载数据,默认false不加载
      */
-    public LtRecyclerViewManager setNoDataIsLoad(boolean noDataIsLoad) {
+    public @NonNull
+    LtRecyclerViewManager setNoDataIsLoad(boolean noDataIsLoad) {
         this.noDataIsLoad = noDataIsLoad;
         return this;
     }

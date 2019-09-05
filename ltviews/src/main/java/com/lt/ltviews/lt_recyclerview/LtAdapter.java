@@ -1,5 +1,7 @@
 package com.lt.ltviews.lt_recyclerview;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -42,7 +44,7 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 传入null会使用默认的上拉View
      */
-    public LtAdapter(View view) {
+    public LtAdapter(@Nullable View view) {
         if (view == null)
             view = View.inflate(LtRecyclerViewManager.getInstance().getContext(), LtRecyclerViewManager.getInstance().getUpLayoutId(), null);
         this.view = view;
@@ -56,7 +58,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 创建ViewHolder
      */
-    public abstract VH onLtCreateViewHolder(ViewGroup parent, int viewType);
+    public abstract @NonNull
+    VH onLtCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     /**
      * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtCreateViewHolder}
@@ -141,7 +144,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 设置是否是刷新,没有更多数据的时候传入false,否则true
      */
-    public LtAdapter setRefresh(boolean b) {
+    public @NonNull
+    LtAdapter setRefresh(boolean b) {
         if (ll1 == null || ll2 == null) {
             return this;
         }
@@ -153,7 +157,7 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 用于设置数据
      */
-    public abstract void onLtBindViewHolder(RecyclerView.ViewHolder holder, int position);
+    public abstract void onLtBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position);
 
     /**
      * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtBindViewHolder}
@@ -208,7 +212,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
      * @deprecated 设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,请使用{@link LtAdapter#addOnNoItemListener}
      */
     @Deprecated
-    public LtAdapter setOnNoItemListener(OnNoItemListener onNoItemListener) {
+    public @NonNull
+    LtAdapter setOnNoItemListener(@Nullable OnNoItemListener onNoItemListener) {
         if (onNoItemListenerList == null)
             onNoItemListenerList = new ArrayList<>();
         else
@@ -220,14 +225,16 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 添加没有数据时的回调
      */
-    public LtAdapter addOnNoItemListener(OnNoItemListener onNoItemListener) {
+    public @NonNull
+    LtAdapter addOnNoItemListener(@NonNull OnNoItemListener onNoItemListener) {
         if (onNoItemListenerList == null)
             onNoItemListenerList = new ArrayList<>();
         onNoItemListenerList.add(onNoItemListener);
         return this;
     }
 
-    public LtAdapter addOnNoItemListener(int position, OnNoItemListener onNoItemListener) {
+    public @NonNull
+    LtAdapter addOnNoItemListener(int position, @NonNull OnNoItemListener onNoItemListener) {
         if (onNoItemListenerList == null)
             onNoItemListenerList = new ArrayList<>();
         onNoItemListenerList.add(position, onNoItemListener);
@@ -237,7 +244,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 移除没有数据时的回调
      */
-    public LtAdapter removeOnNoItemListener(OnNoItemListener onNoItemListener) {
+    public @NonNull
+    LtAdapter removeOnNoItemListener(@NonNull OnNoItemListener onNoItemListener) {
         if (onNoItemListenerList == null || onNoItemListenerList.size() == 0)
             return this;
         onNoItemListenerList.remove(onNoItemListener);
@@ -247,14 +255,16 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 获取没有数据时的回调
      */
-    public List<OnNoItemListener> getOnNoItemListenerList() {
+    public @Nullable
+    List<OnNoItemListener> getOnNoItemListenerList() {
         return onNoItemListenerList;
     }
 
     /**
      * 添加头部的布局
      */
-    public LtAdapter addHeadView(View view) {
+    public @NonNull
+    LtAdapter addHeadView(@NonNull View view) {
         if (headList == null) {
             headList = new ArrayList<>();
         }
@@ -262,7 +272,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
         return this;
     }
 
-    public LtAdapter addHeadView(View view, int position) {
+    public @NonNull
+    LtAdapter addHeadView(@NonNull View view, int position) {
         if (headList == null) {
             headList = new ArrayList<>();
         }
@@ -273,14 +284,16 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 删除头部的布局
      */
-    public LtAdapter removeHeadView(View view) {
+    public @NonNull
+    LtAdapter removeHeadView(@NonNull View view) {
         if (headList != null) {
             headList.remove(view);
         }
         return this;
     }
 
-    public LtAdapter removeHeadView(int position) {
+    public @NonNull
+    LtAdapter removeHeadView(int position) {
         if (headList != null) {
             headList.remove(position);
         }
@@ -304,7 +317,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 添加底部的布局
      */
-    public LtAdapter addTailView(View view) {
+    public @NonNull
+    LtAdapter addTailView(@NonNull View view) {
         if (tailList == null) {
             tailList = new ArrayList<>();
         }
@@ -312,7 +326,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
         return this;
     }
 
-    public LtAdapter addTailView(View view, int position) {
+    public @NonNull
+    LtAdapter addTailView(@NonNull View view, int position) {
         if (tailList == null) {
             tailList = new ArrayList<>();
         }
@@ -323,14 +338,16 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 删除底部的布局
      */
-    public LtAdapter removeTailView(View view) {
+    public @NonNull
+    LtAdapter removeTailView(@NonNull View view) {
         if (tailList != null) {
             tailList.remove(view);
         }
         return this;
     }
 
-    public LtAdapter removeTailView(int position) {
+    public @NonNull
+    LtAdapter removeTailView(int position) {
         if (tailList != null) {
             tailList.remove(position);
         }
@@ -340,21 +357,24 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 获取头布局列表
      */
-    public List<View> getHeadList() {
+    public @Nullable
+    List<View> getHeadList() {
         return headList;
     }
 
     /**
      * 获取尾布局列表
      */
-    public List<View> getTailList() {
+    public @Nullable
+    List<View> getTailList() {
         return tailList;
     }
 
     /**
      * 获取上拉刷新的View
      */
-    public View getRefreshView() {
+    public @Nullable
+    View getRefreshView() {
         return this.view;
     }
 
@@ -381,7 +401,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 设置条目的点击事件监听,请注意不要同时设置此回调和给holder.itemView设置长按事件
      */
-    public LtAdapter setOnRvItemClickListener(OnRvItemClickListener onRvItemClickListener) {
+    public @NonNull
+    LtAdapter setOnRvItemClickListener(@Nullable OnRvItemClickListener onRvItemClickListener) {
         this.onRvItemClickListener = onRvItemClickListener;
         notifyDataSetChanged();
         return this;
@@ -390,7 +411,8 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 设置条目的长按事件监听,请注意不要同时设置此回调和给holder.itemView设置点击事件
      */
-    public LtAdapter setOnRvItemLongClickListener(OnRvItemLongClickListener onRvItemLongClickListener) {
+    public @NonNull
+    LtAdapter setOnRvItemLongClickListener(@Nullable OnRvItemLongClickListener onRvItemLongClickListener) {
         this.onRvItemLongClickListener = onRvItemLongClickListener;
         notifyDataSetChanged();
         return this;

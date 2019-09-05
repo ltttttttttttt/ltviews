@@ -3,6 +3,8 @@ package com.lt.ltviews.lt_recyclerview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -40,15 +42,15 @@ public class LTRecyclerView extends FrameLayout {
     private GridLayoutManager gridLayoutManager;
     private View noItemView;
 
-    public LTRecyclerView(Context context) {
+    public LTRecyclerView(@NonNull Context context) {
         this(context, null);
     }
 
-    public LTRecyclerView(Context context, AttributeSet attrs) {
+    public LTRecyclerView(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LTRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LTRecyclerView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         //创建rv
@@ -163,7 +165,8 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 设置一行展示多少列
      */
-    public LTRecyclerView setSpanCount(int spanCount) {
+    public @NonNull
+    LTRecyclerView setSpanCount(int spanCount) {
         gridLayoutManager.setSpanCount(spanCount);
         return this;
     }
@@ -173,7 +176,8 @@ public class LTRecyclerView extends FrameLayout {
      *
      * @param onUpAndDownListener 回调接口
      */
-    public LTRecyclerView setOnUpAndDownListener(OnUpAndDownListener onUpAndDownListener) {
+    public @NonNull
+    LTRecyclerView setOnUpAndDownListener( @Nullable OnUpAndDownListener onUpAndDownListener) {
         this.onUpAndDownListener = onUpAndDownListener;
         return this;
     }
@@ -183,7 +187,8 @@ public class LTRecyclerView extends FrameLayout {
      *
      * @return 自定义控件中包含的RecyclerView
      */
-    public RecyclerView getRecyclerView() {
+    public @NonNull
+    RecyclerView getRecyclerView() {
         return rv;
     }
 
@@ -192,7 +197,8 @@ public class LTRecyclerView extends FrameLayout {
      *
      * @return 自定义控件中的RefreshLayout
      */
-    public BaseRefreshLayout getRefreshLayout() {
+    public @NonNull
+    BaseRefreshLayout getRefreshLayout() {
         return refreshLayout;
     }
 
@@ -201,7 +207,8 @@ public class LTRecyclerView extends FrameLayout {
      *
      * @param adapter 继承自RecyclerView.Adapter的适配器
      */
-    public LTRecyclerView setAdapter(RecyclerView.Adapter adapter) {
+    public @NonNull
+    LTRecyclerView setAdapter(@NonNull RecyclerView.Adapter adapter) {
         this.adapter = adapter;
         if (this.adapter instanceof LtAdapter)
             ((LtAdapter) this.adapter).addOnNoItemListener(new OnNoItemListener() {
@@ -233,19 +240,19 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 设置没有条目时展示的View,默认是居中的
      */
-    public LTRecyclerView setNoItemView(View view) {
+    public @NonNull
+    LTRecyclerView setNoItemView(@NonNull View view) {
         LayoutParams lp = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
         return setNoItemView(view, lp);
     }
 
-    public LTRecyclerView setNoItemView(View view, ViewGroup.LayoutParams layoutParams) {
+    public @NonNull
+    LTRecyclerView setNoItemView(@NonNull View view, @NonNull ViewGroup.LayoutParams layoutParams) {
         if (this.noItemView != null)
             this.removeView(this.noItemView);
         this.noItemView = view;
-        if (this.noItemView == null)
-            return this;
         noItemView.setLayoutParams(layoutParams);
         if (adapter == null) {
             noItemView.setVisibility(VISIBLE);
@@ -262,7 +269,8 @@ public class LTRecyclerView extends FrameLayout {
         return this;
     }
 
-    public LTRecyclerView setNoItemText(String text) {
+    public @NonNull
+    LTRecyclerView setNoItemText(@NonNull String text) {
         TextView tv = new TextView(getContext());
         tv.setTextColor(LtRecyclerViewManager.getInstance().getNoItemTextColor());
         tv.setText(text);
@@ -272,14 +280,16 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 获取没有条目时展示的View
      */
-    public View getNoItemView() {
+    public @Nullable
+    View getNoItemView() {
         return noItemView;
     }
 
     /**
      * 刷新rv的布局
      */
-    public LTRecyclerView notifyDataSetChanged() {
+    public @NonNull
+    LTRecyclerView notifyDataSetChanged() {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
@@ -296,21 +306,24 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 获取适配器对象
      */
-    public RecyclerView.Adapter getAdapter() {
+    public @Nullable
+    RecyclerView.Adapter getAdapter() {
         return adapter;
     }
 
     /**
      * 获取线性多列布局的管理者
      */
-    public GridLayoutManager getLayoutManager() {
+    public @NonNull
+    GridLayoutManager getLayoutManager() {
         return gridLayoutManager;
     }
 
     /**
      * 设置是否上拉加载
      */
-    public LTRecyclerView setBottomRefresh(boolean b) {
+    public @NonNull
+    LTRecyclerView setBottomRefresh(boolean b) {
         if (this.adapter != null)
             if (this.adapter instanceof LtAdapter)
                 ((LtAdapter) this.adapter).setRefresh(b);
@@ -320,7 +333,8 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 设置是否下拉刷新
      */
-    public LTRecyclerView setTopRefresh(boolean b) {
+    public @NonNull
+    LTRecyclerView setTopRefresh(boolean b) {
         refreshLayout.setRefreshing(b);
         return this;
     }
@@ -328,31 +342,37 @@ public class LTRecyclerView extends FrameLayout {
     /**
      * 设置是否上拉加载(底部)和下拉刷新(顶部)
      */
-    public LTRecyclerView setRefresh(boolean top, boolean bottom) {
+    public @NonNull
+    LTRecyclerView setRefresh(boolean top, boolean bottom) {
         return setTopRefresh(top).setBottomRefresh(bottom);
     }
 
     /**
      * 添加分割线
      */
-    public LTRecyclerView addItemDecoration_line() {
+    public @NonNull
+    LTRecyclerView addItemDecoration_line() {
         return addItemDecoration_line(2);
     }
 
-    public LTRecyclerView addItemDecoration_line(int px) {
+    public @NonNull
+    LTRecyclerView addItemDecoration_line(int px) {
         return addItemDecoration_line(px, 0xffd5d5d5);
     }
 
-    public LTRecyclerView addItemDecoration_line(int px, int color) {
+    public @NonNull
+    LTRecyclerView addItemDecoration_line(int px, int color) {
         rv.addItemDecoration(new LtDivider(rv, px, color));
         return this;
     }
 
-    public LTRecyclerView addItemDecoration_drawable(int resId) {
+    public @NonNull
+    LTRecyclerView addItemDecoration_drawable(int resId) {
         return addItemDecoration_drawable(ContextCompat.getDrawable(getContext(), resId));
     }
 
-    public LTRecyclerView addItemDecoration_drawable(Drawable drawable) {
+    public @NonNull
+    LTRecyclerView addItemDecoration_drawable(@NonNull Drawable drawable) {
         rv.addItemDecoration(new LtDivider(rv, drawable));
         return this;
     }

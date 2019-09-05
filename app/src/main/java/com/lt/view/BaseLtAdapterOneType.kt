@@ -20,15 +20,15 @@ class CountryAdapter(context: Context, list: ArrayList<ClassBean>?) : BaseLtAdap
  */
 
 //LtAdapter
-abstract class BaseLtAdapterOneType<T>(var view: View?, var list: ArrayList<T>?, var itemLayoutId: Int) : LtAdapter(view) {
+abstract class BaseLtAdapterOneType<T>(var view: View?, var list: ArrayList<T>?, var itemLayoutId: Int) : LtAdapter<BaseLtViewHolder>(view) {
 
     abstract fun setData(v: View, b: T, i: Int, h: BaseLtViewHolder)
 
-    override fun onLtBindViewHolder(p0: RecyclerView.ViewHolder?, p1: Int) = setData((p0 as BaseLtViewHolder).itemView, list!![p1], p1, p0)
+    override fun onLtBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) = setData((p0 as BaseLtViewHolder).itemView, list!![p1], p1, p0)
 
     override fun getLtItemCount() = list?.size ?: 0
 
-    override fun onLtCreateViewHolder(p0: ViewGroup?, p1: Int) = BaseLtViewHolder(LayoutInflater.from(p0?.context).inflate(itemLayoutId, p0, false))
+    override fun onLtCreateViewHolder(p0: ViewGroup, p1: Int) = BaseLtViewHolder(LayoutInflater.from(p0.context).inflate(itemLayoutId, p0, false))
 }
 
 //普通的
