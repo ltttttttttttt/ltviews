@@ -24,7 +24,7 @@ abstract class BaseLtAdapterOneType<T>(var view: View?, var list: ArrayList<T>?,
 
     abstract fun setData(v: View, b: T, i: Int, h: BaseLtViewHolder)
 
-    override fun onLtBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) = setData((p0 as BaseLtViewHolder).itemView, list!![p1], p1, p0)
+    override fun onLtBindViewHolder(p0: BaseLtViewHolder, p1: Int) = setData(p0.itemView, list!![p1], p1, p0)
 
     override fun getLtItemCount() = list?.size ?: 0
 

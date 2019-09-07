@@ -157,7 +157,7 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
     /**
      * 用于设置数据
      */
-    public abstract void onLtBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position);
+    public abstract void onLtBindViewHolder(@NonNull VH holder, int position);
 
     /**
      * @deprecated 一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtBindViewHolder}
@@ -203,9 +203,9 @@ public abstract class LtAdapter<VH extends RecyclerView.ViewHolder> extends Recy
         if (position == getItemCount() - 1) {
             return;
         } else if (headList != null)
-            onLtBindViewHolder(holder, position - headList.size());
+            onLtBindViewHolder((VH) holder, position - headList.size());
         else
-            onLtBindViewHolder(holder, position);
+            onLtBindViewHolder((VH) holder, position);
     }
 
     /**
