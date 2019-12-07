@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <declare-styleable name="LTRecyclerView">
+        <attr name="noItemView" format="reference" />
+        <attr name="noItemText" format="string" />
+        <attr name="dividerHeight" format="dimension" />
+        <attr name="dividerColor" format="color|reference" />
+        <attr name="dividerDrawable" format="reference" />
+    </declare-styleable>
+</resources>
