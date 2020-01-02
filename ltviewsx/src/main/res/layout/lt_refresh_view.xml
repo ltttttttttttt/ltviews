@@ -23,14 +23,14 @@
             android:id="@+id/tv_lt_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下拉可以刷新"
+            android:text="@string/down_refresh"
             android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tv_lt_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="上次更新: "
+            android:text="@string/last_update"
             android:textSize="11dp" />
 
     </LinearLayout>

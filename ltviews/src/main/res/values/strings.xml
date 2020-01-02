@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="down_refresh">Drop down to refresh</string>
+    <string name="release_refresh_now">Release refresh now</string>
+    <string name="refresh">Refresh</string>
+    <string name="refresh_finish">Refresh finish</string>
+    <string name="last_update">Last update: </string>
+</resources>

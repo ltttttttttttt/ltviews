@@ -51,7 +51,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
         switch (status) {
             case STATE_REFRESH_DOWN:
                 //下拉中
-                tv.setText("下拉可以刷新");
+                tv.setText(R.string.down_refresh);
                 iv.setVisibility(View.VISIBLE);
                 iv.setImageResource(R.drawable.lt_arrow);
                 //设置动画时间
@@ -62,7 +62,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 break;
             case STATE_REFRESH_RELEASE:
                 //松开刷新
-                tv.setText("释放立即刷新");
+                tv.setText(R.string.release_refresh_now);
                 iv.setVisibility(View.VISIBLE);
                 iv.setImageResource(R.drawable.lt_arrow);
                 oa = ObjectAnimator.ofFloat(iv, "rotation", iv.getRotation(), 180)
@@ -72,7 +72,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 break;
             case STATE_REFRESHING:
                 //刷新中
-                tv.setText("正在刷新...");
+                tv.setText(R.string.refresh);
                 iv.setVisibility(View.VISIBLE);
                 iv.setImageResource(R.drawable.lt_loading);
                 oa = ObjectAnimator.ofFloat(iv, "rotation", 0, 360)
@@ -84,8 +84,8 @@ public class MTextRefreshLayout extends LtRefreshLayout {
             case STATE_REFRESH_FINISH:
                 //刷新完成
                 date = setDate();
-                tv.setText("刷新完成");
-                tvDate.setText("上次更新: " + date);
+                tv.setText(R.string.refresh_finish);
+                tvDate.setText(getContext().getString(R.string.last_update) + date);
                 iv.clearAnimation();
                 oa.cancel();
                 iv.setVisibility(View.INVISIBLE);
@@ -114,7 +114,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
         tv = (TextView) view.findViewById(R.id.tv_lt_refresh);
         tvDate = (TextView) view.findViewById(R.id.tv_lt_date);
         iv = (ImageView) view.findViewById(R.id.iv_lt_refresh);
-        tvDate.setText("上次更新: " + date);
+        tvDate.setText(getContext().getString(R.string.last_update) + date);
         return view;
     }
 
@@ -130,7 +130,7 @@ public class MTextRefreshLayout extends LtRefreshLayout {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
         editor.putString("lt_date", value);
-        editor.commit();
+        editor.apply();
         return value;
     }
 }
