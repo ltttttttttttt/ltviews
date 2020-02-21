@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.ltttttttttttt'
 
@@ -39,5 +41,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.fragment:fragment:1.2.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

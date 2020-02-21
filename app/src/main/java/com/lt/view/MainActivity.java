@@ -4,23 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.lt.ltviews.lt_listener.OnImageViewLoadUrlListener;
-import com.lt.ltviews.lt_listener.OnRvItemClickListener;
-import com.lt.ltviews.lt_listener.OnUpAndDownListener;
-import com.lt.ltviews.lt_recyclerview.LTRecyclerView;
-import com.lt.ltviews.lt_recyclerview.LtAdapter;
-import com.lt.ltviews.lt_scrollimageview.LtPosition;
-import com.lt.ltviews.lt_scrollimageview.LtScrollImageView;
-import com.lt.ltviews2.lt_3linkage.Lt3LinkageManager;
-import com.lt.ltviews2.lt_listener.OnLt3LinkageListener;
+import com.lt.ltviewsx.lt_listener.OnImageViewLoadUrlListener;
+import com.lt.ltviewsx.lt_listener.OnRvItemClickListener;
+import com.lt.ltviewsx.lt_listener.OnUpAndDownListener;
+import com.lt.ltviewsx.lt_recyclerview.LTRecyclerView;
+import com.lt.ltviewsx.lt_recyclerview.LtAdapter;
+import com.lt.ltviewsx.lt_scrollimageview.LtPosition;
+import com.lt.ltviewsx.lt_scrollimageview.LtScrollImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     LtScrollImageView siv;
     int count = 100;
 
-    private Lt3LinkageManager linkageManager;
+    //private Lt3LinkageManager linkageManager;
     private LinearLayout ll1;
 
 
@@ -78,7 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         })
                 .setIvMargin(10)
-                .setPosition(LtPosition.RIGHT)
+                .setPosition(LtPosition.CENTER_BOTTOM_OUT)
                 .setOnRvItemClickListener(new OnRvItemClickListener() {
                     @Override
                     public void onItemClick(View itemView, int position) {
@@ -276,7 +275,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (int i = 0; i < 9; i++) {
             list1.add("第一列" + i);
         }
-        linkageManager = new Lt3LinkageManager(this, "请选择一个", list1, list2, list3)
+        /*linkageManager = new Lt3LinkageManager(this, "请选择一个", list1, list2, list3)
                 .setTextColor(R.color.colorAccent)
                 .showLt3LinkageDialog(new OnLt3LinkageListener() {
                     @Override
@@ -303,7 +302,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 break;
                         }
                     }
-                });
+                });*/
     }
 
     public void onClicka(View view) {

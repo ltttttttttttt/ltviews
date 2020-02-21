@@ -54,7 +54,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     /**
      * 返回刷新的View
      */
-    protected abstract View getRefreshView();
+    protected abstract View createRefreshView();
 
     public LtRefreshLayout(@NonNull Context context) {
         this(context, null);
@@ -66,9 +66,9 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
 
     public LtRefreshLayout(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        refreshThreshold = LtRecyclerViewManager.getInstance().getRefreshThreshold();//设置阈值
+        refreshThreshold = LtRecyclerViewManager.INSTANCE.getRefreshThreshold();//设置阈值
         refreshViewHeight = (int) refreshThreshold;
-        rvIsMove = LtRecyclerViewManager.getInstance().isRvIsMove();//设置rv是否移动
+        rvIsMove = LtRecyclerViewManager.INSTANCE.isRvIsMove();//设置rv是否移动
         this.y = rvIsMove ? 9999 : 0;//设置第一次的y
     }
 
@@ -196,7 +196,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
         if (getChildCount() > 2)
             throw new RuntimeException("this method can only be called once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (getChildCount() == 0 && refreshView == null) {
-            this.refreshView = getRefreshView();
+            this.refreshView = createRefreshView();
             //设置为负的阈值位置
             LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, refreshViewHeight);
             lp.topMargin = -refreshViewHeight;

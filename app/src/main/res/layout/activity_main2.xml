@@ -5,17 +5,17 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
 
     <ImageView
         android:src="#000"
         android:layout_width="30dp"
         android:layout_height="30dp" />
 
-    <com.lt.ltviews.lt_recyclerview.MTextRefreshLayout
+    <com.lt.ltviewsx.lt_recyclerview.MTextRefreshLayout
         android:id="@+id/rl"
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -27,6 +27,6 @@
 
         </CalendarView>
 
-    </com.lt.ltviews.lt_recyclerview.MTextRefreshLayout>
+    </com.lt.ltviewsx.lt_recyclerview.MTextRefreshLayout>
 
 </FrameLayout>

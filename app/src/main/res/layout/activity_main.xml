@@ -20,7 +20,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.lt.ltviews.lt_recyclerview.LTRecyclerView
+        <com.lt.ltviewsx.lt_recyclerview.LTRecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -31,17 +31,17 @@
                 android:background="@drawable/lt_arrow"
                 android:onClick="onClicka"
                 android:visibility="gone" />
-        </com.lt.ltviews.lt_recyclerview.LTRecyclerView>
+        </com.lt.ltviewsx.lt_recyclerview.LTRecyclerView>
 
 
     </FrameLayout>
 
-    <com.lt.ltviews.lt_scrollimageview.LtScrollImageView
+    <com.lt.ltviewsx.lt_scrollimageview.LtScrollImageView
         android:id="@+id/siv"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-    </com.lt.ltviews.lt_scrollimageview.LtScrollImageView>
+    </com.lt.ltviewsx.lt_scrollimageview.LtScrollImageView>
 
     <TextView
         android:id="@+id/tv"

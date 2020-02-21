@@ -2,13 +2,15 @@ package com.lt.view
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import com.lt.ltviews.lt_recyclerview.LtDivider
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType2
+import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
+import com.lt.ltviewsx.lt_recyclerview.LtDivider
+import com.lt.ltviewsx.lt_recyclerview.ViewFind
 import kotlinx.android.synthetic.main.activity_main2.*
-import kotlinx.android.synthetic.main.layout_test2.view.*
+import kotlinx.android.synthetic.main.layout_test2.*
 
 class Main2Activity : AppCompatActivity() {
 
@@ -28,21 +30,21 @@ class Main2Activity : AppCompatActivity() {
             list.add("$i")
         }
 
-        val adapter=MAdapter(list)
-        val manager = GridLayoutManager(this,3)
+        val adapter = MAdapter(list)
+        val manager = GridLayoutManager(this, 3)
         manager.orientation = LinearLayoutManager.VERTICAL
         rv.layoutManager = manager
         rv.adapter = adapter
 
-        rv.addItemDecoration(LtDivider(rv,101,resources.getColor(R.color.colorAccent)))
+        rv.addItemDecoration(LtDivider(rv, 101, resources.getColor(R.color.colorAccent)))
 
     }
 
-    class MAdapter(list: ArrayList<String>) : BaseAdapterOneType<String>(list, R.layout.layout_test2) {
-        override fun setData(v: View, b: String, i: Int, h: BaseLtViewHolder) {
+    class MAdapter(list: ArrayList<String>) : BaseAdapterOneType2<String>(list, R.layout.layout_test2) {
+        override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
             v.tvLeft.text = b
             v.tvRight.text = b
-            v.setBackgroundResource(R.color.colorPrimary)
+            h.itemView.setBackgroundResource(R.color.colorPrimary)
         }
 
     }
