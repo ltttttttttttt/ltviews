@@ -24,6 +24,7 @@ object LtRecyclerViewManager {
 
     /**
      * 创建刷新布局时的上下文,必须有
+     * 但是因为使用了Application的上下文,所以用该上下文的view无法使用配置好的主题,或设置好的density(一般上面两种情况也没什么问题),但是可以通过在Adapter的构造中传入自己new的view来避免
      */
     var context: Context? = null
         private set
