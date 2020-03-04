@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 创    建:  lt  2018/5/23--18:09
  * 作    用:  自定义的下拉刷新View的父类
@@ -40,9 +42,9 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     /**
      * 当状态变更时调用,在此方法中更改刷新View的状态
      *
-     * @param status 状态值
+     * @param state 状态值
      */
-    protected abstract void onStatus(int status);
+    protected abstract void onState(int state);
 
     /**
      * 请在此方法内做额外操作
@@ -55,6 +57,14 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      * 返回刷新的View
      */
     protected abstract View createRefreshView();
+
+    /**
+     * 用来设置刷新view的宽高等信息
+     */
+    @NotNull
+    protected LayoutParams createRefreshViewLayoutParams() {
+        return new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, refreshViewHeight);
+    }
 
     public LtRefreshLayout(@NonNull Context context) {
         this(context, null);
@@ -95,7 +105,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
         }
         if (state == STATE_REFRESHING) {//如果isr变为false,并且当前状态为刷新中,则更改为刷新完成(阈值处停留200,然后300缩回去)
             state = STATE_REFRESH_FINISH;
-            onStatus(state);
+            onState(state);
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -107,7 +117,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
                 @Override
                 public void run() {
                     state = STATE_BACK;
-                    onStatus(state);
+                    onState(state);
                 }
             }, animationTime + waitTime);
             if (!rvIsMove) {
@@ -116,7 +126,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
             }
         } else {//如果isr变为true,并且当前状态不是刷新中状态,变更为刷新中状态,rv和刷新view置为-阈值
             state = STATE_REFRESHING;
-            onStatus(state);
+            onState(state);
             if (listener != null)
                 listener.onRefresh();
             progress(refreshThreshold, animationTime);
@@ -138,23 +148,23 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
             onProgress(y);
             if (state == STATE_BACK) {//如果下拉的时候,状态是back,则改为下拉中
                 state = STATE_REFRESH_DOWN;
-                onStatus(state);
+                onState(state);
             }
             if (rvIsMove) {//rv是否移动对阈值的计算有影响
                 if ((this.y + y - fastY) / 2 < refreshThreshold && state == STATE_REFRESH_RELEASE) {//如果y小于阈值并且不是下拉中状态,改为下拉中状态
                     state = STATE_REFRESH_DOWN;
-                    onStatus(state);
+                    onState(state);
                 } else if ((this.y + y - fastY) / 2 >= refreshThreshold && state == STATE_REFRESH_DOWN) {//如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
                     state = STATE_REFRESH_RELEASE;
-                    onStatus(state);
+                    onState(state);
                 }
             } else {
                 if (this.y + y - fastY < refreshThreshold && state == STATE_REFRESH_RELEASE) {//如果y小于阈值并且不是下拉中状态,改为下拉中状态
                     state = STATE_REFRESH_DOWN;
-                    onStatus(state);
+                    onState(state);
                 } else if (this.y + y - fastY >= refreshThreshold && state == STATE_REFRESH_DOWN) {//如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
                     state = STATE_REFRESH_RELEASE;
-                    onStatus(state);
+                    onState(state);
                 }
             }
         } else {//启用定时操作
@@ -171,7 +181,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
             va.start();//执行这个数值变化器
             if (y != 0.0f && state != STATE_REFRESHING) {//有时间并且不为0,表示会跳到阈值,如果不是刷新中状态就改为刷新中状态
                 state = STATE_REFRESHING;
-                onStatus(state);
+                onState(state);
                 if (listener != null)
                     listener.onRefresh();
             }
@@ -181,7 +191,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
                     @Override
                     public void run() {
                         state = STATE_BACK;
-                        onStatus(state);
+                        onState(state);
                     }
                 }, animationTime);
             }
@@ -189,21 +199,20 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     }
 
     /**
-     * 用来添加rv,会自动添加刷新的view,只能调用一次
+     * 用来添加rv,会自动添加刷新的view,只能调用一次(只能显示设置一个child)
      */
     @Override
     public void addView(@NonNull View child, int index, @NonNull ViewGroup.LayoutParams params) {
         if (getChildCount() > 2)
             throw new RuntimeException("this method can only be called once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (getChildCount() == 0 && refreshView == null) {
-            this.refreshView = createRefreshView();
-            //设置为负的阈值位置
-            LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, refreshViewHeight);
-            lp.topMargin = -refreshViewHeight;
-            refreshView.setLayoutParams(lp);
-            super.addView(refreshView);
             this.contentView = child;
-            super.addView(child, index, params);
+            super.addView(child, 0, params);
+            this.refreshView = createRefreshView();
+            LayoutParams lp = createRefreshViewLayoutParams();
+            //设置为负的阈值位置
+            lp.topMargin = -refreshViewHeight;
+            super.addView(refreshView, 1, lp);
         } else if (getChildCount() == 0) {
             super.addView(child, index, params);
         }

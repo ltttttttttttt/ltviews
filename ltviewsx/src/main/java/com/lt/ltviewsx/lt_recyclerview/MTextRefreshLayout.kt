@@ -27,8 +27,8 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private var sdf: SimpleDateFormat = SimpleDateFormat("M-d H:m")
 
     @SuppressLint("ObjectAnimatorBinding")
-    override fun onStatus(status: Int) {
-        when (status) {
+    override fun onState(state: Int) {
+        when (state) {
             STATE_REFRESH_DOWN -> {
                 //下拉中
                 tv?.setText(R.string.down_refresh)
