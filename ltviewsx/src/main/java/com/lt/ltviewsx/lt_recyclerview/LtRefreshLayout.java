@@ -141,11 +141,16 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
      */
     protected void progress(float y, int time) {
         if (time == 0) {
-            if (rvIsMove)//如果rv跟着动,就调用这个
-                refreshView.setTranslationY(contentView.getTranslationY());
-            else
-                refreshView.setTranslationY(y / 2 + refreshView.getTranslationY());
-            onProgress(y);
+            if (rvIsMove) {
+                //如果rv跟着动,就调用这个
+                float translationY = contentView.getTranslationY();
+                refreshView.setTranslationY(translationY);
+                onProgress(translationY);
+            } else {
+                float translationY = y / 2 + refreshView.getTranslationY();
+                refreshView.setTranslationY(translationY);
+                onProgress(translationY);
+            }
             if (state == STATE_BACK) {//如果下拉的时候,状态是back,则改为下拉中
                 state = STATE_REFRESH_DOWN;
                 onState(state);
