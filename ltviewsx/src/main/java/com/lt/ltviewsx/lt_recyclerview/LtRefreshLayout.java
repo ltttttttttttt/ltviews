@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.lt.ltviewsx.R;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +34,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     protected int animationTime = 300, waitTime = 500;//动画时间和等待时间
     protected float mLastY;//判断拦截事件用的第一次触摸的y轴
     protected int refreshViewHeight;//设置刷新View的高度,学疏才浅,只能这样写
+    protected float scrollOrClickBoundary;//判断是滚动或者点击的边界,一般是4dp(点击的半径),用来判断本次滑动是否有效,防止阻断掉点击事件
 
     public final static int STATE_REFRESH_DOWN = 0;//下拉中
     public final static int STATE_REFRESH_RELEASE = 1;//松开刷新
@@ -47,16 +50,17 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
     protected abstract void onState(int state);
 
     /**
+     * 返回创建完成的刷新的View,一般只会调用一次
+     */
+    protected abstract View createRefreshView();
+
+    /**
      * 请在此方法内做额外操作
      *
      * @param y 当前下拉的y轴
      */
-    protected abstract void onProgress(float y);
-
-    /**
-     * 返回刷新的View
-     */
-    protected abstract View createRefreshView();
+    protected void onProgress(float y) {
+    }
 
     /**
      * 用来设置刷新view的宽高等信息
@@ -80,6 +84,7 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
         refreshViewHeight = (int) refreshThreshold;
         rvIsMove = LtRecyclerViewManager.INSTANCE.isRvIsMove();//设置rv是否移动
         this.y = rvIsMove ? 9999 : 0;//设置第一次的y
+        scrollOrClickBoundary = context.getResources().getDimension(R.dimen.dp4);
     }
 
     /**
@@ -246,12 +251,10 @@ public abstract class LtRefreshLayout extends FrameLayout implements BaseRefresh
                 float mCurY = ev.getY();
                 int mark = (int) (mCurY - mLastY);
                 mLastY = mCurY;
-                //如果contentView内容在Y轴上可滑动，把事件传递给contentView内部
-                if (contentView.canScrollVertically(-mark))
+                //如果是向上滑动,或者向下滑动的距离小于4dp(点击事件半径)(可能是点击的时候位移了)，我们认为这次滑动是无效的，把这次事件传递给contentView去消费。例如contentView的child的点击事件。
+                //或者contentView内容在Y轴上可滑动，把事件传递给contentView内部
+                if (mark <= scrollOrClickBoundary || contentView.canScrollVertically(-mark))
                     return false;
-                //如果滑动的距离小于10px，我们认为这次滑动是无效的，把这次事件传递给contentView去消费。例如contentView的child的点击事件。
-                //如果大于等于10px，我们把这次事件给拦截掉，让这次事件在onTouchEvent(MotionEvent ev)方法中消费掉。
-//                if (Math.abs(mark) >= 10)
                 return true;
         }
 //        return super.onInterceptTouchEvent(ev);
