@@ -27,9 +27,9 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private var sdf: SimpleDateFormat = SimpleDateFormat("M-d H:m")
 
     @SuppressLint("ObjectAnimatorBinding")
-    override fun onState(state: Int) {
+    override fun onState(state: RefreshStates) {
         when (state) {
-            STATE_REFRESH_DOWN -> {
+            RefreshStates.STATE_REFRESH_DOWN -> {
                 //下拉中
                 tv?.setText(R.string.down_refresh)
                 iv?.visibility = View.VISIBLE
@@ -40,7 +40,7 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 oa?.repeatCount = 0 //设置动画执行的次数
                 oa?.start() //开始动画
             }
-            STATE_REFRESH_RELEASE -> {
+            RefreshStates.STATE_REFRESH_RELEASE -> {
                 //松开刷新
                 tv?.setText(R.string.release_refresh_now)
                 iv?.visibility = View.VISIBLE
@@ -50,7 +50,7 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 oa?.setRepeatCount(0) //设置动画执行的次数
                 oa?.start() //开始动画
             }
-            STATE_REFRESHING -> {
+            RefreshStates.STATE_REFRESHING -> {
                 //刷新中
                 tv?.setText(R.string.refresh)
                 iv?.visibility = View.VISIBLE
@@ -61,7 +61,7 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 oa?.setRepeatCount(ObjectAnimator.INFINITE) //设置动画执行的次数,这个是无限
                 oa?.start() //开始动画
             }
-            STATE_REFRESH_FINISH -> {
+            RefreshStates.STATE_REFRESH_FINISH -> {
                 //刷新完成
                 date = saveAndGetDate()
                 tv?.setText(R.string.refresh_finish)
@@ -71,7 +71,7 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 iv?.visibility = View.INVISIBLE
                 iv?.setImageResource(R.drawable.lt_arrow)
             }
-            STATE_BACK -> {
+            RefreshStates.STATE_BACK -> {
                 //刷新头回到重新隐藏了回去,此时重置箭头的动画
                 oa = ObjectAnimator.ofFloat(iv, "rotation", iv?.rotation ?: 0F, 0f)
                         .setDuration(animationTime.toLong())
