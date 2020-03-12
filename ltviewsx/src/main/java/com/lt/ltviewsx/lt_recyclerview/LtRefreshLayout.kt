@@ -30,7 +30,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var mLastY = 0F//判断拦截事件用的第一次触摸的y轴 = 0F
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
     protected var scrollOrClickBoundary = context.resources.getDimension(R.dimen.dp4)//判断是滚动或者点击的边界,一般是4dp(点击的半径),用来判断本次滑动是否有效,防止阻断掉点击事件
-    private val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }
+    private val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
 
     /**
      * 刷新状态

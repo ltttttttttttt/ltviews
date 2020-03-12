@@ -35,19 +35,23 @@ open class LTRecyclerView
      * 获得自定义控件中的RefreshLayout
      */
     val refreshLayout: BaseRefreshLayout
+
     /**
      * 获取到自定义控件中包含的RecyclerView
      */
     val recyclerView = RecyclerView(context)
+
     /**
      * 获取适配器对象
      */
     var adapter: RecyclerView.Adapter<*>? = null
         private set
+
     /**
      * 获取线性多列布局的管理者
      */
     val layoutManager = GridLayoutManager(context, 1)
+
     /**
      * 获取没有条目时展示的View
      */
@@ -116,12 +120,10 @@ open class LTRecyclerView
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     onUpAndDownListener ?: return //没有回调就没必要走
                     if (refreshLayout.isRefreshing) return
-                    adapter ?: return  //如果没有适配器
-                    if (adapter is LtAdapter<*> && !(adapter as LtAdapter<*>).refreshViewIsHaveData)//如果已标记为没数据
-                        return
-                    if (layoutManager.findLastVisibleItemPosition() + 1 == adapter!!.itemCount) { //如果是最后一个条目,表示是上拉加载
+                    val adapter = adapter as? LtAdapter<*> ?: return  //如果没有适配器或不是LtAdapter
+                    if (!adapter.refreshViewIsHaveData) return//如果已标记为没数据
+                    if (layoutManager.findLastVisibleItemPosition() + 1 == adapter.itemCount) //如果是最后一个条目,表示是上拉加载
                         onUpAndDownListener?.up()
-                    }
                 }
             }
         })
