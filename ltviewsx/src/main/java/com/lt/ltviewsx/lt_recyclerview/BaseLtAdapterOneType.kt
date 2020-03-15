@@ -110,10 +110,10 @@ class ViewFind : Fragment() {
  */
 inline fun <T> adapterOf(list: MutableList<T>,
                          @LayoutRes itemLayoutId: Int,
-                         crossinline setData: (v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) -> Unit)
+                         crossinline setData: BaseAdapterOneType2<T>.(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) -> Unit)
         : RecyclerView.Adapter<BaseLtViewHolder> =
         object : BaseAdapterOneType2<T>(list, itemLayoutId) {
-            override fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) = setData(v, b, i, h)
+            override fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) = setData(this, v, b, i, h)
         }
 
 /**
@@ -122,8 +122,8 @@ inline fun <T> adapterOf(list: MutableList<T>,
 inline fun <T> ltAdapterOf(list: MutableList<T>,
                            @LayoutRes itemLayoutId: Int,
                            view: View? = LtRecyclerViewManager.getDefualtBottomRefreshView(),
-                           crossinline setData: (v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) -> Unit)
+                           crossinline setData: BaseLtAdapterOneType2<T>.(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) -> Unit)
         : LtAdapter<BaseLtViewHolder> =
         object : BaseLtAdapterOneType2<T>(list, itemLayoutId, view) {
-            override fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) = setData(v, b, i, h)
+            override fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) = setData(this, v, b, i, h)
         }

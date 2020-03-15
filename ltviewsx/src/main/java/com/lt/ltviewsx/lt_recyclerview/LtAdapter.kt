@@ -1,15 +1,16 @@
 package com.lt.ltviewsx.lt_recyclerview
 
-import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnNoItemListener
 import com.lt.ltviewsx.lt_listener.OnRvItemClickListener
 import com.lt.ltviewsx.lt_listener.OnRvItemLongClickListener
 import com.lt.ltviewsx.utils.nullSize
+import kotlinx.android.synthetic.main.lt_refresh_view.view.*
 import java.util.*
 
 /**
@@ -60,6 +61,13 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     private var onRvItemLongClickListener: OnRvItemLongClickListener? = null//条目长按事件
     private var noItemListenerState: Boolean? = null//没有条目回调的状态:null第一次  true上次是有数据  false上次是无数据
     private var bottomRefreshState = if (bottomRefreshView == null) -1 else 0//底部刷新的状态 -1表示不能刷新,其他表示展示的索引
+
+    private val TAG_BUTTOM_REFRESH_VIEW = 12345701//底部刷新view
+    private val TAG_HEAD_VIEWS_START = 12345500//头部view开始
+    private val TAG_HEAD_VIEWS_END = 12345599//头部view结束,一共可以添加100个
+    private val TAG_TAIL_VIEWS_START = 12345600//尾部view开始
+    private val TAG_TAIL_VIEWS_END = 12345600//尾部view开始
+    private val TAG_IS_HAVE_LONGCLICK = R.id.iv_lt_refresh//是否包含长按事件,ps:必须要用资源id
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)//内部方便使用
 
@@ -202,9 +210,9 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtCreateViewHolder}")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { //顶部和底部返回特定的ViewHolder
         return when (viewType) {
-            12345701 -> MyViewHolder(bottomRefreshView) //底部刷新布局
-            in 12345500..12345599 -> MyViewHolder(headList!![viewType - 12345500]) //头布局
-            in 12345600..12345699 -> MyViewHolder(tailList!![viewType - 12345600]) //尾布局
+            TAG_BUTTOM_REFRESH_VIEW -> MyViewHolder(bottomRefreshView) //底部刷新布局
+            in TAG_HEAD_VIEWS_START..TAG_HEAD_VIEWS_END -> MyViewHolder(headList!![viewType - TAG_HEAD_VIEWS_START]) //头布局
+            in TAG_TAIL_VIEWS_START..TAG_TAIL_VIEWS_END -> MyViewHolder(tailList!![viewType - TAG_TAIL_VIEWS_START]) //尾布局
             else -> onLtCreateViewHolder(parent, viewType)
         }
     }
@@ -215,12 +223,12 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         return when {
             headList != null
                     && position <= headList.nullSize() - 1
-            -> 12345500 + position //表示头部
+            -> TAG_HEAD_VIEWS_START + position //表示头部
             tailList != null
                     && position >= getLtItemCount() + headList.nullSize()
                     && position < itemCount - 1
-            -> 12345600 + (position - getLtItemCount() - headList.nullSize()) //表示尾部
-            position == itemCount - 1 -> 12345701 //表示是底部的上拉加载布局
+            -> TAG_TAIL_VIEWS_START + (position - getLtItemCount() - headList.nullSize()) //表示尾部
+            position == itemCount - 1 -> TAG_BUTTOM_REFRESH_VIEW //表示是底部的上拉加载布局
             else -> getLtItemViewType(position - headList.nullSize())//中间自定的布局
         }
     }
@@ -255,13 +263,14 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
             return
         if (position >= getLtItemCount() + headList.nullSize())
             return
-        onLtBindViewHolder(holder as VH, position - headList.nullSize())
-        //条目长按事件,12345678:表示view是否设置过长按事件
-        if (onRvItemLongClickListener != null && holder.itemView.getTag(12345678) != true) {
-            holder.itemView.setTag(12345678, true)
+        //条目长按事件,TAG_IS_HAVE_LONGCLICK:表示view是否设置过长按事件
+        if (onRvItemLongClickListener != null && holder.itemView.getTag(TAG_IS_HAVE_LONGCLICK) != true) {
+            holder.itemView.setTag(TAG_IS_HAVE_LONGCLICK, true)
             holder.itemView.setOnLongClickListener {
                 onRvItemLongClickListener ?: return@setOnLongClickListener false
-                onRvItemLongClickListener?.onItemLongClick(it, holder.adapterPosition)
+                val mPosition = holder.adapterPosition - headList.nullSize()
+                if (mPosition >= 0)
+                    onRvItemLongClickListener?.onItemLongClick(it, mPosition)
                 true
             }
         }
@@ -269,8 +278,11 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         if (onRvItemClickListener != null && !holder.itemView.hasOnClickListeners())
             holder.itemView.setOnClickListener {
                 onRvItemClickListener ?: return@setOnClickListener
-                onRvItemClickListener?.onItemClick(it, holder.adapterPosition)
+                val mPosition = holder.adapterPosition - headList.nullSize()
+                if (mPosition >= 0)
+                    onRvItemClickListener?.onItemClick(it, mPosition)
             }
+        onLtBindViewHolder(holder as VH, position - headList.nullSize())
     }
 
     @Deprecated("设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,并且set null 会清空掉数据,请使用{@link LtAdapter#addOnNoItemListener}")
@@ -289,9 +301,9 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         gridManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val itemViewType = getItemViewType(position)
-                return if (itemViewType == 12345701
-                        || itemViewType in 12345500..12345599
-                        || itemViewType in 12345600..12345699) gridManager.spanCount
+                return if (itemViewType == TAG_BUTTOM_REFRESH_VIEW
+                        || itemViewType in TAG_HEAD_VIEWS_START..TAG_HEAD_VIEWS_END
+                        || itemViewType in TAG_TAIL_VIEWS_START..TAG_TAIL_VIEWS_END) gridManager.spanCount
                 else 1
             }
         }
