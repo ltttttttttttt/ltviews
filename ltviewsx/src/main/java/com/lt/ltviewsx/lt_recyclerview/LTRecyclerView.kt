@@ -69,6 +69,8 @@ open class LTRecyclerView
         val lp = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         recyclerView.layoutParams = lp
+        //设置焦点默认给rv,不给子view,可以预解决很多焦点冲突问题
+        recyclerView.descendantFocusability = FOCUS_BEFORE_DESCENDANTS
         refreshLayout.setLayoutParams(lp)
         refreshLayout.setOnRefreshListener {
             //刷新时,添加下拉刷新回调
@@ -137,7 +139,7 @@ open class LTRecyclerView
         return when (val clazz = LtRecyclerViewManager.refreshLayoutClazz) {
             MSwipeRefreshLayout::class.java -> MSwipeRefreshLayout(context)
             MTextRefreshLayout::class.java -> MTextRefreshLayout(context)
-            else -> clazz!!.getConstructor(Context::class.java).newInstance(context) as BaseRefreshLayout
+            else -> clazz.getConstructor(Context::class.java).newInstance(context) as BaseRefreshLayout
         }
     }
 
