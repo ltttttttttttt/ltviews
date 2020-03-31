@@ -223,9 +223,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     override fun getItemViewType(position: Int): Int {
         val itemCount = itemCount
         return when {
-            headList != null
-                    && position <= headList.nullSize() - 1
-            -> TAG_HEAD_VIEWS_START + position //表示头部
+            position < headList.nullSize() -> TAG_HEAD_VIEWS_START + position //表示头部
             tailList != null
                     && position >= getLtItemCount() + headList.nullSize()
                     && position < itemCount - 1
