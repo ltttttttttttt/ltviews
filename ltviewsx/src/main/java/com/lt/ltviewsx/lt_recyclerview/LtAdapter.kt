@@ -10,7 +10,6 @@ import com.lt.ltviewsx.lt_listener.OnNoItemListener
 import com.lt.ltviewsx.lt_listener.OnRvItemClickListener
 import com.lt.ltviewsx.lt_listener.OnRvItemLongClickListener
 import com.lt.ltviewsx.utils.nullSize
-import kotlinx.android.synthetic.main.lt_refresh_view.view.*
 import java.util.*
 
 /**
@@ -62,12 +61,14 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     private var noItemListenerState: Boolean? = null//没有条目回调的状态:null第一次  true上次是有数据  false上次是无数据
     private var bottomRefreshState = if (bottomRefreshView == null) -1 else 0//底部刷新的状态 -1表示不能刷新,其他表示展示的索引
 
-    private val TAG_BUTTOM_REFRESH_VIEW = 12345701//底部刷新view
-    private val TAG_HEAD_VIEWS_START = 12345500//头部view开始
-    private val TAG_HEAD_VIEWS_END = 12345599//头部view结束,一共可以添加100个
-    private val TAG_TAIL_VIEWS_START = 12345600//尾部view开始
-    private val TAG_TAIL_VIEWS_END = 12345600//尾部view开始
-    private val TAG_IS_HAVE_LONGCLICK = R.id.iv_lt_refresh//是否包含长按事件,ps:必须要用资源id
+    companion object {
+        private const val TAG_BUTTOM_REFRESH_VIEW = 12345701//底部刷新view
+        private const val TAG_HEAD_VIEWS_START = 12345500//头部view开始
+        private const val TAG_HEAD_VIEWS_END = 12345599//头部view结束,一共可以添加100个
+        private const val TAG_TAIL_VIEWS_START = 12345600//尾部view开始
+        private const val TAG_TAIL_VIEWS_END = 12345600//尾部view开始
+        private val TAG_IS_HAVE_LONGCLICK = R.id.iv_lt_refresh//是否包含长按事件,ps:必须要用资源id
+    }
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)//内部方便使用
 
@@ -220,6 +221,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     //给顶部和底部的布局加上特定的type
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#getLtItemViewType}")
     override fun getItemViewType(position: Int): Int {
+        val itemCount = itemCount
         return when {
             headList != null
                     && position <= headList.nullSize() - 1
