@@ -150,11 +150,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         textView.setText("我是头部局");
         rv.setNoItemText("123");
         adapter.addHeadView(textView);
+        TextView textView2 = new TextView(this);
+        textView2.setText("我是尾部局");
+        adapter.addTailView(textView2);
 //        contentView.getRecyclerView()
 //                .setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         rv.addItemDecoration_line(10);
         rv.setAdapter(adapter)
-//                .setSpanCount(3)
+                .setSpanCount(3)
                 .setOnUpAndDownListener(new OnUpAndDownListener() {
                     @Override
                     public void up() {
@@ -165,6 +168,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     @Override
                     public void down() {
                         //下拉刷新时的回调
+                        adapter.removeHeadView(0);
+                        TextView textView = new TextView(MainActivity.this);
+                        textView.setText("我是头部局2");
+                        adapter.addHeadView(textView);
+                        adapter.notifyDataSetChanged();
+
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {

@@ -9,3 +9,8 @@ package com.lt.ltviewsx.utils
  * 获取集合长度
  */
 internal fun Collection<*>?.nullSize(): Int = this?.size ?: 0
+
+/**
+ * 如果是true返回前面的值,否则返回后面的值
+ */
+internal fun <T> Boolean?.yesOrNo(yes: T, no: T): T = if (this == true) yes else no

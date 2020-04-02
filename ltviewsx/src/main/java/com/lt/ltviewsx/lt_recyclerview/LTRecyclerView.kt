@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnNoItemListener
 import com.lt.ltviewsx.lt_listener.OnUpAndDownListener
-import com.lt.ltviewsx.utils.nullSize
 import java.lang.reflect.InvocationTargetException
 
 /**
@@ -183,8 +182,8 @@ open class LTRecyclerView
         recyclerView.adapter = adapter
         if (adapter is LtAdapter<*>)
             if (adapter.getLtItemCount() == 0
-                    && (!adapter.headersIsItem || adapter.headList.nullSize() == 0)
-                    && (!adapter.tailsIsItem || adapter.tailList.nullSize() == 0))
+                    && (!adapter.headsIsItem || adapter.headList.isEmpty())
+                    && (!adapter.tailsIsItem || adapter.tailList.isEmpty()))
                 recyclerView.visibility = View.INVISIBLE
         return this
     }
