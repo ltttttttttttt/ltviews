@@ -208,6 +208,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                rv.setTopRefresh(true);
                 rv.setBottomRefresh(true);
             }
         }, 2000);
