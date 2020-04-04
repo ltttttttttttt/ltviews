@@ -14,13 +14,13 @@ import com.lt.ltviewsx.lt_listener.OnRvItemLongClickListener
 import com.lt.ltviewsx.utils.nullSize
 import com.lt.ltviewsx.utils.yesOrNo
 import java.util.*
-
 /**
- * 所在包名:  com.lt.ltrecyclerview
- * 创建日期:  2017/4/28--10:38
- * 作   用:   适配器
- * 使用方法:
- * 注意事项:
+ * creator: lt  2017/4/28   lt.dygzs@qq.com
+ * effect : 适配器
+ * warning: 使用方法: https://blog.csdn.net/qq_33505109/article/details/80653174
+ *                   https://blog.csdn.net/qq_33505109/article/details/80677331
+ *                   https://blog.csdn.net/qq_33505109/article/details/80677778
+ *           github: https://github.com/ltttttttttttt/ltviews
  */
 abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor(bottomRefreshView: View? = LtRecyclerViewManager.getDefualtBottomRefreshView())
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
