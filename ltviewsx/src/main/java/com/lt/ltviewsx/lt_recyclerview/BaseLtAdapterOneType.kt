@@ -88,7 +88,7 @@ abstract class BaseLtAdapterOneType2<T>(val list: MutableList<T>,
  * 使用方便的ViewHolder
  */
 class BaseLtViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-    val viewFind: ViewFind = ViewFind().apply { this.setView(this@BaseLtViewHolder.view) }
+    val viewFind: ViewFind = ViewFind().apply { this.view = this@BaseLtViewHolder.view }
 }
 
 /**
