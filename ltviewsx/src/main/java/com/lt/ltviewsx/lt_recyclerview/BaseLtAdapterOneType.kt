@@ -1,5 +1,6 @@
 package com.lt.ltviewsx.lt_recyclerview
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,9 +101,9 @@ class ViewFind : Fragment() {
         this.mView = view
     }
 
-    override fun getView(): View? {
-        return mView
-    }
+    override fun getView(): View = mView
+
+    override fun getContext(): Context = mView.context
 }
 
 /**
