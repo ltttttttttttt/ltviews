@@ -1,7 +1,7 @@
 package com.lt.view
 
 import android.content.Context
-import com.lt.ltviewsx.lt_recyclerview.BaseLtAdapterOneType2
+import com.lt.ltviewsx.lt_recyclerview.BaseLtAdapterOneType
 import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
 import com.lt.ltviewsx.lt_recyclerview.LtRecyclerViewManager
 import com.lt.ltviewsx.lt_recyclerview.ViewFind
@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.layout_test1.*
  * 作    用:
  * 注意事项:
  */
-class TextAdapter(context: Context, list: ArrayList<String>) : BaseLtAdapterOneType2<String>(list, R.layout.layout_test1, LtRecyclerViewManager.getDefualtBottomRefreshView()) {
+class TextAdapter(context: Context, list: ArrayList<String>) : BaseLtAdapterOneType<String>(list, R.layout.layout_test1, LtRecyclerViewManager.getDefualtBottomRefreshView()) {
     override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
         v.tvLeft.text = b
 //        v.setBackgroundResource(R.color.notification_icon_bg_color)

@@ -5,7 +5,7 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType2
+import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType
 import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
 import com.lt.ltviewsx.lt_recyclerview.LtDivider
 import com.lt.ltviewsx.lt_recyclerview.ViewFind
@@ -40,7 +40,7 @@ class Main2Activity : AppCompatActivity() {
 
     }
 
-    class MAdapter(list: ArrayList<String>) : BaseAdapterOneType2<String>(list, R.layout.layout_test2) {
+    class MAdapter(list: ArrayList<String>) : BaseAdapterOneType<String>(list, R.layout.layout_test2) {
         override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
             v.tvLeft.text = b
             v.tvRight.text = b

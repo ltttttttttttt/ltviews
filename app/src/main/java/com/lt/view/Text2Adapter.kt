@@ -1,7 +1,7 @@
 package com.lt.view
 
 import android.content.Context
-import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType2
+import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType
 import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
 import com.lt.ltviewsx.lt_recyclerview.ViewFind
 import kotlinx.android.synthetic.main.layout_test1.*
@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.layout_test1.*
  * 作    用:
  * 注意事项:
  */
-class Text2Adapter(context: Context, list: ArrayList<String>) : BaseAdapterOneType2<String>(list, R.layout.layout_test1) {
+class Text2Adapter(context: Context, list: ArrayList<String>) : BaseAdapterOneType<String>(list, R.layout.layout_test1) {
     override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
         v.tvLeft.text = b
         v.tvRight.text = "右边的$b"
