@@ -25,58 +25,72 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      * 显示的Activity
      */
     private var mContext: Context? = null
+
     /**
      * 条目单击事件接口
      */
     private var mOnRvItemClickListener: OnRvItemClickListener? = null
+
     /**
      * 滚动事件监听
      */
     private var mOnScrollListener: OnScrollListener? = null
+
     /**
      * 图片切换时间
      */
     private var mSwitchTime = 0
+
     /**
      * 自动滚动的定时器
      */
     private var mTimer: Timer? = null
+
     /**
      * 圆点容器
      */
     private var mOvalLayout: LinearLayout? = null
+
     /**
      * item数量
      */
     private var tv_page: TextView? = null
+
     /**
      * 视频按钮
      */
     private var img_video: ImageView? = null
+
     /**
      * 当前选中的数组索引
      */
     private var curIndex = 0
+
     /**
      * 上次选中的数组索引
      */
     private var oldIndex = 0
+
     /**
      * 圆点选中时的背景ID
      */
     private var mFocusedId = 0
+
     /**
      * 圆点正常时的背景ID
      */
     private var mNormalId = 0
+
     /**
      * 图片资源ID组
      */
     private var mUris: List<String>? = null
+
     /**
      * ImageView组
      */
     var listImgs: MutableList<View>? = ArrayList() // 图片组;
+
     /**
      * 加载图片的监听
      */
@@ -113,7 +127,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         mFocusedId = focusedId
         mNormalId = normalId
         ininImages(context) // 初始化图片组
-        adapter = AdAdapter()
+        if (adapter !is BaseAdapter)
+            adapter = AdAdapter()
+        else
+            (adapter as BaseAdapter).notifyDataSetChanged()
         this.onItemClickListener = this
         setOnTouchListener(this)
         this.onItemSelectedListener = this
@@ -136,7 +153,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         mSwitchTime = switchTime
         this.tv_page = tv_page
         ininImages(context) // 初始化图片组
-        adapter = AdAdapter()
+        if (adapter !is BaseAdapter)
+            adapter = AdAdapter()
+        else
+            (adapter as BaseAdapter).notifyDataSetChanged()
         this.onItemClickListener = this
         setOnTouchListener(this)
         this.onItemSelectedListener = this
@@ -160,7 +180,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         this.tv_page = tv_page
         this.img_video = img_video
         ininImages(context) // 初始化图片组
-        adapter = AdAdapter()
+        if (adapter !is BaseAdapter)
+            adapter = AdAdapter()
+        else
+            (adapter as BaseAdapter).notifyDataSetChanged()
         this.onItemClickListener = this
         setOnTouchListener(this)
         this.onItemSelectedListener = this
@@ -365,6 +388,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>?) {}
+
     /**
      * 项目点击事件
      */
