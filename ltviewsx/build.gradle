@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.ltttttttttttt'
+group = 'com.github.ltttttttttttt'
 
 android {
     compileSdkVersion 28
@@ -26,16 +26,15 @@ android {
     }
 
 
-    tasks.withType(Jar){jarTask->
+    tasks.withType(Jar) { jarTask ->
 
-        if(jarTask.name.equals('packageReleaseJar')){
+        if (jarTask.name.equals('packageReleaseJar')) {
 
             jarTask.from android.sourceSets.main.java.srcDirs
 
         }
 
     }
-
 }
 
 dependencies {
