@@ -58,7 +58,7 @@ open class LTRecyclerView
         private set
 
     /**
-     * 设置是否在没有条目是隐藏RecyclerView
+     * 设置是否在没有条目时隐藏RecyclerView
      */
     var noItemIsHideRecyclerView = true
 
