@@ -56,6 +56,12 @@ open class LTRecyclerView
      */
     var noItemView: View? = null
         private set
+
+    /**
+     * 设置是否在没有条目是隐藏RecyclerView
+     */
+    var noItemIsHideRecyclerView = true
+
     private var onUpAndDownListener: OnUpAndDownListener? = null
 
     init {
@@ -170,12 +176,14 @@ open class LTRecyclerView
         if (adapter is LtAdapter<*>)
             adapter.addOnNoItemListener(object : OnNoItemListener {
                 override fun noItem() { //没有条目时隐藏rl,然后展示没条目时的布局
-                    recyclerView.visibility = View.INVISIBLE
+                    if (noItemIsHideRecyclerView)
+                        recyclerView.visibility = View.INVISIBLE
                     noItemView?.visibility = View.VISIBLE
                 }
 
                 override fun haveItem() { //有条目了就显示rv,并且隐藏noItemView
-                    recyclerView.visibility = View.VISIBLE
+                    if (noItemIsHideRecyclerView)
+                        recyclerView.visibility = View.VISIBLE
                     noItemView?.visibility = View.GONE
                 }
             })
