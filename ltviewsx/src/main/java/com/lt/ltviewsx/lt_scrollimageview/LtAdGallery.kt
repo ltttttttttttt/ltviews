@@ -312,7 +312,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        clear()
+        stopTimer()
     }
 
     /**
