@@ -309,6 +309,12 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
 //            tv_page.setText(1 + "/" + listImgs.size());
 //        }
 //    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        clear()
+    }
+
     /**
      * 无限循环适配器
      */
