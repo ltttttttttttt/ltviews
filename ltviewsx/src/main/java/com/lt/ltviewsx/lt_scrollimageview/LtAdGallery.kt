@@ -251,12 +251,11 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      * 初始化圆点
      */
     private fun initOvalLayout() {
-        if (mOvalLayout != null && listImgs!!.size < 2) { // 如果只有一第图时不显示圆点容器
+        if (mOvalLayout != null && listImgs!!.size < 2) {
+            // 如果只有一第图时不显示圆点容器
             mOvalLayout!!.layoutParams.height = 0
-        } else if (mOvalLayout != null) { // 圆点的大小是 圆点窗口的 70%;
-//            int Ovalheight = (int) (mOvalLayout.getLayoutParams().height * 0.7);
-// 圆点的左右外边距是 圆点窗口的 20%;
-//            int Ovalmargin = (int) (mOvalLayout.getLayoutParams().height * 0.2);
+        } else if (mOvalLayout != null) {
+            // 圆点的左右外边距是 圆点窗口的 20%;
             if (ovalmargin == 0) ovalmargin = try {
                 (BitmapFactory.decodeResource(resources, mFocusedId).width * 0.3).toInt()
             } catch (e: Exception) {
@@ -309,6 +308,13 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
 //            tv_page.setText(1 + "/" + listImgs.size());
 //        }
 //    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (listImgs?.isNotEmpty() == true) {
+            startTimer()
+        }
+    }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
