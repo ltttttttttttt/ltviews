@@ -48,7 +48,7 @@ abstract class BaseAdapterOneType<T>(val list: MutableList<T>,
  */
 abstract class BaseLtAdapterOneType<T>(val list: MutableList<T>,
                                        @LayoutRes private val itemLayoutId: Int = 0,
-                                       val view: View? = LtRecyclerViewManager.getDefualtBottomRefreshView())
+                                       view: View? = LtRecyclerViewManager.getDefualtBottomRefreshView())
     : LtAdapter<BaseLtViewHolder>(view) {
 
     abstract fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder)
