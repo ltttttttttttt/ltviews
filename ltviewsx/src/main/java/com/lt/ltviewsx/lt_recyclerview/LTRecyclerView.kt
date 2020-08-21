@@ -41,10 +41,32 @@ open class LTRecyclerView
     val recyclerView = RecyclerView(context)
 
     /**
-     * 获取适配器对象
+     * 获取或直接设置适配器对象
      */
     var adapter: RecyclerView.Adapter<*>? = null
-        private set
+        set(adapter) {
+            field = adapter
+            if (adapter is LtAdapter<*>)
+                adapter.addOnNoItemListener(object : OnNoItemListener {
+                    override fun noItem() { //没有条目时隐藏rl,然后展示没条目时的布局
+                        if (noItemIsHideRecyclerView)
+                            recyclerView.visibility = View.INVISIBLE
+                        noItemView?.visibility = View.VISIBLE
+                    }
+
+                    override fun haveItem() { //有条目了就显示rv,并且隐藏noItemView
+                        if (noItemIsHideRecyclerView)
+                            recyclerView.visibility = View.VISIBLE
+                        noItemView?.visibility = View.GONE
+                    }
+                })
+            recyclerView.adapter = adapter
+            if (adapter is LtAdapter<*>)
+                if (adapter.getLtItemCount() == 0
+                        && (!adapter.headsIsItem || adapter.headList.isEmpty())
+                        && (!adapter.tailsIsItem || adapter.tailList.isEmpty()))
+                    recyclerView.visibility = View.INVISIBLE
+        }
 
     /**
      * 获取线性多列布局的管理者
@@ -163,36 +185,6 @@ open class LTRecyclerView
      */
     fun setOnUpAndDownListener(onUpAndDownListener: OnUpAndDownListener?): LTRecyclerView {
         this.onUpAndDownListener = onUpAndDownListener
-        return this
-    }
-
-    /**
-     * 设置RecyclerView的适配器
-     *
-     * @param adapter 继承自RecyclerView.Adapter的适配器
-     */
-    fun setAdapter(adapter: RecyclerView.Adapter<*>): LTRecyclerView {
-        this.adapter = adapter
-        if (adapter is LtAdapter<*>)
-            adapter.addOnNoItemListener(object : OnNoItemListener {
-                override fun noItem() { //没有条目时隐藏rl,然后展示没条目时的布局
-                    if (noItemIsHideRecyclerView)
-                        recyclerView.visibility = View.INVISIBLE
-                    noItemView?.visibility = View.VISIBLE
-                }
-
-                override fun haveItem() { //有条目了就显示rv,并且隐藏noItemView
-                    if (noItemIsHideRecyclerView)
-                        recyclerView.visibility = View.VISIBLE
-                    noItemView?.visibility = View.GONE
-                }
-            })
-        recyclerView.adapter = adapter
-        if (adapter is LtAdapter<*>)
-            if (adapter.getLtItemCount() == 0
-                    && (!adapter.headsIsItem || adapter.headList.isEmpty())
-                    && (!adapter.tailsIsItem || adapter.tailList.isEmpty()))
-                recyclerView.visibility = View.INVISIBLE
         return this
     }
 

@@ -16,11 +16,8 @@ import com.lt.ltviewsx.lt_listener.OnScrollListener
  * 注意事项:
  */
 class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
-    /**
-     * 获取内部的LtAdGallery控件
-     */
-    val ltAdGallery: LtAdGallery
-    private val ll: LinearLayout
+    val ltAdGallery: LtAdGallery//获取内部的LtAdGallery控件
+    val llIndicator: LinearLayout//指示器的父布局
     val dp10 = context.resources.getDimension(R.dimen.dp10).toInt()
 
     init {
@@ -29,14 +26,14 @@ class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: Attri
         val lp = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         ltAdGallery.layoutParams = lp
         addView(ltAdGallery)
-        ll = LinearLayout(context)
+        llIndicator = LinearLayout(context)
         val lp2 = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        ll.setPadding(dp10, dp7, dp10, dp7)
-        ll.orientation = LinearLayout.HORIZONTAL
+        llIndicator.setPadding(dp10, dp7, dp10, dp7)
+        llIndicator.orientation = LinearLayout.HORIZONTAL
         lp2.gravity = Gravity.BOTTOM
-        ll.gravity = Gravity.CENTER_HORIZONTAL
-        ll.layoutParams = lp2
-        addView(ll)
+        llIndicator.gravity = Gravity.CENTER_HORIZONTAL
+        llIndicator.layoutParams = lp2
+        addView(llIndicator)
     }
 
     /**
@@ -51,7 +48,7 @@ class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: Attri
      */
     fun init(imageUrl: List<String>?, switchTime: Int, aTime: Int, focusedId: Int, normalId: Int, listener: OnImageViewLoadUrlListener?): LtScrollImageView {
         ltAdGallery.setOnImageViewLoadUrlListener(listener)
-                .start(context, imageUrl, switchTime, aTime, ll, focusedId, normalId)
+                .start(context, imageUrl, switchTime, aTime, llIndicator, focusedId, normalId)
         return this
     }
 
@@ -85,63 +82,63 @@ class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: Attri
     fun setPosition(ltSIVPosition: LtPosition): LtScrollImageView {
         when (ltSIVPosition) {
             LtPosition.LEFT_TOP -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.TOP
-                ll.gravity = Gravity.LEFT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.TOP
+                llIndicator.gravity = Gravity.LEFT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.CENTER_TOP -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.TOP
-                ll.gravity = Gravity.CENTER_HORIZONTAL
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.TOP
+                llIndicator.gravity = Gravity.CENTER_HORIZONTAL
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.RIGHT_TOP -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.TOP
-                ll.gravity = Gravity.RIGHT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.TOP
+                llIndicator.gravity = Gravity.RIGHT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.LEFT_CENTER -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.CENTER_VERTICAL
-                ll.gravity = Gravity.LEFT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.CENTER_VERTICAL
+                llIndicator.gravity = Gravity.LEFT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.CENTER_CENTER -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.CENTER_VERTICAL
-                ll.gravity = Gravity.CENTER_HORIZONTAL
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.CENTER_VERTICAL
+                llIndicator.gravity = Gravity.CENTER_HORIZONTAL
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.RIGHT_CENTER -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.CENTER_VERTICAL
-                ll.gravity = Gravity.RIGHT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.CENTER_VERTICAL
+                llIndicator.gravity = Gravity.RIGHT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.LEFT_BOTTOM -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
-                ll.gravity = Gravity.LEFT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
+                llIndicator.gravity = Gravity.LEFT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.CENTER_BOTTOM -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
-                ll.gravity = Gravity.CENTER_HORIZONTAL
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
+                llIndicator.gravity = Gravity.CENTER_HORIZONTAL
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.RIGHT_BOTTOM -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
-                ll.gravity = Gravity.RIGHT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
+                llIndicator.gravity = Gravity.RIGHT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = 0
             }
             LtPosition.LEFT_BOTTOM_OUT -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
-                ll.gravity = Gravity.LEFT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
+                llIndicator.gravity = Gravity.LEFT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = dp10 * 2
             }
             LtPosition.CENTER_BOTTOM_OUT -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
-                ll.gravity = Gravity.CENTER_HORIZONTAL
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
+                llIndicator.gravity = Gravity.CENTER_HORIZONTAL
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = dp10 * 2
             }
             LtPosition.RIGHT_BOTTOM_OUT -> {
-                (ll.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
-                ll.gravity = Gravity.RIGHT
+                (llIndicator.layoutParams as LayoutParams).gravity = Gravity.BOTTOM
+                llIndicator.gravity = Gravity.RIGHT
                 (ltAdGallery.layoutParams as LayoutParams).bottomMargin = dp10 * 2
             }
         }
