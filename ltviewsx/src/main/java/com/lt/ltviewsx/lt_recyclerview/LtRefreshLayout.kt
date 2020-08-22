@@ -70,7 +70,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     /**
      * 用来设置刷新view的宽高等信息
      */
-    protected fun createRefreshViewLayoutParams(): LayoutParams {
+    protected open fun createRefreshViewLayoutParams(): LayoutParams {
         return LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, refreshViewHeight)
     }
 
@@ -125,7 +125,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     /**
      * 下拉的进度
      */
-    protected fun progress(y: Float, time: Long) {
+    protected open fun progress(y: Float, time: Long) {
         if (time == 0L) {
             if (rvIsMove) {
                 //如果rv跟着动,就调用这个
