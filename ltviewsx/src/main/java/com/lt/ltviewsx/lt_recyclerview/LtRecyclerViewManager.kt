@@ -27,76 +27,40 @@ object LtRecyclerViewManager {
      * 但是因为使用了Application的上下文,所以用该上下文的view无法使用配置好的主题,或设置好的density(一般上面两种情况也没什么问题),但是可以通过在Adapter的构造中传入自己new的view来避免
      */
     var context: Context? = null
-        private set
+
     /**
      * 下拉刷新的View的class
      */
     var refreshLayoutClazz: Class<*> = MSwipeRefreshLayout::class.java
-        private set
+
     /**
      * 上拉加载的布局id
      */
     var upLayoutId = R.layout.lt_up_loading
-        private set
+
     /**
      * 下拉阈值
      */
     var refreshThreshold = 0F
-        private set
+
     /**
      * 下拉时RecyclerView是否跟着向下移动(仅自定义下拉刷新布局)
      */
     var isRvIsMove = true
-        private set
+
     /**
      * 上拉已经没数据了,再次上拉是否加载数据
      */
     var isNoDataIsLoad = false
-        private set
+
     /**
      * noItemTextView的字体颜色
      */
     var noItemTextColor = 0
-        private set
     internal val handler by lazy { Handler(Looper.getMainLooper()) }//项目内用的handler
 
     /**
      * 获取默认(自定义设置)的适配器底部刷新view
      */
-    fun getDefualtBottomRefreshView(): View = View.inflate(context, upLayoutId, null)
-
-    fun setContext(context: Context): LtRecyclerViewManager {
-        this.context = context
-        return this
-    }
-
-    fun setRefreshLayoutClazz(refreshLayoutClazz: Class<*>): LtRecyclerViewManager {
-        this.refreshLayoutClazz = refreshLayoutClazz
-        return this
-    }
-
-    fun setUpLayoutId(upLayoutId: Int): LtRecyclerViewManager {
-        this.upLayoutId = upLayoutId
-        return this
-    }
-
-    fun setRefreshThreshold(refreshThreshold: Float): LtRecyclerViewManager {
-        this.refreshThreshold = refreshThreshold
-        return this
-    }
-
-    fun setIsRvIsMove(isRvIsMove: Boolean): LtRecyclerViewManager {
-        this.isRvIsMove = isRvIsMove
-        return this
-    }
-
-    fun setIsNoDataIsLoad(isNoDataIsLoad: Boolean): LtRecyclerViewManager {
-        this.isNoDataIsLoad = isNoDataIsLoad
-        return this
-    }
-
-    fun setNoItemTextColor(noItemTextColor: Int): LtRecyclerViewManager {
-        this.noItemTextColor = noItemTextColor
-        return this
-    }
+    fun getDefaultBottomRefreshView(): View = View.inflate(context, upLayoutId, null)
 }

@@ -48,7 +48,7 @@ abstract class BaseAdapterOneType<T>(val list: MutableList<T>,
  */
 abstract class BaseLtAdapterOneType<T>(val list: MutableList<T>,
                                        @LayoutRes private val itemLayoutId: Int = 0,
-                                       view: View? = LtRecyclerViewManager.getDefualtBottomRefreshView())
+                                       view: View? = LtRecyclerViewManager.getDefaultBottomRefreshView())
     : LtAdapter<BaseLtViewHolder>(view) {
 
     abstract fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder)
@@ -104,7 +104,7 @@ inline fun <T> adapterOf(list: MutableList<T>,
  */
 inline fun <T> ltAdapterOf(list: MutableList<T>,
                            @LayoutRes itemLayoutId: Int,
-                           view: View? = LtRecyclerViewManager.getDefualtBottomRefreshView(),
+                           view: View? = LtRecyclerViewManager.getDefaultBottomRefreshView(),
                            crossinline setData: BaseLtAdapterOneType<T>.(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder) -> Unit)
         : BaseLtAdapterOneType<T> =
         object : BaseLtAdapterOneType<T>(list, itemLayoutId, view) {

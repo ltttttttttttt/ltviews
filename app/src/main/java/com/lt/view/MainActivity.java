@@ -156,8 +156,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        contentView.getRecyclerView()
 //                .setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         rv.addItemDecoration_line(10);
-        rv.setAdapter(adapter)
-                .setSpanCount(3)
+        rv.setAdapter(adapter);
+        rv.setSpanCount(3)
                 .setOnUpAndDownListener(new OnUpAndDownListener() {
                     @Override
                     public void up() {

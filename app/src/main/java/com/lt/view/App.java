@@ -16,11 +16,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LtRecyclerViewManager.INSTANCE.init(this)
-                .setUpLayoutId(R.layout.lt_up_loading)
+        LtRecyclerViewManager init = LtRecyclerViewManager.INSTANCE.init(this);
+        init.setUpLayoutId(R.layout.lt_up_loading);
 //                .setRvIsMove(false)
 //                .setNoDataIsLoad( true)
-                .setRefreshLayoutClazz(MTextRefreshLayout.class)
+        init.setRefreshLayoutClazz(MTextRefreshLayout.class);
         ;
     }
 }

@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.layout_test1.*
  * 作    用:
  * 注意事项:
  */
-class TextAdapter(context: Context, list: ArrayList<String>) : BaseLtAdapterOneType<String>(list, R.layout.layout_test1, LtRecyclerViewManager.getDefualtBottomRefreshView()) {
+class TextAdapter(context: Context, list: ArrayList<String>) : BaseLtAdapterOneType<String>(list, R.layout.layout_test1, LtRecyclerViewManager.getDefaultBottomRefreshView()) {
     override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
         v.tvLeft.text = b
 //        v.setBackgroundResource(R.color.notification_icon_bg_color)

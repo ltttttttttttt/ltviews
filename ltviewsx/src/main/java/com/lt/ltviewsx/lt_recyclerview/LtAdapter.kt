@@ -22,7 +22,7 @@ import java.util.*
  *                   https://blog.csdn.net/qq_33505109/article/details/80677778
  *           github: https://github.com/ltttttttttttt/ltviews
  */
-abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor(bottomRefreshView: View? = LtRecyclerViewManager.getDefualtBottomRefreshView())
+abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor(bottomRefreshView: View? = LtRecyclerViewManager.getDefaultBottomRefreshView())
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     /**
      * 底部的上拉刷新View
