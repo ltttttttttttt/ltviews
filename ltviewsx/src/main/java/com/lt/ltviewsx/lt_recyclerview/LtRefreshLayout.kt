@@ -191,7 +191,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
      * 用来添加rv,会自动添加刷新的view,只能调用一次(只能显示设置一个child)
      */
     override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams) {
-        if (childCount > 2) throw RuntimeException("this method can only be called once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        if (childCount > 2) throw RuntimeException("BaseRefreshLayout.addView method can only be called once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         if (childCount == 0) {
             contentView = child
             super.addView(child, 0, params)
