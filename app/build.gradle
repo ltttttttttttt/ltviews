@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.lt.view"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,9 +22,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.appcompat:appcompat:1.2.0")
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation project(':ltviewsx')
 //    implementation project(':ltviews2')

@@ -21,6 +21,5 @@ public class App extends Application {
 //                .setRvIsMove(false)
 //                .setNoDataIsLoad( true)
         init.setRefreshLayoutClazz(MTextRefreshLayout.class);
-        ;
     }
 }

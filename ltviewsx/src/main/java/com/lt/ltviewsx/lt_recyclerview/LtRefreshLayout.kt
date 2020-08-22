@@ -4,10 +4,13 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.NestedScrollingParent
+import androidx.core.view.ViewCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lt.ltviewsx.R
 
@@ -16,7 +19,9 @@ import com.lt.ltviewsx.R
  * 作    用:  自定义的下拉刷新View的父类
  * 注意事项:
  */
-abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr), BaseRefreshLayout {
+abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr),
+        BaseRefreshLayout {
     protected var rvIsMove = LtRecyclerViewManager.isRvIsMove //View是否跟着下拉移动
     protected var listener: SwipeRefreshLayout.OnRefreshListener? = null //刷新的回调
     protected var yAxis = if (rvIsMove) 9999F else 0F //y轴的值
@@ -30,7 +35,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var mLastY = 0F//判断拦截事件用的第一次触摸的y轴 = 0F
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
     protected var scrollOrClickBoundary = context.resources.getDimension(R.dimen.dp4)//判断是滚动或者点击的边界,一般是4dp(点击的半径),用来判断本次滑动是否有效,防止阻断掉点击事件
-    private val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
+    protected val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
 
     /**
      * 刷新状态
@@ -216,7 +221,11 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 mLastY = mCurY
                 //如果是向上滑动,或者向下滑动的距离小于4dp(点击事件半径)(可能是点击的时候位移了)，我们认为这次滑动是无效的，把这次事件传递给contentView去消费。例如contentView的child的点击事件。
                 //或者contentView内容在Y轴上可滑动，把事件传递给contentView内部(false是不拦截,所以使用!)
-                return !(mark <= scrollOrClickBoundary || contentView.canScrollVertically(-mark))
+                //表示是否要拦截
+                val isIntercept = !(mark <= scrollOrClickBoundary || contentView.canScrollVertically(-mark))
+                //提示父控件自身要使用本次触摸事件,不要拦截
+                parent.requestDisallowInterceptTouchEvent(isIntercept)
+                return isIntercept
             }
         }
         return false

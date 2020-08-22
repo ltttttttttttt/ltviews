@@ -47,6 +47,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //todo test
+        startActivity(new Intent(this, Main3Activity.class));
+
         ll1 = (LinearLayout) findViewById(R.id.ll1);
 //        iv = (LtDoubleTextView) findViewById(R.id.iv);
         siv = (LtScrollImageView) findViewById(R.id.siv);
@@ -267,6 +270,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        app:dividerColor="@color/colorAccent"
 //        //设置图片分割线,和颜色,高度冲突
 //        app:dividerDrawable="@mipmap/ic_launcher"
+    }
+
+    //测试下拉刷新
+    public void onClickTestRefresh(View view) {
+        startActivity(new Intent(this, Main3Activity.class));
     }
 
     class MViewHolder extends RecyclerView.ViewHolder {
