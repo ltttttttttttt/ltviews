@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 创    建:  lt  2018/1/3--10:42
  * 作    用:  三级联动管理者
- * 注意事项:
+ * 注意事项:   该包内废弃,改用ltviewsx内的文件
  */
 
 public class Lt3LinkageManager {

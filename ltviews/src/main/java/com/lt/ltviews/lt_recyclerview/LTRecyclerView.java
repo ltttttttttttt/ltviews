@@ -31,7 +31,7 @@ import java.lang.reflect.InvocationTargetException;
  * 创建日期:  2017/4/6--17:10
  * 作   用:   以RecyclerView为基础,可以上拉加载和下拉刷新
  * 使用方法:
- * 注意事项:
+ * 注意事项:   该包内废弃,改用ltviewsx内的文件
  */
 
 public class LTRecyclerView extends FrameLayout {
