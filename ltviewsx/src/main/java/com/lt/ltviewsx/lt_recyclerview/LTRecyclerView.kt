@@ -32,7 +32,7 @@ open class LTRecyclerView
     /**
      * 获得自定义控件中的RefreshLayout
      */
-    val refreshLayout: BaseRefreshLayout
+    val refreshLayout: BaseRefreshLayout = LtRecyclerViewManager.refreshLayoutConstructorFunction(context, null, 0)
 
     /**
      * 获取到自定义控件中包含的RecyclerView
@@ -45,7 +45,9 @@ open class LTRecyclerView
     var adapter: RecyclerView.Adapter<*>? = null
         set(adapter) {
             field = adapter
-            if (adapter is LtAdapter<*>)
+            recyclerView.adapter = adapter
+            if (adapter is LtAdapter<*>) {
+                //注册条目有无的回调
                 adapter.addOnNoItemListener(object : OnNoItemListener {
                     override fun noItem() { //没有条目时隐藏rl,然后展示没条目时的布局
                         if (noItemIsHideRecyclerView)
@@ -59,12 +61,22 @@ open class LTRecyclerView
                         noItemView?.visibility = View.GONE
                     }
                 })
-            recyclerView.adapter = adapter
-            if (adapter is LtAdapter<*>)
+                //初始化noItemView
                 if (adapter.getLtItemCount() == 0
                         && (!adapter.headsIsItem || adapter.headList.isEmpty())
                         && (!adapter.tailsIsItem || adapter.tailList.isEmpty()))
                     recyclerView.visibility = View.INVISIBLE
+                //适用于GridView,使条目跨列
+                layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        val itemViewType = adapter.getItemViewType(position)
+                        return if (itemViewType == LtAdapter.TAG_BOTTOM_REFRESH_VIEW
+                                || itemViewType == LtAdapter.TAG_HEAD_VIEW
+                                || itemViewType == LtAdapter.TAG_TAIL_VIEW) layoutManager.spanCount
+                        else 1
+                    }
+                }
+            }
         }
 
     /**
@@ -87,7 +99,6 @@ open class LTRecyclerView
 
     init {
         //添加下拉刷新
-        refreshLayout = LtRecyclerViewManager.refreshLayoutConstructorFunction(context, null, 0)
         val lp = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         recyclerView.layoutParams = lp

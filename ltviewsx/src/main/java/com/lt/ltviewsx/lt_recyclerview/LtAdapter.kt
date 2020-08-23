@@ -5,7 +5,6 @@ import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnNoItemListener
@@ -75,9 +74,9 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     private var bottomRefreshState = if (bottomRefreshView == null) -1 else 0//底部刷新的状态 -1表示不能刷新,其他表示展示的索引
 
     companion object {
-        private const val TAG_BOTTOM_REFRESH_VIEW = 12345701//底部刷新view
-        private const val TAG_HEAD_VIEW = 12345702//头部view
-        private const val TAG_TAIL_VIEW = 12345703//尾部view
+        internal const val TAG_BOTTOM_REFRESH_VIEW = 12345701//底部刷新view
+        internal const val TAG_HEAD_VIEW = 12345702//头部view
+        internal const val TAG_TAIL_VIEW = 12345703//尾部view
         private val TAG_IS_HAVE_LONG_CLICK = R.id.iv_lt_refresh//是否包含长按事件,ps:必须要用资源id
     }
 
@@ -387,21 +386,5 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         if (onNoItemListener != null)
             onNoItemListenerList?.add(onNoItemListener)
         return this
-    }
-
-    /**
-     * 适用于GridView,使条目跨列
-     */
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        val gridManager = recyclerView.layoutManager as? GridLayoutManager ?: return
-        gridManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val itemViewType = getItemViewType(position)
-                return if (itemViewType == TAG_BOTTOM_REFRESH_VIEW
-                        || itemViewType == TAG_HEAD_VIEW
-                        || itemViewType == TAG_TAIL_VIEW) gridManager.spanCount
-                else 1
-            }
-        }
     }
 }
