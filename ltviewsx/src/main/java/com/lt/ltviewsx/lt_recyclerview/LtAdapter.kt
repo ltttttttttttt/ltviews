@@ -11,9 +11,8 @@ import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnNoItemListener
 import com.lt.ltviewsx.lt_listener.OnRvItemClickListener
 import com.lt.ltviewsx.lt_listener.OnRvItemLongClickListener
-import com.lt.ltviewsx.utils.nullSize
-import com.lt.ltviewsx.utils.yesOrNo
 import java.util.*
+
 /**
  * creator: lt  2017/4/28   lt.dygzs@qq.com
  * effect : 适配器
@@ -137,7 +136,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
      * 设置是否是刷新,没有更多数据的时候传入false,否则true
      */
     fun setRefresh(b: Boolean): LtAdapter<VH> {
-        return setRefresh(b.yesOrNo(0, 1))
+        return setRefresh(if (b) 0 else 1)
     }
 
     /**
@@ -181,13 +180,13 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
      */
     fun addOnNoItemListener(onNoItemListener: OnNoItemListener): LtAdapter<VH> {
         if (onNoItemListenerList == null) onNoItemListenerList = ArrayList()
-        onNoItemListenerList!!.add(onNoItemListener)
+        onNoItemListenerList?.add(onNoItemListener)
         return this
     }
 
     fun addOnNoItemListener(position: Int, onNoItemListener: OnNoItemListener): LtAdapter<VH> {
         if (onNoItemListenerList == null) onNoItemListenerList = ArrayList()
-        onNoItemListenerList!!.add(position, onNoItemListener)
+        onNoItemListenerList?.add(position, onNoItemListener)
         return this
     }
 
@@ -195,8 +194,8 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
      * 移除没有数据时的回调
      */
     fun removeOnNoItemListener(onNoItemListener: OnNoItemListener): LtAdapter<VH> {
-        if (onNoItemListenerList.nullSize() == 0) return this
-        onNoItemListenerList!!.remove(onNoItemListener)
+        if (onNoItemListenerList.isNullOrEmpty()) return this
+        onNoItemListenerList?.remove(onNoItemListener)
         return this
     }
 
@@ -301,7 +300,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
             position == 0 && headList.isNotEmpty() -> TAG_HEAD_VIEW //表示头部
             position == itemCount - 2 && tailList.isNotEmpty() -> TAG_TAIL_VIEW //表示尾部
             position == itemCount - 1 -> TAG_BOTTOM_REFRESH_VIEW //表示是底部的上拉加载布局
-            else -> getLtItemViewType(position - headList.isNotEmpty().yesOrNo(1, 0))//中间自定的布局
+            else -> getLtItemViewType(position - if (headList.isNotEmpty()) 1 else 0)//中间自定的布局
         }
     }
 
@@ -311,14 +310,14 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         //如果调用了一次无数据,下次有数据的时候就调用有数据,如果之前没调过无数据,就不相应有数据
         if (noItemListenerState != false
                 && itemCount == 0
-                && onNoItemListenerList.nullSize() > 0
+                && !onNoItemListenerList.isNullOrEmpty()
                 && (!headsIsItem || headList.isEmpty())
                 && (!tailsIsItem || tailList.isEmpty())) {
             //如果没数据,但是变成有数据了,就调用有数据的回调,并修改为有数据
             noItemListenerState = false
             onNoItemListenerList?.forEach { it.noItem() }
         } else if (noItemListenerState != true
-                && onNoItemListenerList.nullSize() > 0
+                && !onNoItemListenerList.isNullOrEmpty()
                 && ((headsIsItem && headList.isNotEmpty())
                         || (tailsIsItem && tailList.isNotEmpty())
                         || itemCount > 0)) {
@@ -365,7 +364,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
             holder.itemView.setTag(TAG_IS_HAVE_LONG_CLICK, true)
             holder.itemView.setOnLongClickListener {
                 onRvItemLongClickListener ?: return@setOnLongClickListener false
-                val mPosition = holder.adapterPosition - headList.isEmpty().yesOrNo(0, 1)
+                val mPosition = holder.adapterPosition - if (headList.isEmpty()) 0 else 1
                 if (mPosition >= 0)
                     onRvItemLongClickListener?.onItemLongClick(it, mPosition)
                 true
@@ -375,18 +374,18 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         if (onRvItemClickListener != null && !holder.itemView.hasOnClickListeners())
             holder.itemView.setOnClickListener {
                 onRvItemClickListener ?: return@setOnClickListener
-                val mPosition = holder.adapterPosition - headList.isEmpty().yesOrNo(0, 1)
+                val mPosition = holder.adapterPosition - if (headList.isEmpty()) 0 else 1
                 if (mPosition >= 0)
                     onRvItemClickListener?.onItemClick(it, mPosition)
             }
-        onLtBindViewHolder(holder as VH, position - headList.isEmpty().yesOrNo(0, 1))
+        onLtBindViewHolder(holder as VH, position - if (headList.isEmpty()) 0 else 1)
     }
 
     @Deprecated("设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,并且set null 会清空掉数据,请使用{@link LtAdapter#addOnNoItemListener}")
     fun setOnNoItemListener(onNoItemListener: OnNoItemListener?): LtAdapter<VH> {
-        if (onNoItemListenerList == null) onNoItemListenerList = ArrayList() else onNoItemListenerList!!.clear()
+        if (onNoItemListenerList == null) onNoItemListenerList = ArrayList() else onNoItemListenerList?.clear()
         if (onNoItemListener != null)
-            onNoItemListenerList!!.add(onNoItemListener)
+            onNoItemListenerList?.add(onNoItemListener)
         return this
     }
 

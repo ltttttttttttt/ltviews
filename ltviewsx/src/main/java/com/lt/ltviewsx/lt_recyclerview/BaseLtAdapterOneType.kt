@@ -36,7 +36,7 @@ abstract class BaseAdapterOneType<T>(val list: MutableList<T>,
             else
                 BaseLtViewHolder(createView(parent))
 
-    open fun createView(parent: ViewGroup): View = throw RuntimeException("请填写itemLayoutId或者重写createView()")
+    open fun createView(parent: ViewGroup): View = throw RuntimeException("${this::class.simpleName}:请填写itemLayoutId或者重写createView()")
 }
 
 /**
@@ -63,14 +63,14 @@ abstract class BaseLtAdapterOneType<T>(val list: MutableList<T>,
             else
                 BaseLtViewHolder(createView(parent))
 
-    open fun createView(parent: ViewGroup): View = throw RuntimeException("请填写itemLayoutId或者重写createView()")
+    open fun createView(parent: ViewGroup): View = throw RuntimeException("${this::class.simpleName}:请填写itemLayoutId或者重写createView()")
 }
 
 /**
  * 使用方便的ViewHolder
  */
-open class BaseLtViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-    val viewFind: ViewFind = ViewFind().apply { this.view = this@BaseLtViewHolder.view }
+open class BaseLtViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val viewFind: ViewFind = ViewFind().setView(view)
 }
 
 /**
@@ -79,8 +79,9 @@ open class BaseLtViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
 open class ViewFind : Fragment() {
     private lateinit var mView: View
 
-    fun setView(view: View) {
+    fun setView(view: View): ViewFind {
         this.mView = view
+        return this
     }
 
     override fun getView(): View = mView

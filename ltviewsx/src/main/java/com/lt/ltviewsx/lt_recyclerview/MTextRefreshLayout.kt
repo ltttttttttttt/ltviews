@@ -78,8 +78,6 @@ class MTextRefreshLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 oa?.repeatCount = 0 //设置动画执行的次数
                 oa?.start() //开始动画
             }
-            else -> {
-            }
         }
     }
 

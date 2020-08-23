@@ -1,6 +1,5 @@
 package com.lt.ltviewsx.lt_recyclerview
 
-import android.R
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -10,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lt.ltviewsx.utils.nullSize
 
 /**
  * rv的分割线类
@@ -27,10 +25,11 @@ class LtDivider(rv: RecyclerView) : RecyclerView.ItemDecoration() {
      * @param rv
      */
     init {
-        val a = rv.context.obtainStyledAttributes(intArrayOf(R.attr.listDivider))
+        val a = rv.context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
         mDivider = a.getDrawable(0)
         a.recycle()
-        orientation = if (rv.layoutManager is LinearLayoutManager) (rv.layoutManager as LinearLayoutManager?)!!.orientation else -1
+        val layoutManager = rv.layoutManager
+        orientation = if (layoutManager is LinearLayoutManager) layoutManager.orientation else -1
     }
 
     /**
@@ -63,9 +62,9 @@ class LtDivider(rv: RecyclerView) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
         spanCount = getSpanCount(parent)
-        val childCount = parent.adapter!!.itemCount
+        val childCount = parent.adapter?.itemCount ?: 0
         when {
-            parent.layoutManager!!.getPosition(view) == childCount - 1 // 如果是最后一行，则不需要绘制底部
+            parent.layoutManager?.getPosition(view) == childCount - 1 // 如果是最后一行，则不需要绘制底部
             -> {
                 outRect[0, 0, 0] = 0
             }
@@ -89,12 +88,12 @@ class LtDivider(rv: RecyclerView) : RecyclerView.ItemDecoration() {
     }
 
     private fun isLastColum(parent: RecyclerView, spanCount: Int, view: View): Boolean {
-        val layoutManager = parent.layoutManager
-        val pos = layoutManager!!.getPosition(view)
+        val layoutManager = parent.layoutManager ?: return false
+        val pos = layoutManager.getPosition(view)
         if (layoutManager is GridLayoutManager) { // 如果是有head,则去掉head,如果是最后一列，则不需要绘制右边
-            if (parent.adapter is LtAdapter<*>) {
-                val headSize = (parent.adapter as LtAdapter<*>?)!!.headList.nullSize()
-                if ((pos - headSize + 1) % spanCount == 0) {
+            val adapter = parent.adapter
+            if (adapter is LtAdapter<*>) {
+                if ((pos - (if (adapter.headList.isNullOrEmpty()) 0 else 1) + 1) % spanCount == 0) {
                     return true
                 }
             } else if ((pos + 1) % spanCount == 0) { // 如果是最后一列，则不需要绘制右边
@@ -132,8 +131,8 @@ class LtDivider(rv: RecyclerView) : RecyclerView.ItemDecoration() {
                     +  /*mDivider.getIntrinsicWidth()*/mDividerHeight)
             val top = child.bottom + params.bottomMargin
             val bottom = top +  /*mDivider.getIntrinsicHeight()*/mDividerHeight
-            mDivider!!.setBounds(left, top, right, bottom)
-            mDivider!!.draw(canvas)
+            mDivider?.setBounds(left, top, right, bottom)
+            mDivider?.draw(canvas)
         }
     }
 
@@ -149,8 +148,8 @@ class LtDivider(rv: RecyclerView) : RecyclerView.ItemDecoration() {
             val bottom = child.bottom + params.bottomMargin
             val left = child.right + params.rightMargin
             val right = left +  /*mDivider.getIntrinsicWidth()*/mDividerHeight
-            mDivider!!.setBounds(left, top, right, bottom)
-            mDivider!!.draw(canvas)
+            mDivider?.setBounds(left, top, right, bottom)
+            mDivider?.draw(canvas)
         }
     }
 }
