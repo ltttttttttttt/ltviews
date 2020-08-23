@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnNoItemListener
 import com.lt.ltviewsx.lt_listener.OnUpAndDownListener
-import java.lang.reflect.InvocationTargetException
 
 /**
  * 所在包名:  com.lt.ltrecyclerview
@@ -88,11 +87,7 @@ open class LTRecyclerView
 
     init {
         //添加下拉刷新
-        refreshLayout = try {
-            thisRefreshLayout()
-        } catch (e: Exception) {
-            throw RuntimeException("请将刷新的类继承ViewGroup类或子类并实现BaseRefreshLayout接口")
-        }
+        refreshLayout = LtRecyclerViewManager.refreshLayoutConstructorFunction(context, null, 0)
         val lp = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         recyclerView.layoutParams = lp
@@ -156,18 +151,6 @@ open class LTRecyclerView
                 }
             }
         })
-    }
-
-    /**
-     * 类内部获取下拉刷新的View,可以继承并重写该方法来实现项目内不同的下拉刷新效果
-     */
-    @Throws(NoSuchMethodException::class, IllegalAccessException::class, InvocationTargetException::class, InstantiationException::class)
-    protected open fun thisRefreshLayout(): BaseRefreshLayout {
-        return when (val clazz = LtRecyclerViewManager.refreshLayoutClazz) {
-            MSwipeRefreshLayout::class.java -> MSwipeRefreshLayout(context)
-            MTextRefreshLayout::class.java -> MTextRefreshLayout(context)
-            else -> clazz.getConstructor(Context::class.java).newInstance(context) as BaseRefreshLayout
-        }
     }
 
     /**

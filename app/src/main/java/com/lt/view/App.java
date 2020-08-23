@@ -3,7 +3,6 @@ package com.lt.view;
 import android.app.Application;
 
 import com.lt.ltviewsx.lt_recyclerview.LtRecyclerViewManager;
-import com.lt.ltviewsx.lt_recyclerview.MTextRefreshLayout;
 
 
 /**
@@ -20,6 +19,12 @@ public class App extends Application {
         init.setUpLayoutId(R.layout.lt_up_loading);
 //                .setRvIsMove(false)
 //                .setNoDataIsLoad( true)
-        init.setRefreshLayoutClazz(MTextRefreshLayout.class);
+//        init.setRefreshLayoutConstructorFunction(new Function3<Context, AttributeSet, Integer, BaseRefreshLayout>() {
+//            @Override
+//            public BaseRefreshLayout invoke(Context context, AttributeSet attributeSet, Integer integer) {
+//                return new MTextRefreshLayout(context, attributeSet, integer);
+//            }
+//        });
+        //init.setRefreshLayoutConstructorFunction(::MTextRefreshLayout);//kt
     }
 }

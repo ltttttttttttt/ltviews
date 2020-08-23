@@ -3,6 +3,7 @@ package com.lt.ltviewsx.lt_recyclerview
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.view.View
 import com.lt.ltviewsx.R
 
@@ -31,7 +32,7 @@ object LtRecyclerViewManager {
     /**
      * 下拉刷新的View的class
      */
-    var refreshLayoutClazz: Class<*> = MSwipeRefreshLayout::class.java
+    var refreshLayoutConstructorFunction: (Context, AttributeSet?, Int) -> BaseRefreshLayout = ::MTextRefreshLayout
 
     /**
      * 上拉加载的布局id

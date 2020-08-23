@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lt.ltviewsx.R
 
 /**
@@ -20,7 +19,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     : FrameLayout(context, attrs, defStyleAttr),
         BaseRefreshLayout {
     protected var rvIsMove = LtRecyclerViewManager.isRvIsMove //View是否跟着下拉移动
-    protected var listener: SwipeRefreshLayout.OnRefreshListener? = null //刷新的回调
+    protected var listener: (() -> Unit)? = null //刷新的回调
     protected var yAxis = if (rvIsMove) 9999F else 0F //y轴的值
     protected var fastY = -1.0F //当前的y和第一次按下的y(近似)
     protected lateinit var contentView: View//内部的view
@@ -33,6 +32,42 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
     protected var scrollOrClickBoundary = context.resources.getDimension(R.dimen.dp4)//判断是滚动或者点击的边界,一般是4dp(点击的半径),用来判断本次滑动是否有效,防止阻断掉点击事件
     protected val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
+
+    //获取和设置是否刷新
+    override var isRefreshing: Boolean
+        get() = state == RefreshStates.STATE_REFRESHING
+        set(value) {
+            if (value && state == RefreshStates.STATE_REFRESHING) {
+                //如果设置为刷新中,如果当前是刷新中则返回
+                return
+            }
+            if (!value && state != RefreshStates.STATE_REFRESHING) {
+                //如果设置为刷新完成,如果当前不是刷新中的状态,则返回
+                return
+            }
+            if (state == RefreshStates.STATE_REFRESHING) { //如果isr变为false,并且当前状态为刷新中,则更改为刷新完成(阈值处停留200,然后300缩回去)
+                state = RefreshStates.STATE_REFRESH_FINISH
+                onState(state)
+                postDelayed({
+                    progress(0F, animationTime)
+                    ObjectAnimator.ofFloat(contentView, "translationY", contentView.translationY, 0F).setDuration(animationTime).start()
+                }, waitTime)
+                postDelayed({
+                    state = RefreshStates.STATE_BACK
+                    onState(state)
+                }, animationTime + waitTime)
+                if (!rvIsMove) {
+                    fastY = -1.0F
+                    yAxis = 0F
+                }
+            } else { //如果isr变为true,并且当前状态不是刷新中状态,变更为刷新中状态,rv和刷新view置为-阈值
+                state = RefreshStates.STATE_REFRESHING
+                onState(state)
+                progress(refreshThreshold, animationTime)
+                ObjectAnimator.ofFloat(contentView, "translationY", contentView.translationY, refreshThreshold).setDuration(animationTime).start()
+                listener?.invoke()
+            }
+        }
 
     /**
      * 刷新状态
@@ -79,49 +114,8 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     /**
      * 设置刷新时的回调
      */
-    override fun setOnRefreshListener(listener: SwipeRefreshLayout.OnRefreshListener?) {
+    override fun setOnRefreshListener(listener: (() -> Unit)?) {
         this.listener = listener
-    }
-
-    /**
-     * 获取是否刷新
-     */
-    override fun isRefreshing(): Boolean = state == RefreshStates.STATE_REFRESHING
-
-    /**
-     * 设置是否刷新
-     */
-    override fun setRefreshing(refreshing: Boolean) {
-        if (refreshing && state == RefreshStates.STATE_REFRESHING) {
-            //如果设置为刷新中,如果当前是刷新中则返回
-            return
-        }
-        if (!refreshing && state != RefreshStates.STATE_REFRESHING) {
-            //如果设置为刷新完成,如果当前不是刷新中的状态,则返回
-            return
-        }
-        if (state == RefreshStates.STATE_REFRESHING) { //如果isr变为false,并且当前状态为刷新中,则更改为刷新完成(阈值处停留200,然后300缩回去)
-            state = RefreshStates.STATE_REFRESH_FINISH
-            onState(state)
-            postDelayed({
-                progress(0F, animationTime)
-                ObjectAnimator.ofFloat(contentView, "translationY", contentView.translationY, 0F).setDuration(animationTime).start()
-            }, waitTime)
-            postDelayed({
-                state = RefreshStates.STATE_BACK
-                onState(state)
-            }, animationTime + waitTime)
-            if (!rvIsMove) {
-                fastY = -1.0F
-                yAxis = 0F
-            }
-        } else { //如果isr变为true,并且当前状态不是刷新中状态,变更为刷新中状态,rv和刷新view置为-阈值
-            state = RefreshStates.STATE_REFRESHING
-            onState(state)
-            progress(refreshThreshold, animationTime)
-            ObjectAnimator.ofFloat(contentView, "translationY", contentView.translationY, refreshThreshold).setDuration(animationTime).start()
-            listener?.onRefresh()
-        }
     }
 
     /**
@@ -172,7 +166,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
             if (y != 0.0f && state != RefreshStates.STATE_REFRESHING) { //有时间并且不为0,表示会跳到阈值,如果不是刷新中状态就改为刷新中状态
                 state = RefreshStates.STATE_REFRESHING
                 onState(state)
-                listener?.onRefresh()
+                listener?.invoke()
             }
             if (y == 0.0f && state == RefreshStates.STATE_REFRESH_DOWN) {
                 //如果还原到0,并且还是下拉中,说明不需要刷新只需要还原状态
