@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var mLastX = 0F//判断拦截事件用的第一次触摸的x轴 = 0F
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
     protected val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
+    private var isFirstMove = true//是否是第一次move事件,如果是就把其转成down事件发给子view,具体原因参考onInterceptTouchEvent方法的实现机制
 
     //获取和设置是否刷新
     override var isRefreshing: Boolean
@@ -215,7 +215,6 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
             MotionEvent.ACTION_DOWN -> {
                 mLastY = ev.y
                 mLastX = ev.x
-                onTouchEvent(ev)
             }
             MotionEvent.ACTION_MOVE -> {
                 val mCurY = ev.y
@@ -228,6 +227,10 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 return if (abs(mark) - abs(markX) > 3f) {
                     //提示父控件自身要使用本次触摸事件,不要拦截
                     parent.requestDisallowInterceptTouchEvent(true)
+                    val event = MotionEvent.obtain(ev)
+                    event.action = MotionEvent.ACTION_DOWN
+                    onTouchEvent(event)
+                    event.recycle()
                     true
                 } else false
             }
@@ -251,7 +254,6 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
             return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                contentView.onTouchEvent(event)
                 //如果子View被隐藏则拦截事件
                 if (contentView.visibility != View.VISIBLE) return true
                 val newY = event.y
@@ -271,10 +273,14 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
-                val newY = event.y
-                if (fastY == -1.0f) {
-                    fastY = newY
+                if (isFirstMove) {
+                    isFirstMove = false
+                    val obtain = MotionEvent.obtain(event)
+                    obtain.action = MotionEvent.ACTION_DOWN
+                    contentView.onTouchEvent(obtain)
+                    obtain.recycle()
                 }
+                val newY = event.y
                 val distance = newY - yAxis
                 if (distance < 0) {//上拉
                     if (state == RefreshStates.STATE_BACK || refreshView.translationY <= 0.0f) {
@@ -302,6 +308,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 return true
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                isFirstMove = true
                 contentView.onTouchEvent(event)
                 //如果是松开或者刷新状态,移动到阈值,否则归0
                 if (rvIsMove) { //如果rv可以下移,则离开屏幕是回归原位

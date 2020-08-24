@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -38,6 +38,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="500dp" />
             </FrameLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </com.lt.ltviewsx.lt_recyclerview.MTextRefreshLayout>
 </LinearLayout>
