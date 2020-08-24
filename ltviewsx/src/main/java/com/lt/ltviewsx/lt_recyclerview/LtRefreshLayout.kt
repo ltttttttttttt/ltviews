@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlin.math.abs
+import kotlin.math.max
 
 /**
  * 创    建:  lt  2018/5/23--18:09
@@ -297,7 +298,8 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                         actionDownY = newY - fastY
                     }
                 }
-                if (rvIsMove) contentView.translationY = if (contentView.translationY >= 0) distance / 2 + contentView.translationY else 0F
+                val ty = distance / 2 + contentView.translationY
+                if (rvIsMove) contentView.translationY = if (contentView.translationY >= 0) max(ty, 0f) else 0F
                 if (yAxis != 0.0f) progress(if (contentView.translationY >= 0) distance else 0F, 0) else progress(contentView.translationY + refreshThreshold, 0)
                 if (yAxis > newY) {
                     yAxis = newY
