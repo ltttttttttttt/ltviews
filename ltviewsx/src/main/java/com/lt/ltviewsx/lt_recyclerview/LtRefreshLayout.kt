@@ -8,7 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.lt.ltviewsx.R
+import kotlin.math.abs
 
 /**
  * 创    建:  lt  2018/5/23--18:09
@@ -21,6 +21,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var rvIsMove = LtRecyclerViewManager.isRvIsMove //View是否跟着下拉移动
     protected var listener: (() -> Unit)? = null //刷新的回调
     protected var yAxis = if (rvIsMove) 9999F else 0F //y轴的值
+    protected var actionDownY = -1F//每个第一次触发下拉刷新开始时的y轴
     protected var fastY = -1.0F //当前的y和第一次按下的y(近似)
     protected lateinit var contentView: View//内部的view
     protected lateinit var refreshView: View//刷新的view
@@ -29,8 +30,8 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var animationTime = 300L//动画时间
     protected var waitTime = 500L//下拉回弹的等待时间
     protected var mLastY = 0F//判断拦截事件用的第一次触摸的y轴 = 0F
+    protected var mLastX = 0F//判断拦截事件用的第一次触摸的x轴 = 0F
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
-    protected var scrollOrClickBoundary = context.resources.getDimension(R.dimen.dp4)//判断是滚动或者点击的边界,一般是4dp(点击的半径),用来判断本次滑动是否有效,防止阻断掉点击事件
     protected val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
 
     //获取和设置是否刷新
@@ -138,10 +139,10 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 onState(state)
             }
             if (rvIsMove) { //rv是否移动对阈值的计算有影响
-                if ((this.yAxis + y - fastY) / 2 < refreshThreshold && state == RefreshStates.STATE_REFRESH_RELEASE) { //如果y小于阈值并且不是下拉中状态,改为下拉中状态
+                if ((this.yAxis + y - fastY - actionDownY) / 2 < refreshThreshold && state == RefreshStates.STATE_REFRESH_RELEASE) { //如果y小于阈值并且不是下拉中状态,改为下拉中状态
                     state = RefreshStates.STATE_REFRESH_DOWN
                     onState(state)
-                } else if ((this.yAxis + y - fastY) / 2 >= refreshThreshold && state == RefreshStates.STATE_REFRESH_DOWN) { //如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
+                } else if ((this.yAxis + y - fastY - actionDownY) / 2 >= refreshThreshold && state == RefreshStates.STATE_REFRESH_DOWN) { //如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
                     state = RefreshStates.STATE_REFRESH_RELEASE
                     onState(state)
                 }
@@ -198,25 +199,36 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
 
     /**
      * 是否拦截触摸事件
+     *      如果是纵向就始终拦截事件给自己用
      */
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         if (!isEnabled)
             return false
-        if (state != RefreshStates.STATE_BACK) //如果不启用下拉则结束,或者刷新view已经出来了
+        if (state != RefreshStates.STATE_BACK) { //如果不启用下拉则结束,或者刷新view已经出来了
+            if (MotionEvent.ACTION_DOWN == ev.action)
+                onTouchEvent(ev)
+            parent.requestDisallowInterceptTouchEvent(true)
             return true
+        }
         when (ev.action) {
-            MotionEvent.ACTION_DOWN -> mLastY = ev.y
+            MotionEvent.ACTION_DOWN -> {
+                mLastY = ev.y
+                mLastX = ev.x
+                onTouchEvent(ev)
+            }
             MotionEvent.ACTION_MOVE -> {
                 val mCurY = ev.y
-                val mark = (mCurY - mLastY).toInt()
+                val mark = mCurY - mLastY
                 mLastY = mCurY
-                //如果是向上滑动,或者向下滑动的距离小于4dp(点击事件半径)(可能是点击的时候位移了)，我们认为这次滑动是无效的，把这次事件传递给contentView去消费。例如contentView的child的点击事件。
-                //或者contentView内容在Y轴上可滑动，把事件传递给contentView内部(false是不拦截,所以使用!)
-                //表示是否要拦截
-                val isIntercept = !(mark <= scrollOrClickBoundary || contentView.canScrollVertically(-mark))
-                //提示父控件自身要使用本次触摸事件,不要拦截
-                parent.requestDisallowInterceptTouchEvent(isIntercept)
-                return isIntercept
+                val mCurX = ev.x
+                val markX = mCurX - mLastX
+                mLastX = mCurX
+                //如果是纵向就始终拦截事件给自己用
+                return if (abs(mark) - abs(markX) > 3f) {
+                    //提示父控件自身要使用本次触摸事件,不要拦截
+                    parent.requestDisallowInterceptTouchEvent(true)
+                    true
+                } else false
             }
         }
         return false
@@ -224,13 +236,21 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
 
     /**
      * 分发触摸事件
+     *      判断向上或是向下:
+     *          向上:如果自身刷新状态为back,直接给子view,否则自身使用
+     *          向下:如果子view能竖向向下滑动,就给子view,否则自身使用
      */
     override fun onTouchEvent(event: MotionEvent): Boolean {
         //实现触摸响应
-        if (state == RefreshStates.STATE_REFRESHING || state == RefreshStates.STATE_REFRESH_FINISH) //如果不启用下拉则结束,或者刷新中和刷新完成阶段
+        if (!isEnabled) {
+            contentView.onTouchEvent(event)
+            return false
+        }
+        if (state == RefreshStates.STATE_REFRESHING || state == RefreshStates.STATE_REFRESH_FINISH)  //如果不启用下拉则结束,或者刷新中和刷新完成阶段
             return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                contentView.onTouchEvent(event)
                 //如果子View被隐藏则拦截事件
                 if (contentView.visibility != View.VISIBLE) return true
                 val newY = event.y
@@ -243,17 +263,8 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                     //如果向上推,刷新的view还没动,则不使用
                     if (refreshView.translationY == 0f) {
                         yAxis = newY
-                        return false
+                        return true
                     }
-                }
-                if (rvIsMove) //需要rv向下移动时则移动下拉一半的距离
-                    contentView.translationY = if (contentView.translationY >= 0) distance / 2 + contentView.translationY else 0F
-                if (yAxis != 0.0f) progress(if (contentView.translationY >= 0) distance else 0F, 0) else  //y==0
-                    progress(contentView.translationY + refreshThreshold, 0)
-                if (yAxis > newY) { //交给子去执行事件
-                    yAxis = newY
-                    if (state == RefreshStates.STATE_BACK) contentView.onTouchEvent(event)
-                    return false
                 }
                 yAxis = newY
                 return true
@@ -264,10 +275,23 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                     fastY = newY
                 }
                 val distance = newY - yAxis
-                if (distance < 0) {
+                if (distance < 0) {//上拉
+                    if (state == RefreshStates.STATE_BACK || refreshView.translationY == 0.0f) {
+                        yAxis = newY
+                        contentView.onTouchEvent(event)
+                        return true
+                    }
                     if (refreshView.translationY == 0f) {
                         yAxis = newY
-                        return false
+                        return true
+                    }
+                } else {//下拉
+                    if (contentView.canScrollVertically(-1)) {
+                        yAxis = newY
+                        contentView.onTouchEvent(event)
+                        return true
+                    } else if (actionDownY == -1f) {
+                        actionDownY = newY - fastY
                     }
                 }
                 if (rvIsMove) contentView.translationY = if (contentView.translationY >= 0) distance / 2 + contentView.translationY else 0F
@@ -275,12 +299,13 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 if (yAxis > newY) {
                     yAxis = newY
                     if (state == RefreshStates.STATE_BACK) contentView.onTouchEvent(event)
-                    return false
+                    return true
                 }
                 yAxis = newY
                 return true
             }
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                contentView.onTouchEvent(event)
                 //如果是松开或者刷新状态,移动到阈值,否则归0
                 if (rvIsMove) { //如果rv可以下移,则离开屏幕是回归原位
                     if (state == RefreshStates.STATE_REFRESHING || state == RefreshStates.STATE_REFRESH_RELEASE)
@@ -299,6 +324,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                         yAxis = 0f
                     }
                 }
+                actionDownY = -1f
                 return true
             }
         }

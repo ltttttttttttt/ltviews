@@ -28,7 +28,7 @@ class Main3Activity : AppCompatActivity() {
                 }
             })
             ltRecyclerView.adapter = TextAdapter(ltRecyclerView.context, ArrayList((0..50).map(Int::toString)))
-            ltRecyclerView.setBackgroundColor(colors[i])
+            ltRecyclerView.recyclerView.setBackgroundColor(colors[i])
         }
     }
 }
