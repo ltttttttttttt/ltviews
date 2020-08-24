@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-        <Button
+        <TextView
+            android:background="@color/color5"
             android:layout_width="match_parent"
             android:layout_height="150dp" />
     </com.lt.ltviewsx.lt_recyclerview.MTextRefreshLayout>

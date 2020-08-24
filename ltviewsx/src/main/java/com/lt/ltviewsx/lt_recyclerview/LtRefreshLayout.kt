@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -139,18 +140,18 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 onState(state)
             }
             if (rvIsMove) { //rv是否移动对阈值的计算有影响
-                if ((this.yAxis + y - fastY - actionDownY) / 2 < refreshThreshold && state == RefreshStates.STATE_REFRESH_RELEASE) { //如果y小于阈值并且不是下拉中状态,改为下拉中状态
+                if (this.yAxis + y - fastY - actionDownY < refreshThreshold * 2 && state == RefreshStates.STATE_REFRESH_RELEASE) { //如果y小于阈值并且不是下拉中状态,改为下拉中状态
                     state = RefreshStates.STATE_REFRESH_DOWN
                     onState(state)
-                } else if ((this.yAxis + y - fastY - actionDownY) / 2 >= refreshThreshold && state == RefreshStates.STATE_REFRESH_DOWN) { //如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
+                } else if (this.yAxis + y - fastY - actionDownY >= refreshThreshold * 2 && state == RefreshStates.STATE_REFRESH_DOWN) { //如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
                     state = RefreshStates.STATE_REFRESH_RELEASE
                     onState(state)
                 }
             } else {
-                if (this.yAxis + y - fastY < refreshThreshold && state == RefreshStates.STATE_REFRESH_RELEASE) { //如果y小于阈值并且不是下拉中状态,改为下拉中状态
+                if (this.yAxis + y - fastY - actionDownY < refreshThreshold * 2 && state == RefreshStates.STATE_REFRESH_RELEASE) { //如果y小于阈值并且不是下拉中状态,改为下拉中状态
                     state = RefreshStates.STATE_REFRESH_DOWN
                     onState(state)
-                } else if (this.yAxis + y - fastY >= refreshThreshold && state == RefreshStates.STATE_REFRESH_DOWN) { //如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
+                } else if (this.yAxis + y - fastY - actionDownY >= refreshThreshold * 2 && state == RefreshStates.STATE_REFRESH_DOWN) { //如果y大于等于阈值,并且不是松开刷新状态,改为松开刷新状态
                     state = RefreshStates.STATE_REFRESH_RELEASE
                     onState(state)
                 }
@@ -261,7 +262,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 if (distance < 0) {
                     //表示向上推
                     //如果向上推,刷新的view还没动,则不使用
-                    if (refreshView.translationY == 0f) {
+                    if (refreshView.translationY <= 0f) {
                         yAxis = newY
                         return true
                     }
@@ -276,13 +277,9 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 }
                 val distance = newY - yAxis
                 if (distance < 0) {//上拉
-                    if (state == RefreshStates.STATE_BACK || refreshView.translationY == 0.0f) {
+                    if (state == RefreshStates.STATE_BACK || refreshView.translationY <= 0.0f) {
                         yAxis = newY
                         contentView.onTouchEvent(event)
-                        return true
-                    }
-                    if (refreshView.translationY == 0f) {
-                        yAxis = newY
                         return true
                     }
                 } else {//下拉
