@@ -26,6 +26,7 @@ public class App extends Application {
 //                return new MTextRefreshLayout(context, attributeSet, integer);
 //            }
 //        });
+        //init.setRefreshLayoutConstructorFunction(MTextRefreshLayout::new);//java8
         //init.setRefreshLayoutConstructorFunction(::MTextRefreshLayout);//kt
     }
 }
