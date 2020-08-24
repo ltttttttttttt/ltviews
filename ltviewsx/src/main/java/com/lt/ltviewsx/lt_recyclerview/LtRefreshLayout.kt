@@ -165,7 +165,6 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 refreshView.translationY = f
                 onProgress(f)
             }
-            va.start() //执行这个数值变化器
             if (y != 0.0f && state != RefreshStates.STATE_REFRESHING) { //有时间并且不为0,表示会跳到阈值,如果不是刷新中状态就改为刷新中状态
                 state = RefreshStates.STATE_REFRESHING
                 onState(state)
@@ -176,8 +175,9 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                 postDelayed({
                     state = RefreshStates.STATE_BACK
                     onState(state)
-                }, animationTime)
+                }, time)
             }
+            va.start() //执行这个数值变化器
         }
     }
 
