@@ -12,5 +12,8 @@
 (二)更多api:<a href="https://blog.csdn.net/qq_33505109/article/details/80677331" target="_blank">https://blog.csdn.net/qq_33505109/article/details/80677331</a></br>
 (三)自定义刷新View(包括上拉和下拉):<a href="https://blog.csdn.net/qq_33505109/article/details/80677778" target="_blank">https://blog.csdn.net/qq_33505109/article/details/80677778</a></br>
 
+<h2>BaseRefreshLayout:超简单方式自定义下拉刷新,并且可以内部可以嵌套任意View</h2>
+使用方式 https://blog.csdn.net/qq_33505109/article/details/80677778
+
 <h2>LtScrollImageView:自动滚动的广告图片展示栏</h2>
 使用方式 https://blog.csdn.net/qq_33505109/article/details/79521213
