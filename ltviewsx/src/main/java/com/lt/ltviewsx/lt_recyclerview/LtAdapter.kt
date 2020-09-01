@@ -299,7 +299,12 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
             position == 0 && headList.isNotEmpty() -> TAG_HEAD_VIEW //表示头部
             position == itemCount - 2 && tailList.isNotEmpty() -> TAG_TAIL_VIEW //表示尾部
             position == itemCount - 1 -> TAG_BOTTOM_REFRESH_VIEW //表示是底部的上拉加载布局
-            else -> getLtItemViewType(position - if (headList.isNotEmpty()) 1 else 0)//中间自定的布局
+            else -> {//中间自定的布局
+                val ltItemViewType = getLtItemViewType(position - (if (headList.isNotEmpty()) 1 else 0))
+                if (ltItemViewType == TAG_BOTTOM_REFRESH_VIEW || ltItemViewType == TAG_HEAD_VIEW || ltItemViewType == TAG_TAIL_VIEW)
+                    throw RuntimeException("LtAdapter.getLtItemViewType请使用非 $TAG_BOTTOM_REFRESH_VIEW,$TAG_HEAD_VIEW,$TAG_TAIL_VIEW 的Type")
+                ltItemViewType
+            }
         }
     }
 
@@ -363,7 +368,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
             holder.itemView.setTag(TAG_IS_HAVE_LONG_CLICK, true)
             holder.itemView.setOnLongClickListener {
                 onRvItemLongClickListener ?: return@setOnLongClickListener false
-                val mPosition = holder.adapterPosition - if (headList.isEmpty()) 0 else 1
+                val mPosition = holder.adapterPosition - (if (headList.isEmpty()) 0 else 1)
                 if (mPosition >= 0)
                     onRvItemLongClickListener?.onItemLongClick(it, mPosition)
                 true
@@ -373,11 +378,11 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
         if (onRvItemClickListener != null && !holder.itemView.hasOnClickListeners())
             holder.itemView.setOnClickListener {
                 onRvItemClickListener ?: return@setOnClickListener
-                val mPosition = holder.adapterPosition - if (headList.isEmpty()) 0 else 1
+                val mPosition = holder.adapterPosition - (if (headList.isEmpty()) 0 else 1)
                 if (mPosition >= 0)
                     onRvItemClickListener?.onItemClick(it, mPosition)
             }
-        onLtBindViewHolder(holder as VH, position - if (headList.isEmpty()) 0 else 1)
+        onLtBindViewHolder(holder as VH, position - (if (headList.isEmpty()) 0 else 1))
     }
 
     @Deprecated("设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,并且set null 会清空掉数据,请使用{@link LtAdapter#addOnNoItemListener}")
