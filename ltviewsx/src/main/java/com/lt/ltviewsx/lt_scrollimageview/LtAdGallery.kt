@@ -2,6 +2,8 @@ package com.lt.ltviewsx.lt_scrollimageview
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -17,10 +19,6 @@ import java.util.*
  * 无限滚动广告栏组件
  */
 class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, View.OnTouchListener {
-    //	private ImageLoader imageLoader = ImageLoader.getInstance();
-//	private DisplayImageOptions options = new DisplayImageOptions.Builder()
-//			.cacheInMemory(true).cacheOnDisk(true).considerExifParams(true)
-//			.bitmapConfig(Bitmap.Config.RGB_565).build();
     /**
      * 显示的Activity
      */
@@ -44,7 +42,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     /**
      * 自动滚动的定时器
      */
-    private var mTimer: Timer? = null
+    private var mTimer = Handler(Looper.getMainLooper())
 
     /**
      * 圆点容器
@@ -97,9 +95,9 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     private var listener: OnImageViewLoadUrlListener? = null
     private var ovalmargin = 0
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {}
-    constructor(context: Context?) : super(context) {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
     /**
      * 设置加载图片的监听,用户自己来加载图片
@@ -110,6 +108,8 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     }
 
     /**
+     * 圆点图片
+     *
      * @param context    显示的Activity ,不能为null
      * @param mris       图片的网络路径数组 ,为空时 加载 adsId
      * @param switchTime 图片切换时间 写0 为不自动切换
@@ -126,7 +126,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         mOvalLayout = ovalLayout
         mFocusedId = focusedId
         mNormalId = normalId
-        ininImages(context) // 初始化图片组
+        ininImages() // 初始化图片组
         if (adapter !is BaseAdapter)
             adapter = AdAdapter()
         else
@@ -146,13 +146,16 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         startTimer() // 开始自动滚动任务
     }
 
+    /**
+     * 圆点数量的文字
+     */
     fun start(context: Context?, mris: List<String>?, switchTime: Int,
               tv_page: TextView?) {
         mContext = context
         mUris = mris
         mSwitchTime = switchTime
         this.tv_page = tv_page
-        ininImages(context) // 初始化图片组
+        ininImages() // 初始化图片组
         if (adapter !is BaseAdapter)
             adapter = AdAdapter()
         else
@@ -179,7 +182,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         mSwitchTime = switchTime
         this.tv_page = tv_page
         this.img_video = img_video
-        ininImages(context) // 初始化图片组
+        ininImages() // 初始化图片组
         if (adapter !is BaseAdapter)
             adapter = AdAdapter()
         else
@@ -200,50 +203,30 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     }
 
     fun clear() {
-        if (listImgs != null) {
-            listImgs!!.clear()
-        }
-        (adapter as BaseAdapter).notifyDataSetChanged()
-        mOvalLayout!!.removeAllViews()
+        listImgs?.clear()
+        (adapter as? BaseAdapter)?.notifyDataSetChanged()
+        mOvalLayout?.removeAllViews()
         stopTimer()
     }
 
     /**
      * 初始化图片组
      */
-    private fun ininImages(context: Context?) {
-        listImgs!!.clear()
-        if (mUris == null || mUris!!.size == 0) {
+    private fun ininImages() {
+        listImgs?.clear()
+        if (mUris.isNullOrEmpty()) {
             clear()
             return
         }
-        val len = mUris!!.size
+        val len = mUris?.size ?: 0
         for (i in 0 until len) {
             val imageview = ImageView(mContext) // 实例化ImageView的对象
             imageview.layoutParams = LayoutParams(
                     LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT)
             imageview.scaleType = ImageView.ScaleType.CENTER_CROP
-            // FinalBitmap.create(mContext).display(imageview, mUris[i],
-// imageview.getWidth(), imageview.getHeight(), null, null);
-// imageview.setImageResource(R.drawable.gg01);
-//            View view = View.inflate(context, R.layout.item_my_gallery, null);
-//            ImageView imageview = (ImageView) view
-//                    .findViewById(R.id.img_content);
-// ImageView img_video = (ImageView)
-// view.findViewById(R.id.img_video);
-// if (mUris[i].contains("/video/"))
-// {
-// img_video.setVisibility(View.VISIBLE);
-// } else
-// {
-// img_video.setVisibility(View.GONE);
-// }
-            if (listener != null) listener!!.onLoad(imageview, mUris!![i])
-            //            Picasso.with(context).load(mUris[i])/*.placeholder(R.mipmap.ic_launcher)*/.into(imageview);
-//			imageLoader.displayImage(mUris[i], imageview, options, null);
-// listImgs.add(imageview);
-            listImgs!!.add(imageview)
+            listener?.onLoad(imageview, mUris!![i])
+            listImgs?.add(imageview)
         }
     }
 
@@ -251,9 +234,9 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      * 初始化圆点
      */
     private fun initOvalLayout() {
-        if (mOvalLayout != null && listImgs!!.size < 2) {
+        if (mOvalLayout != null && (listImgs?.size ?: 0) < 2) {
             // 如果只有一第图时不显示圆点容器
-            mOvalLayout!!.layoutParams.height = 0
+            mOvalLayout?.layoutParams?.height = 0
         } else if (mOvalLayout != null) {
             // 圆点的左右外边距是 圆点窗口的 20%;
             if (ovalmargin == 0) ovalmargin = try {
@@ -264,50 +247,20 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
             val layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             layoutParams.setMargins(ovalmargin, 0, ovalmargin, 0)
-            mOvalLayout!!.removeAllViews()
-            for (i in listImgs!!.indices) {
+            mOvalLayout?.removeAllViews()
+            for (i in 0 until (listImgs?.size ?: 0)) {
                 val v = ImageView(mContext) // 员点
                 v.layoutParams = layoutParams
                 v.setImageResource(mNormalId)
-                mOvalLayout!!.addView(v)
+                mOvalLayout?.addView(v)
             }
-            println(mOvalLayout!!.childCount)
             // 选中第一个
-            (mOvalLayout!!.getChildAt(0) as ImageView).setImageResource(mFocusedId)
+            (mOvalLayout?.getChildAt(0) as? ImageView)?.setImageResource(mFocusedId)
         }
         if (tv_page != null) {
-            tv_page!!.text = 1.toString() + "/" + listImgs!!.size
+            tv_page?.text = "1/${listImgs?.size ?: 0}"
         }
     }
-    // /** 初始化圆点 */
-//    private void initOvalLayout() {
-//        if (mOvalLayout != null && listImgs.size() < 2) {// 如果只有一第图时不显示圆点容器
-//            mOvalLayout.getLayoutParams().height = 0;
-//        } else if (mOvalLayout != null) {
-//            // 圆点的大小是 圆点窗口的 70%;
-//            int Ovalheight = (int) (mOvalLayout.getLayoutParams().height * 0.7);
-//            // 圆点的左右外边距是 圆点窗口的 20%;
-//            int Ovalmargin = (int) (mOvalLayout.getLayoutParams().height * 0.2);
-//            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-//                    Ovalheight, Ovalheight);
-//            layoutParams.setMargins(Ovalmargin, 0, Ovalmargin, 0);
-//
-//            mOvalLayout.removeAllViews();
-//            for (int i = 0; i < listImgs.size(); i++) {
-//                View v = new View(mContext); // 员点
-//                v.setLayoutParams(layoutParams);
-//                v.setBackgroundResource(mNormalId);
-//                mOvalLayout.addView(v);
-//            }
-//
-//            System.out.println(mOvalLayout.getChildCount());
-//            // 选中第一个
-//            mOvalLayout.getChildAt(0).setBackgroundResource(mFocusedId);
-//        }
-//        if (tv_page != null) {
-//            tv_page.setText(1 + "/" + listImgs.size());
-//        }
-//    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -326,7 +279,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      */
     internal inner class AdAdapter : BaseAdapter() {
         override fun getCount(): Int {
-            return if (listImgs!!.size < 2) listImgs!!.size else Int.MAX_VALUE
+            return if (listImgs.isNullOrEmpty()) 0 else Int.MAX_VALUE
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -344,8 +297,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
 
     override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float,
                          velocityY: Float): Boolean {
-        val kEvent: Int
-        kEvent = if (isScrollingLeft(e1, e2)) { // 检查是否往左滑动
+        val kEvent: Int = if (isScrollingLeft(e1, e2)) { // 检查是否往左滑动
             KeyEvent.KEYCODE_DPAD_LEFT
         } else { // 检查是否往右滑动
             KeyEvent.KEYCODE_DPAD_RIGHT
@@ -378,25 +330,23 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
                                 arg3: Long) {
         curIndex = position % listImgs!!.size
         if (mOvalLayout != null && listImgs!!.size > 1) { // 切换圆点
-//            mOvalLayout.getChildAt(oldIndex).setBackgroundResource(mNormalId); // 圆点取消
-//            mOvalLayout.getChildAt(curIndex).setBackgroundResource(mFocusedId);// 圆点选中
-            (mOvalLayout!!.getChildAt(oldIndex) as ImageView).setImageResource(mNormalId) // 圆点取消
-            (mOvalLayout!!.getChildAt(curIndex) as ImageView).setImageResource(mFocusedId) // 圆点选中
+            (mOvalLayout?.getChildAt(oldIndex) as? ImageView)?.setImageResource(mNormalId) // 圆点取消
+            (mOvalLayout?.getChildAt(curIndex) as? ImageView)?.setImageResource(mFocusedId) // 圆点选中
             oldIndex = curIndex
         }
         if (tv_page != null) {
-            tv_page!!.text = (curIndex + 1).toString() + "/" + listImgs!!.size
+            tv_page?.text = "${curIndex + 1}/${listImgs?.size ?: 0}"
         }
         if (img_video != null) {
-            if (mUris!![curIndex].contains("/video/")) { // img_video.setVisibility(View.VISIBLE);
-                img_video!!.visibility = View.GONE
-                img_video!!.tag = curIndex
+            if (mUris?.get(curIndex)?.contains("/video/") == true) {
+                img_video?.visibility = View.VISIBLE
+                img_video?.tag = curIndex
             } else {
-                img_video!!.visibility = View.GONE
-                img_video!!.tag = -1
+                img_video?.visibility = View.GONE
+                img_video?.tag = -1
             }
         }
-        if (mOnScrollListener != null) mOnScrollListener!!.onScroll(position)
+        mOnScrollListener?.onScroll(position)
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>?) {}
@@ -429,26 +379,22 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      * 停止自动滚动任务
      */
     fun stopTimer() {
-        if (mTimer != null) {
-            mTimer!!.cancel()
-            mTimer = null
-        }
+        mTimer.removeCallbacksAndMessages(null)
     }
 
     /**
      * 开始自动滚动任务 图片大于1张才滚动
      */
     fun startTimer() {
-        if (mTimer == null && listImgs!!.size > 1 && mSwitchTime > 0) {
-            mTimer = Timer()
-            mTimer!!.schedule(object : TimerTask() {
-                override fun run() {
-                    handler.post {
-                        onScroll(null, null, 1f, 0f)
-                        onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT, null)
-                    }
-                }
-            }, mSwitchTime.toLong(), mSwitchTime.toLong())
+        if ((listImgs?.size ?: 0) > 1 && mSwitchTime > 0) {
+            mTimer.removeCallbacksAndMessages(null)
+            lateinit var runnable: Runnable
+            runnable = Runnable {
+                onScroll(null, null, 1f, 0f)
+                onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT, null)
+                mTimer.postDelayed(runnable, mSwitchTime.toLong())
+            }
+            mTimer.postDelayed(runnable, mSwitchTime.toLong())
         }
     }
 

@@ -58,7 +58,6 @@ object LtRecyclerViewManager {
      * noItemTextView的字体颜色
      */
     var noItemTextColor = 0
-    internal val handler by lazy { Handler(Looper.getMainLooper()) }//项目内用的handler
 
     /**
      * 获取默认(自定义设置)的适配器底部刷新view
