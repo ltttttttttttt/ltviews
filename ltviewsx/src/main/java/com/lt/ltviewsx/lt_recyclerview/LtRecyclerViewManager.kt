@@ -30,7 +30,7 @@ object LtRecyclerViewManager {
     var context: Context? = null
 
     /**
-     * 下拉刷新的View的class
+     * 下拉刷新的View的构造方法引用
      */
     var refreshLayoutConstructorFunction: (Context, AttributeSet?, Int) -> BaseRefreshLayout = ::MTextRefreshLayout
 
