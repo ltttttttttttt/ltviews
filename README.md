@@ -18,4 +18,4 @@
 <h2>LtScrollImageView:自动滚动的广告图片展示栏</h2>
 使用方式 https://blog.csdn.net/qq_33505109/article/details/79521213
 
-<h2><a href="https://www.jetbrains.com/?from=ltviews">最后感谢一下JetBrains对本项目的支持</a><h2>
+<h2>最后感谢一下<a href="https://www.jetbrains.com/?from=ltviews" target="_blank">JetBrains</a>对本项目的支持<h2>
