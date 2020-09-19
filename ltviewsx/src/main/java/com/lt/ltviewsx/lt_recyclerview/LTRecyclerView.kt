@@ -82,7 +82,7 @@ open class LTRecyclerView
     /**
      * 获取线性多列布局的管理者
      */
-    val layoutManager = GridLayoutManager(context, 1)
+    val layoutManager = MGridLayoutManager(context, 1)
 
     /**
      * 获取没有条目时展示的View
