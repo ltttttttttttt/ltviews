@@ -35,6 +35,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
     protected val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
     private var isFirstMove = true//是否是第一次move事件,如果是就把其转成down事件发给子view,具体原因参考onInterceptTouchEvent方法的实现机制
+    private var isHaveDownMove = false//内部的view是否向下移动过,如果移动过,最后传递UP事件,否则传递CANCEL时间
 
     //获取和设置是否刷新
     override var isRefreshing: Boolean
@@ -255,6 +256,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
             return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                isHaveDownMove = false
                 //如果子View被隐藏则拦截事件
                 if (contentView.visibility != View.VISIBLE) return true
                 val newY = event.y
@@ -291,6 +293,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                     }
                 } else {//下拉
                     if (contentView.canScrollVertically(-1)) {
+                        isHaveDownMove = true
                         yAxis = newY
                         contentView.onTouchEvent(event)
                         return true
@@ -311,7 +314,14 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isFirstMove = true
-                contentView.onTouchEvent(event)
+                if (isHaveDownMove) {
+                    contentView.onTouchEvent(event)
+                } else {
+                    val obtain = MotionEvent.obtain(event)
+                    obtain.action = MotionEvent.ACTION_CANCEL
+                    contentView.onTouchEvent(obtain)
+                }
+                isHaveDownMove = false
                 //如果是松开或者刷新状态,移动到阈值,否则归0
                 if (rvIsMove) { //如果rv可以下移,则离开屏幕是回归原位
                     if (state == RefreshStates.STATE_REFRESHING || state == RefreshStates.STATE_REFRESH_RELEASE)
