@@ -47,8 +47,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //todo test
-        startActivity(new Intent(this, Main3Activity.class));
+        //startActivity(new Intent(this, Main3Activity.class));
 
         ll1 = (LinearLayout) findViewById(R.id.ll1);
 //        iv = (LtDoubleTextView) findViewById(R.id.iv);
@@ -180,7 +179,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                for (int i = 0; i < 100; i++) {
+                                for (int i = 0; i < 1000; i++) {
                                     list.add("" + i);
                                 }
                                 adapter.notifyDataSetChanged();
