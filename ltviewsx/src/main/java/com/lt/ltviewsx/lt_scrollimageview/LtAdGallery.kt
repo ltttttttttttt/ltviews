@@ -10,9 +10,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnImageViewLoadUrlListener
 import com.lt.ltviewsx.lt_listener.OnRvItemClickListener
 import com.lt.ltviewsx.lt_listener.OnScrollListener
+import java.lang.Math.abs
 import java.util.*
 
 /**
@@ -94,6 +96,9 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      */
     private var listener: OnImageViewLoadUrlListener? = null
     private var ovalmargin = 0
+    private var firstX = 0f
+    private var firstY = 0f
+    private val dp8 = context.resources.getDimension(R.dimen.dp8)
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -314,6 +319,17 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
+        if (listImgs?.size ?: 0 == 1) {
+            if (MotionEvent.ACTION_DOWN == event.action) {
+                firstX = event.rawX
+                firstY = event.rawY
+            } else if (MotionEvent.ACTION_UP == event.action
+                    || MotionEvent.ACTION_CANCEL == event.action) {
+                if (abs(event.rawX - firstX) <= dp8 && abs(event.rawY - firstY) <= dp8)
+                    mOnRvItemClickListener?.onItemClick(listImgs!![0], 0)
+            }
+            return true
+        }
         if (MotionEvent.ACTION_UP == event.action
                 || MotionEvent.ACTION_CANCEL == event.action) {
             startTimer() // 开始自动滚动任务

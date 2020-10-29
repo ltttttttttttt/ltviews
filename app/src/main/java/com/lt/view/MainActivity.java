@@ -63,9 +63,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void initSiv() {
         List<String> srr = new ArrayList<String>();
         srr.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584264257088&di=b2e7e2c573de3652e650128d5fdb5a49&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D86853839%2C3576305254%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D750%26h%3D390");
-        srr.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584264269138&di=a791f08b13b1d6a36e9d7d10ad1d20c0&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D1307125826%2C3433407105%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D5760%26h%3D3240");
-        srr.add("http://img.zcool.cn/community/01711b59426ca1a8012193a31e5398.gif");
-        srr.add("http://pic4.nipic.com/20091217/3885730_124701000519_2.jpg");
+        //srr.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584264269138&di=a791f08b13b1d6a36e9d7d10ad1d20c0&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D1307125826%2C3433407105%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D5760%26h%3D3240");
+        //srr.add("http://img.zcool.cn/community/01711b59426ca1a8012193a31e5398.gif");
+        //srr.add("http://pic4.nipic.com/20091217/3885730_124701000519_2.jpg");
         siv.init(srr, 3000, 500, R.drawable.banner_xuanzhong, R.drawable.banner_weixuanzhong, new OnImageViewLoadUrlListener() {
             @Override
             public void onLoad(ImageView iv, String url) {
@@ -81,7 +81,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 .setOnRvItemClickListener(new OnRvItemClickListener() {
                     @Override
                     public void onItemClick(View itemView, int position) {
-                        LogUtil.i("lllttt", "MainActivity.onItemClick : " + position);
+                        LogUtil.e("lllttt", "MainActivity.onItemClick : " + position);
                     }
                 });
 
