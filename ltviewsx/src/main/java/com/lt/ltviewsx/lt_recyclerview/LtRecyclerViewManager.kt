@@ -1,8 +1,6 @@
 package com.lt.ltviewsx.lt_recyclerview
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import com.lt.ltviewsx.R
@@ -58,6 +56,11 @@ object LtRecyclerViewManager {
      * noItemTextView的字体颜色
      */
     var noItemTextColor = 0
+
+    /**
+     * 表示外部引用是否是Debug状态,如果是Debug状态,则不帮外部cache某些异常
+     */
+    var isDebug = false
 
     /**
      * 获取默认(自定义设置)的适配器底部刷新view

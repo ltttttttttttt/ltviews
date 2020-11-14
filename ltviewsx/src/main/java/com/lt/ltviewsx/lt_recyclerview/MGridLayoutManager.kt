@@ -3,6 +3,7 @@ package com.lt.ltviewsx.lt_recyclerview
 import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * creator: lt  2020/9/19  lt.dygzs@qq.com
@@ -25,5 +26,19 @@ class MGridLayoutManager : GridLayoutManager {
      * 解决某些rv内部bug(数组越界,等?)
      * 参考https://stackoverflow.com/questions/30220771/recyclerview-inconsistency-detected-invalid-item-position
      */
-    override fun supportsPredictiveItemAnimations(): Boolean = false
+    override fun supportsPredictiveItemAnimations(): Boolean = LtRecyclerViewManager.isDebug
+
+    /**
+     * 解决rv内部ViewHolder越界Adapter总ItemCount异常
+     */
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
+        try {
+            super.onLayoutChildren(recycler, state)
+        } catch (e: Exception) {
+            if (LtRecyclerViewManager.isDebug)
+                throw e
+            else
+                e.printStackTrace()
+        }
+    }
 }
