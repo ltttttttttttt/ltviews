@@ -58,12 +58,12 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     var tailsIsItem = true
 
     /**
-     * 头部是否变动
+     * 头部是否变动了
      */
     private var headIsChanged = false
 
     /**
-     * 尾部是否变动
+     * 尾部是否变动了
      */
     private var tailIsChanged = false
 
