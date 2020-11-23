@@ -60,12 +60,12 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     /**
      * 头部是否变动
      */
-    var headIsChanged = false
+    private var headIsChanged = false
 
     /**
      * 尾部是否变动
      */
-    var tailIsChanged = false
+    private var tailIsChanged = false
 
     private var onNoItemListenerList: MutableList<OnNoItemListener>? = null//有无条目的回调
     private var onRvItemClickListener: OnRvItemClickListener? = null//条目点击事件
