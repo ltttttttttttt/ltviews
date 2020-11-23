@@ -421,4 +421,9 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         ovalmargin = margin
         initOvalLayout()
     }
+
+    /**
+     * 获取图片的数量
+     */
+    fun getImageUrlSize(): Int = mUris?.size ?: 0
 }

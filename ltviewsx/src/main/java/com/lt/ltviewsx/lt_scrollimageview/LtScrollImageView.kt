@@ -3,6 +3,7 @@ package com.lt.ltviewsx.lt_scrollimageview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.MotionEvent
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.lt.ltviewsx.R
@@ -19,6 +20,7 @@ class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: Attri
     val ltAdGallery: LtAdGallery//获取内部的LtAdGallery控件
     val llIndicator: LinearLayout//指示器的父布局
     val dp10 = context.resources.getDimension(R.dimen.dp10).toInt()
+    var useSuperIntercept = false//只使用默认view拦截策略
 
     init {
         val dp7 = context.resources.getDimension(R.dimen.dp7).toInt()
@@ -143,5 +145,11 @@ class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: Attri
             }
         }
         return this
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        if (!useSuperIntercept && ltAdGallery.getImageUrlSize() > 1)
+            requestDisallowInterceptTouchEvent(true)
+        return super.onInterceptTouchEvent(ev)
     }
 }
