@@ -34,6 +34,7 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
     protected var mLastX = 0F//判断拦截事件用的第一次触摸的x轴 = 0F
     protected var refreshViewHeight = refreshThreshold.toInt()//设置刷新View的高度
     protected val noItemView by lazy(LazyThreadSafetyMode.NONE) { (parent as? LTRecyclerView)?.noItemView }//如果整体需要下滑,就需要拿到noItemView
+    protected var maxY = -1//最多能下拉多远,负数为无限
     private var isFirstMove = true//是否是第一次move事件,如果是就把其转成down事件发给子view,具体原因参考onInterceptTouchEvent方法的实现机制
     private var isHaveChildMove = false//内部的view是否移动过,如果移动过,最后传递UP事件,否则传递CANCEL事件
 
@@ -303,6 +304,8 @@ abstract class LtRefreshLayout @JvmOverloads constructor(context: Context, attrs
                     }
                 }
                 val ty = distance / 2 + contentView.translationY
+                if (maxY > 0 && ty > maxY)
+                    return true
                 if (rvIsMove) contentView.translationY = if (contentView.translationY >= 0) max(ty, 0f) else 0F
                 if (yAxis != 0.0f) progress(if (contentView.translationY >= 0) distance else 0F, 0) else progress(contentView.translationY + refreshThreshold, 0)
                 if (yAxis > newY) {
