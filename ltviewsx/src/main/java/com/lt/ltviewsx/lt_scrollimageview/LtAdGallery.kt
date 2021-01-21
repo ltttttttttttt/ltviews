@@ -342,7 +342,7 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     /**
      * 图片切换事件
      */
-    override fun onItemSelected(arg0: AdapterView<*>?, arg1: View, position: Int,
+    override fun onItemSelected(arg0: AdapterView<*>?, arg1: View?, position: Int,
                                 arg3: Long) {
         curIndex = position % listImgs!!.size
         if (mOvalLayout != null && listImgs!!.size > 1) { // 切换圆点
