@@ -49,6 +49,7 @@ class LtScrollImageView @JvmOverloads constructor(context: Context, attrs: Attri
      * @param listener   设置加载图片的监听,用户自己来加载图片
      */
     fun init(imageUrl: List<String>?, switchTime: Int, aTime: Int, focusedId: Int, normalId: Int, listener: OnImageViewLoadUrlListener?): LtScrollImageView {
+        ltAdGallery.stopTimer()
         ltAdGallery.setOnImageViewLoadUrlListener(listener)
                 .start(context, imageUrl, switchTime, aTime, llIndicator, focusedId, normalId)
         return this

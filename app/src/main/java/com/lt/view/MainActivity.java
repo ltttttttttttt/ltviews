@@ -84,7 +84,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         LogUtil.e("lllttt", "MainActivity.onItemClick : " + position);
                     }
                 });
-
     }
 
     private void initRv() {
