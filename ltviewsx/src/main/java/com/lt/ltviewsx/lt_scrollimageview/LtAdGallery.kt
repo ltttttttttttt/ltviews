@@ -279,6 +279,14 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         stopTimer()
     }
 
+    //解决索引越界bug
+    override fun getChildDrawingOrder(childCount: Int, i: Int): Int {
+        val childPosition = super.getChildDrawingOrder(childCount, i)
+        if (childPosition >= childCount)
+            return childCount - 1
+        return childPosition
+    }
+
     /**
      * 无限循环适配器
      */
