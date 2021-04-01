@@ -30,7 +30,7 @@ abstract class BaseAdapterOneType<T>(val list: MutableList<T>,
             try {
                 setData(holder.viewFind, list[position], position, holder)
             } catch (t: Throwable) {
-                LtRecyclerViewManager.onAdapterCatchHandler(t)
+                LtRecyclerViewManager.onLtViewsCatchHandler(t)
                 //如果没有对异常做正确处理,可能会显示异常
             }
 
@@ -43,7 +43,7 @@ abstract class BaseAdapterOneType<T>(val list: MutableList<T>,
                 else
                     BaseLtViewHolder(createView(parent))
             } catch (t: Throwable) {
-                LtRecyclerViewManager.onAdapterCatchHandler(t)
+                LtRecyclerViewManager.onLtViewsCatchHandler(t)
                 BaseLtViewHolder(View(parent.context))//如果没有对异常做正确处理,可能会显示异常
             }
 

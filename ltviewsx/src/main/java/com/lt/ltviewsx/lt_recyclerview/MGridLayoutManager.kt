@@ -35,7 +35,7 @@ class MGridLayoutManager : GridLayoutManager {
         try {
             super.onLayoutChildren(recycler, state)
         } catch (t: Throwable) {
-            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            LtRecyclerViewManager.onLtViewsCatchHandler(t)
         }
     }
 }

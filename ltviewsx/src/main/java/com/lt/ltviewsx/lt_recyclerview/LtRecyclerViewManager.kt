@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.lt.ltviewsx.R
+import com.lt.ltviewsx.lt_listener.OnLtViewsCatchHandler
 
 /**
  * 创    建:  lt  2018/5/22--15:23
@@ -67,5 +68,5 @@ object LtRecyclerViewManager {
     /**
      * Adapter的回调方法中出现了异常的处理方式,默认抛异常,用户可以自行捕获相应异常
      */
-    var onAdapterCatchHandler: (Throwable) -> Unit = { throw it }
+    var onLtViewsCatchHandler: OnLtViewsCatchHandler = OnLtViewsCatchHandler { throw it }
 }

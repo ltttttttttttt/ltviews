@@ -291,7 +291,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
                 else -> onLtCreateViewHolder(parent, viewType)
             }
         } catch (t: Throwable) {
-            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            LtRecyclerViewManager.onLtViewsCatchHandler(t)
             BottomRefreshViewHolder(View(parent.context))//如果没有对异常做正确处理,可能会显示异常
         }
     }
@@ -313,7 +313,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
                 }
             }
         } catch (t: Throwable) {
-            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            LtRecyclerViewManager.onLtViewsCatchHandler(t)
             0//如果没有对异常做正确处理,可能会显示异常
         }
     }
@@ -347,7 +347,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
                 count++
             count
         } catch (t: Throwable) {
-            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            LtRecyclerViewManager.onLtViewsCatchHandler(t)
             0//如果没有对异常做正确处理,可能会显示异常
         }
     }
@@ -400,7 +400,7 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
                 }
             onLtBindViewHolder(holder as VH, position - (if (headList.isEmpty()) 0 else 1))
         } catch (t: Throwable) {
-            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            LtRecyclerViewManager.onLtViewsCatchHandler(t)
             //如果没有对异常做正确处理,可能会显示异常
         }
     }
