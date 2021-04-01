@@ -26,7 +26,7 @@ class MGridLayoutManager : GridLayoutManager {
      * 解决某些rv内部bug(数组越界,等?)
      * 参考https://stackoverflow.com/questions/30220771/recyclerview-inconsistency-detected-invalid-item-position
      */
-    override fun supportsPredictiveItemAnimations(): Boolean = LtRecyclerViewManager.isDebug
+    override fun supportsPredictiveItemAnimations(): Boolean = false
 
     /**
      * 解决rv内部ViewHolder越界Adapter总ItemCount异常
@@ -34,11 +34,8 @@ class MGridLayoutManager : GridLayoutManager {
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
         try {
             super.onLayoutChildren(recycler, state)
-        } catch (e: Exception) {
-            if (LtRecyclerViewManager.isDebug)
-                throw e
-            else
-                e.printStackTrace()
+        } catch (t: Throwable) {
+            LtRecyclerViewManager.onAdapterCatchHandler(t)
         }
     }
 }
