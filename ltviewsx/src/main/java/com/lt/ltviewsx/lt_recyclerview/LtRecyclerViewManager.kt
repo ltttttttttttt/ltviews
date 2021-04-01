@@ -1,5 +1,6 @@
 package com.lt.ltviewsx.lt_recyclerview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -10,6 +11,7 @@ import com.lt.ltviewsx.R
  * 作    用:  ltRv的管理者
  * 注意事项:
  */
+@SuppressLint("StaticFieldLeak")
 object LtRecyclerViewManager {
     /**
      * 初始化,在application的onCreate中调用
@@ -66,4 +68,9 @@ object LtRecyclerViewManager {
      * 获取默认(自定义设置)的适配器底部刷新view
      */
     fun getDefaultBottomRefreshView(): View = View.inflate(context, upLayoutId, null)
+
+    /**
+     * Adapter的回调方法中出现了异常的处理方式,默认抛异常,用户可以自行捕获相应异常
+     */
+    var onAdapterCatchHandler: (Throwable) -> Unit = { throw it }
 }

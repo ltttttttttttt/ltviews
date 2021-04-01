@@ -26,15 +26,26 @@ abstract class BaseAdapterOneType<T>(val list: MutableList<T>,
     : RecyclerView.Adapter<BaseLtViewHolder>() {
     abstract fun setData(v: ViewFind, b: T, i: Int, h: BaseLtViewHolder)
 
-    override fun onBindViewHolder(holder: BaseLtViewHolder, position: Int) = setData(holder.viewFind, list[position], position, holder)
+    override fun onBindViewHolder(holder: BaseLtViewHolder, position: Int) =
+            try {
+                setData(holder.viewFind, list[position], position, holder)
+            } catch (t: Throwable) {
+                LtRecyclerViewManager.onAdapterCatchHandler(t)
+                //如果没有对异常做正确处理,可能会显示异常
+            }
 
     override fun getItemCount() = list.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseLtViewHolder =
-            if (itemLayoutId != 0)
-                BaseLtViewHolder(LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false))
-            else
-                BaseLtViewHolder(createView(parent))
+            try {
+                if (itemLayoutId != 0)
+                    BaseLtViewHolder(LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false))
+                else
+                    BaseLtViewHolder(createView(parent))
+            } catch (t: Throwable) {
+                LtRecyclerViewManager.onAdapterCatchHandler(t)
+                BaseLtViewHolder(View(parent.context))//如果没有对异常做正确处理,可能会显示异常
+            }
 
     open fun createView(parent: ViewGroup): View = throw RuntimeException("${this::class.simpleName}:请填写itemLayoutId或者重写createView()")
 }

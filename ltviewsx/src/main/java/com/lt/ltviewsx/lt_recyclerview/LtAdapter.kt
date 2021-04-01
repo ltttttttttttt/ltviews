@@ -283,106 +283,126 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
 
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtCreateViewHolder}")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { //顶部和底部返回特定的ViewHolder
-        return when (viewType) {
-            TAG_BOTTOM_REFRESH_VIEW -> BottomRefreshViewHolder(bottomRefreshView) //底部刷新布局
-            TAG_HEAD_VIEW -> HeadViewHolder(parent.context)//头布局
-            TAG_TAIL_VIEW -> TailViewHolder(parent.context)//尾布局
-            else -> onLtCreateViewHolder(parent, viewType)
+        return try {
+            when (viewType) {
+                TAG_BOTTOM_REFRESH_VIEW -> BottomRefreshViewHolder(bottomRefreshView) //底部刷新布局
+                TAG_HEAD_VIEW -> HeadViewHolder(parent.context)//头布局
+                TAG_TAIL_VIEW -> TailViewHolder(parent.context)//尾布局
+                else -> onLtCreateViewHolder(parent, viewType)
+            }
+        } catch (t: Throwable) {
+            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            BottomRefreshViewHolder(View(parent.context))//如果没有对异常做正确处理,可能会显示异常
         }
     }
 
     //给顶部和底部的布局加上特定的type
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#getLtItemViewType}")
     override fun getItemViewType(position: Int): Int {
-        val itemCount = itemCount
-        return when {
-            position == 0 && headList.isNotEmpty() -> TAG_HEAD_VIEW //表示头部
-            position == itemCount - 2 && tailList.isNotEmpty() -> TAG_TAIL_VIEW //表示尾部
-            position == itemCount - 1 -> TAG_BOTTOM_REFRESH_VIEW //表示是底部的上拉加载布局
-            else -> {//中间自定的布局
-                val ltItemViewType = getLtItemViewType(position - (if (headList.isNotEmpty()) 1 else 0))
-                if (ltItemViewType == TAG_BOTTOM_REFRESH_VIEW || ltItemViewType == TAG_HEAD_VIEW || ltItemViewType == TAG_TAIL_VIEW)
-                    throw RuntimeException("LtAdapter.getLtItemViewType请使用非 $TAG_BOTTOM_REFRESH_VIEW,$TAG_HEAD_VIEW,$TAG_TAIL_VIEW 的Type")
-                ltItemViewType
+        return try {
+            val itemCount = itemCount
+            when {
+                position == 0 && headList.isNotEmpty() -> TAG_HEAD_VIEW //表示头部
+                position == itemCount - 2 && tailList.isNotEmpty() -> TAG_TAIL_VIEW //表示尾部
+                position == itemCount - 1 -> TAG_BOTTOM_REFRESH_VIEW //表示是底部的上拉加载布局
+                else -> {//中间自定的布局
+                    val ltItemViewType = getLtItemViewType(position - (if (headList.isNotEmpty()) 1 else 0))
+                    if (ltItemViewType == TAG_BOTTOM_REFRESH_VIEW || ltItemViewType == TAG_HEAD_VIEW || ltItemViewType == TAG_TAIL_VIEW)
+                        throw RuntimeException("LtAdapter.getLtItemViewType请使用非 $TAG_BOTTOM_REFRESH_VIEW,$TAG_HEAD_VIEW,$TAG_TAIL_VIEW 的Type")
+                    ltItemViewType
+                }
             }
+        } catch (t: Throwable) {
+            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            0//如果没有对异常做正确处理,可能会显示异常
         }
     }
 
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#getLtItemCount}")
     override fun getItemCount(): Int {
-        val itemCount = getLtItemCount()
-        //如果调用了一次无数据,下次有数据的时候就调用有数据,如果之前没调过无数据,就不相应有数据
-        if (noItemListenerState != false
-                && itemCount == 0
-                && !onNoItemListenerList.isNullOrEmpty()
-                && (!headsIsItem || headList.isEmpty())
-                && (!tailsIsItem || tailList.isEmpty())) {
-            //如果没数据,但是变成有数据了,就调用有数据的回调,并修改为有数据
-            noItemListenerState = false
-            onNoItemListenerList?.forEach { it.noItem() }
-        } else if (noItemListenerState != true
-                && !onNoItemListenerList.isNullOrEmpty()
-                && ((headsIsItem && headList.isNotEmpty())
-                        || (tailsIsItem && tailList.isNotEmpty())
-                        || itemCount > 0)) {
-            noItemListenerState = true
-            onNoItemListenerList?.forEach { it.haveItem() }
+        return try {
+            val itemCount = getLtItemCount()
+            //如果调用了一次无数据,下次有数据的时候就调用有数据,如果之前没调过无数据,就不相应有数据
+            if (noItemListenerState != false
+                    && itemCount == 0
+                    && !onNoItemListenerList.isNullOrEmpty()
+                    && (!headsIsItem || headList.isEmpty())
+                    && (!tailsIsItem || tailList.isEmpty())) {
+                //如果没数据,但是变成有数据了,就调用有数据的回调,并修改为有数据
+                noItemListenerState = false
+                onNoItemListenerList?.forEach { it.noItem() }
+            } else if (noItemListenerState != true
+                    && !onNoItemListenerList.isNullOrEmpty()
+                    && ((headsIsItem && headList.isNotEmpty())
+                            || (tailsIsItem && tailList.isNotEmpty())
+                            || itemCount > 0)) {
+                noItemListenerState = true
+                onNoItemListenerList?.forEach { it.haveItem() }
+            }
+            //加上多的顶部和底部的条目
+            var count = itemCount + 1
+            if (headList.isNotEmpty())
+                count++
+            if (tailList.isNotEmpty())
+                count++
+            count
+        } catch (t: Throwable) {
+            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            0//如果没有对异常做正确处理,可能会显示异常
         }
-        //加上多的顶部和底部的条目
-        var count = itemCount + 1
-        if (headList.isNotEmpty())
-            count++
-        if (tailList.isNotEmpty())
-            count++
-        return count
     }
 
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtBindViewHolder}")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        //给不是头部,不是尾部,不是上拉的布局提供方法,并减去头部的条目数
-        //如果是头部或尾部,如果变更过,就刷新viewHolder
-        if (holder is HeadViewHolder) {
-            if (headIsChanged) {
-                holder.linearLayout.removeAllViews()
-                headList.forEach {
-                    holder.linearLayout.addView(it)
+        try {
+            //给不是头部,不是尾部,不是上拉的布局提供方法,并减去头部的条目数
+            //如果是头部或尾部,如果变更过,就刷新viewHolder
+            if (holder is HeadViewHolder) {
+                if (headIsChanged) {
+                    holder.linearLayout.removeAllViews()
+                    headList.forEach {
+                        holder.linearLayout.addView(it)
+                    }
+                    headIsChanged = false
                 }
-                headIsChanged = false
+                return
             }
-            return
-        }
-        if (holder is BottomRefreshViewHolder)
-            return
-        if (holder is TailViewHolder) {
-            if (tailIsChanged) {
-                holder.linearLayout.removeAllViews()
-                tailList.forEach {
-                    holder.linearLayout.addView(it)
+            if (holder is BottomRefreshViewHolder)
+                return
+            if (holder is TailViewHolder) {
+                if (tailIsChanged) {
+                    holder.linearLayout.removeAllViews()
+                    tailList.forEach {
+                        holder.linearLayout.addView(it)
+                    }
+                    tailIsChanged = false
                 }
-                tailIsChanged = false
+                return
             }
-            return
+            //条目长按事件,TAG_IS_HAVE_LONGCLICK:表示view是否设置过长按事件
+            if (onRvItemLongClickListener != null && holder.itemView.getTag(TAG_IS_HAVE_LONG_CLICK) != true) {
+                holder.itemView.setTag(TAG_IS_HAVE_LONG_CLICK, true)
+                holder.itemView.setOnLongClickListener {
+                    onRvItemLongClickListener ?: return@setOnLongClickListener false
+                    val mPosition = holder.adapterPosition - (if (headList.isEmpty()) 0 else 1)
+                    if (mPosition >= 0)
+                        onRvItemLongClickListener?.onItemLongClick(it, mPosition)
+                    true
+                }
+            }
+            //条目点击事件
+            if (onRvItemClickListener != null && !holder.itemView.hasOnClickListeners())
+                holder.itemView.setOnClickListener {
+                    onRvItemClickListener ?: return@setOnClickListener
+                    val mPosition = holder.adapterPosition - (if (headList.isEmpty()) 0 else 1)
+                    if (mPosition >= 0)
+                        onRvItemClickListener?.onItemClick(it, mPosition)
+                }
+            onLtBindViewHolder(holder as VH, position - (if (headList.isEmpty()) 0 else 1))
+        } catch (t: Throwable) {
+            LtRecyclerViewManager.onAdapterCatchHandler(t)
+            //如果没有对异常做正确处理,可能会显示异常
         }
-        //条目长按事件,TAG_IS_HAVE_LONGCLICK:表示view是否设置过长按事件
-        if (onRvItemLongClickListener != null && holder.itemView.getTag(TAG_IS_HAVE_LONG_CLICK) != true) {
-            holder.itemView.setTag(TAG_IS_HAVE_LONG_CLICK, true)
-            holder.itemView.setOnLongClickListener {
-                onRvItemLongClickListener ?: return@setOnLongClickListener false
-                val mPosition = holder.adapterPosition - (if (headList.isEmpty()) 0 else 1)
-                if (mPosition >= 0)
-                    onRvItemLongClickListener?.onItemLongClick(it, mPosition)
-                true
-            }
-        }
-        //条目点击事件
-        if (onRvItemClickListener != null && !holder.itemView.hasOnClickListeners())
-            holder.itemView.setOnClickListener {
-                onRvItemClickListener ?: return@setOnClickListener
-                val mPosition = holder.adapterPosition - (if (headList.isEmpty()) 0 else 1)
-                if (mPosition >= 0)
-                    onRvItemClickListener?.onItemClick(it, mPosition)
-            }
-        onLtBindViewHolder(holder as VH, position - (if (headList.isEmpty()) 0 else 1))
     }
 
     @Deprecated("设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,并且set null 会清空掉数据,请使用{@link LtAdapter#addOnNoItemListener}")
