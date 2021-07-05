@@ -3,7 +3,6 @@ package com.lt.view
 import android.content.Context
 import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType
 import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
-import com.lt.ltviewsx.lt_recyclerview.ViewFind
 import kotlinx.android.synthetic.main.layout_test1.*
 
 /**
@@ -11,13 +10,14 @@ import kotlinx.android.synthetic.main.layout_test1.*
  * 作    用:
  * 注意事项:
  */
-class Text2Adapter(context: Context, list: ArrayList<String>) : BaseAdapterOneType<String>(list, R.layout.layout_test1) {
-    override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
-        v.tvLeft.text = b
-        v.tvRight.text = "右边的$b"
+class Text2Adapter(context: Context, list: ArrayList<String>) :
+    BaseAdapterOneType<String>(list, R.layout.layout_test1) {
+    override fun setData(h: BaseLtViewHolder, b: String, i: Int) {
+        h.tvLeft.text = b
+        h.tvRight.text = "右边的$b"
         h.itemView.setOnClickListener {
             LogUtil.i("lllttt", "TextAdapter.setData : $it")
-            v.tvLeft.text = "更改之后的$it"
+            h.tvLeft.text = "更改之后的$it"
         }
     }
 }

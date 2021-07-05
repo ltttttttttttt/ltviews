@@ -16,8 +16,14 @@ class Main3Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.a_main3)
-        val colors = intArrayOf(R.color.color1, R.color.color2, R.color.color3, R.color.color4, R.color.color5).map(resources::getColor)
-        vp.adapter = adapterOf(mutableListOf(1, 2, 3, 4, 5), R.layout.item_ltrecy) { v, b, i, h ->
+        val colors = intArrayOf(
+            R.color.color1,
+            R.color.color2,
+            R.color.color3,
+            R.color.color4,
+            R.color.color5
+        ).map(resources::getColor)
+        vp.adapter = adapterOf(mutableListOf(1, 2, 3, 4, 5), R.layout.item_ltrecy) { h, b, i ->
             val ltRecyclerView = h.itemView as LTRecyclerView
             ltRecyclerView.setOnUpAndDownListener(object : OnUpAndDownListener {
                 override fun up() {
@@ -27,7 +33,8 @@ class Main3Activity : AppCompatActivity() {
                     ltRecyclerView.postDelayed({ ltRecyclerView.setTopRefresh(false) }, 2000)
                 }
             })
-            ltRecyclerView.adapter = TextAdapter(ltRecyclerView.context, ArrayList((0..50).map(Int::toString)))
+            ltRecyclerView.adapter =
+                TextAdapter(ltRecyclerView.context, ArrayList((0..50).map(Int::toString)))
             ltRecyclerView.recyclerView.setBackgroundColor(colors[i])
         }
     }

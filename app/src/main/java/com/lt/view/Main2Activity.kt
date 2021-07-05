@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType
 import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
 import com.lt.ltviewsx.lt_recyclerview.LtDivider
-import com.lt.ltviewsx.lt_recyclerview.ViewFind
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.layout_test2.*
 
@@ -40,10 +39,11 @@ class Main2Activity : AppCompatActivity() {
 
     }
 
-    class MAdapter(list: ArrayList<String>) : BaseAdapterOneType<String>(list, R.layout.layout_test2) {
-        override fun setData(v: ViewFind, b: String, i: Int, h: BaseLtViewHolder) {
-            v.tvLeft.text = b
-            v.tvRight.text = b
+    class MAdapter(list: ArrayList<String>) :
+        BaseAdapterOneType<String>(list, R.layout.layout_test2) {
+        override fun setData(h: BaseLtViewHolder, b: String, i: Int) {
+            h.tvLeft.text = b
+            h.tvRight.text = b
             h.itemView.setBackgroundResource(R.color.colorPrimary)
         }
 
