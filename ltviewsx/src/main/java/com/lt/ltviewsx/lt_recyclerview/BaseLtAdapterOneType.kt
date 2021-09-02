@@ -13,7 +13,11 @@ import kotlinx.android.extensions.LayoutContainer
  * 注意事项:  只能在有一种type的情况下使用
  * 使用该种类的适配器,需要在对应的model的gradle的android{}中加入下面代码
  *          androidExtensions {
- *              experimental = true
+ *              experimental = true//启用自定义的kae
+ *          }
+ *          kotlinOptions {
+ *              jvmTarget = "1.8"
+ *              useOldBackend = true//使用旧的kt后端,会使kae性能更好,但无法支持compose等kt新特性,所以建议使用 TODO XxxAdapter(View or Data Binding)
  *          }
  */
 
