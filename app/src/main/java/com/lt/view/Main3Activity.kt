@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.lt.ltviewsx.lt_listener.OnUpAndDownListener
 import com.lt.ltviewsx.lt_recyclerview.LTRecyclerView
-import com.lt.ltviewsx.lt_recyclerview.adapterOf
+import com.lt.ltviewsx.lt_recyclerview.adapterOf2
 import kotlinx.android.synthetic.main.a_main3.*
 
 /**
@@ -23,7 +23,7 @@ class Main3Activity : AppCompatActivity() {
             R.color.color4,
             R.color.color5
         ).map(resources::getColor)
-        vp.adapter = adapterOf(mutableListOf(1, 2, 3, 4, 5), R.layout.item_ltrecy) { h, b, i ->
+        vp.adapter = adapterOf2(mutableListOf(1, 2, 3, 4, 5), R.layout.item_ltrecy) { h, b, i ->
             val ltRecyclerView = h.itemView as LTRecyclerView
             ltRecyclerView.setOnUpAndDownListener(object : OnUpAndDownListener {
                 override fun up() {

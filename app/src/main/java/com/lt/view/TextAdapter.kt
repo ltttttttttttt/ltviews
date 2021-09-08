@@ -1,9 +1,7 @@
 package com.lt.view
 
 import android.content.Context
-import com.lt.ltviewsx.lt_recyclerview.BaseLtAdapterOneType
-import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
-import com.lt.ltviewsx.lt_recyclerview.LtRecyclerViewManager
+import com.lt.ltviewsx.lt_recyclerview.*
 import kotlinx.android.synthetic.main.layout_test1.*
 
 /**
@@ -11,12 +9,12 @@ import kotlinx.android.synthetic.main.layout_test1.*
  * 作    用:
  * 注意事项:
  */
-class TextAdapter(context: Context, list: ArrayList<String>) : BaseLtAdapterOneType<String>(
+class TextAdapter(context: Context, list: ArrayList<String>) : BaseLtAdapterOneType2<String>(
     list,
     R.layout.layout_test1,
     LtRecyclerViewManager.getDefaultBottomRefreshView()
 ) {
-    override fun setData(h: BaseLtViewHolder, b: String, i: Int) {
+    override fun setData(h: BaseLtViewHolder2, b: String, i: Int) {
         h.tvLeft.text = b
 //        h.setBackgroundResource(R.color.notification_icon_bg_color)
         h.tvRight.text = "右边的$b"

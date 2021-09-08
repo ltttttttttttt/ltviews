@@ -5,9 +5,7 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lt.ltviewsx.lt_recyclerview.BaseAdapterOneType
-import com.lt.ltviewsx.lt_recyclerview.BaseLtViewHolder
-import com.lt.ltviewsx.lt_recyclerview.LtDivider
+import com.lt.ltviewsx.lt_recyclerview.*
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.layout_test2.*
 
@@ -40,8 +38,8 @@ class Main2Activity : AppCompatActivity() {
     }
 
     class MAdapter(list: ArrayList<String>) :
-        BaseAdapterOneType<String>(list, R.layout.layout_test2) {
-        override fun setData(h: BaseLtViewHolder, b: String, i: Int) {
+        BaseAdapterOneType2<String>(list, R.layout.layout_test2) {
+        override fun setData(h: BaseLtViewHolder2, b: String, i: Int) {
             h.tvLeft.text = b
             h.tvRight.text = b
             h.itemView.setBackgroundResource(R.color.colorPrimary)
