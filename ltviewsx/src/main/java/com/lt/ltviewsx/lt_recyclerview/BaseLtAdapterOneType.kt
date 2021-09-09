@@ -75,9 +75,10 @@ open class BaseLtViewHolder<VB : ViewBinding>(val binding: VB) :
  */
 inline fun <T, reified VB : ViewBinding> adapterOf(
     list: MutableList<T>,
+    clazz: Class<VB> = VB::class.java,
     crossinline setData: BaseAdapterOneType<T, VB>.(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB) -> Unit
 ): BaseAdapterOneType<T, VB> =
-    object : BaseAdapterOneType<T, VB>(list, VB::class.java) {
+    object : BaseAdapterOneType<T, VB>(list, clazz) {
         override fun setData(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB) {
             setData(this, h, b, i, v)
         }
@@ -88,10 +89,11 @@ inline fun <T, reified VB : ViewBinding> adapterOf(
  */
 inline fun <T, reified VB : ViewBinding> ltAdapterOf(
     list: MutableList<T>,
+    clazz: Class<VB> = VB::class.java,
     view: View? = LtRecyclerViewManager.getDefaultBottomRefreshView(),
     crossinline setData: BaseLtAdapterOneType<T, VB>.(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB) -> Unit
 ): BaseLtAdapterOneType<T, VB> =
-    object : BaseLtAdapterOneType<T, VB>(list, VB::class.java, view) {
+    object : BaseLtAdapterOneType<T, VB>(list, clazz, view) {
         override fun setData(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB) {
             setData(this, h, b, i, v)
         }
