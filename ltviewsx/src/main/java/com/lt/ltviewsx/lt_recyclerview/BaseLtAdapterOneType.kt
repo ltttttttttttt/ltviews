@@ -11,6 +11,10 @@ import kotlinx.android.extensions.LayoutContainer
  * 创    建:  lt  2018/3/9--11:22
  * 作    用:  LtAdapter和Adapter的Base
  * 注意事项:  只能在有一种type的情况下使用
+ *            混淆配置:
+ *              -keepclassmembers class * implements androidx.viewbinding.ViewBinding {
+ *                  public static ** inflate(...);
+ *              }
  */
 
 /**
@@ -22,8 +26,10 @@ import kotlinx.android.extensions.LayoutContainer
  */
 abstract class BaseAdapterOneType<T, VB : ViewBinding>(
     val list: MutableList<T>,
-    private val viewBindingClass: Class<VB>
+    viewBindingClass: Class<VB>
 ) : RecyclerView.Adapter<BaseLtViewHolder<VB>>() {
+    private val inflateMethod = viewBindingClass.getMethod("inflate", LayoutInflater::class.java)
+
     abstract fun setData(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB)
 
     override fun onBindViewHolder(holder: BaseLtViewHolder<VB>, position: Int) =
@@ -37,7 +43,7 @@ abstract class BaseAdapterOneType<T, VB : ViewBinding>(
     override fun getItemCount() = list.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseLtViewHolder<VB> =
-        BaseLtViewHolder(viewBindingClass.createViewBinding(LayoutInflater.from(parent.context)))
+        BaseLtViewHolder(inflateMethod.invoke(null, LayoutInflater.from(parent.context)) as VB)
 }
 
 /**
@@ -48,9 +54,10 @@ abstract class BaseAdapterOneType<T, VB : ViewBinding>(
  */
 abstract class BaseLtAdapterOneType<T, VB : ViewBinding>(
     val list: MutableList<T>,
-    private val viewBindingClass: Class<VB>,
+    viewBindingClass: Class<VB>,
     view: View? = LtRecyclerViewManager.getDefaultBottomRefreshView()
 ) : LtAdapter<BaseLtViewHolder<VB>>(view) {
+    private val inflateMethod = viewBindingClass.getMethod("inflate", LayoutInflater::class.java)
 
     abstract fun setData(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB)
 
@@ -60,7 +67,7 @@ abstract class BaseLtAdapterOneType<T, VB : ViewBinding>(
     override fun getLtItemCount() = list.size
 
     override fun onLtCreateViewHolder(parent: ViewGroup, viewType: Int): BaseLtViewHolder<VB> =
-        BaseLtViewHolder(viewBindingClass.createViewBinding(LayoutInflater.from(parent.context)))
+        BaseLtViewHolder(inflateMethod.invoke(null, LayoutInflater.from(parent.context)) as VB)
 }
 
 /**
@@ -98,10 +105,3 @@ inline fun <T, reified VB : ViewBinding> ltAdapterOf(
             setData(this, h, b, i, v)
         }
     }
-
-/**
- * 通过viewBinding的Class来获取binding对象
- */
-private fun <VB : ViewBinding> Class<VB>.createViewBinding(layoutInflater: LayoutInflater): VB =
-    getMethod("inflate", LayoutInflater::class.java)
-        .invoke(null, layoutInflater) as VB
