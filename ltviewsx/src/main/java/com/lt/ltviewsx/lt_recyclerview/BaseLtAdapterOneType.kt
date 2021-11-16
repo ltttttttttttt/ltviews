@@ -28,7 +28,7 @@ abstract class BaseAdapterOneType<T, VB : ViewBinding>(
     val list: MutableList<T>,
     viewBindingClass: Class<VB>
 ) : RecyclerView.Adapter<BaseLtViewHolder<VB>>() {
-    private val inflateMethod = viewBindingClass.getMethod("inflate", LayoutInflater::class.java)
+    private val inflateMethod = viewBindingClass.getInflateMethod()
 
     abstract fun setData(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB)
 
@@ -43,7 +43,14 @@ abstract class BaseAdapterOneType<T, VB : ViewBinding>(
     override fun getItemCount() = list.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseLtViewHolder<VB> =
-        BaseLtViewHolder(inflateMethod.invoke(null, LayoutInflater.from(parent.context)) as VB)
+        BaseLtViewHolder(
+            inflateMethod.invoke(
+                null,
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ) as VB
+        )
 }
 
 /**
@@ -57,7 +64,7 @@ abstract class BaseLtAdapterOneType<T, VB : ViewBinding>(
     viewBindingClass: Class<VB>,
     view: View? = LtRecyclerViewManager.getDefaultBottomRefreshView()
 ) : LtAdapter<BaseLtViewHolder<VB>>(view) {
-    private val inflateMethod = viewBindingClass.getMethod("inflate", LayoutInflater::class.java)
+    private val inflateMethod = viewBindingClass.getInflateMethod()
 
     abstract fun setData(h: BaseLtViewHolder<VB>, b: T, i: Int, v: VB)
 
@@ -67,8 +74,18 @@ abstract class BaseLtAdapterOneType<T, VB : ViewBinding>(
     override fun getLtItemCount() = list.size
 
     override fun onLtCreateViewHolder(parent: ViewGroup, viewType: Int): BaseLtViewHolder<VB> =
-        BaseLtViewHolder(inflateMethod.invoke(null, LayoutInflater.from(parent.context)) as VB)
+        BaseLtViewHolder(
+            inflateMethod.invoke(
+                null,
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ) as VB
+        )
 }
+
+private fun <VB : ViewBinding> Class<VB>.getInflateMethod() =
+    getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
 
 /**
  * 使用方便的ViewHolder
