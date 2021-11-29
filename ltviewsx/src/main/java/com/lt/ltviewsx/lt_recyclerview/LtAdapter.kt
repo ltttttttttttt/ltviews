@@ -20,8 +20,8 @@ import java.util.*
  *                   https://blog.csdn.net/qq_33505109/article/details/80677778
  *           github: https://github.com/ltttttttttttt/ltviews
  */
-abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor(bottomRefreshView: View? = LtRecyclerViewManager.getDefaultBottomRefreshView())
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor(bottomRefreshView: View? = LtRecyclerViewManager.getDefaultBottomRefreshView()) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     /**
      * 底部的上拉刷新View
      */
@@ -71,7 +71,8 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     private var onRvItemClickListener: OnRvItemClickListener? = null//条目点击事件
     private var onRvItemLongClickListener: OnRvItemLongClickListener? = null//条目长按事件
     private var noItemListenerState: Boolean? = null//没有条目回调的状态:null第一次  true上次是有数据  false上次是无数据
-    private var bottomRefreshState = if (bottomRefreshView == null) -1 else 0//底部刷新的状态 -1表示不能刷新,其他表示展示的索引
+    private var bottomRefreshState =
+        if (bottomRefreshView == null) -1 else 0//底部刷新的状态 -1表示不能刷新,其他表示展示的索引
 
     companion object {
         internal const val TAG_BOTTOM_REFRESH_VIEW = 12345701//底部刷新view
@@ -84,18 +85,26 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     private class BottomRefreshViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     //头部
-    private class HeadViewHolder(context: Context) : RecyclerView.ViewHolder(LinearLayout(context).apply {
-        layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT)
-        orientation = LinearLayout.VERTICAL
-    }) {
+    private class HeadViewHolder(context: Context) :
+        RecyclerView.ViewHolder(LinearLayout(context).apply {
+            layoutParams = RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT,
+                RecyclerView.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.VERTICAL
+        }) {
         val linearLayout = itemView as LinearLayout
     }
 
     //尾部
-    private class TailViewHolder(context: Context) : RecyclerView.ViewHolder(LinearLayout(context).apply {
-        layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT)
-        orientation = LinearLayout.VERTICAL
-    }) {
+    private class TailViewHolder(context: Context) :
+        RecyclerView.ViewHolder(LinearLayout(context).apply {
+            layoutParams = RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT,
+                RecyclerView.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.VERTICAL
+        }) {
         val linearLayout = itemView as LinearLayout
     }
 
@@ -103,7 +112,10 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
      * 使用空参构造会使用默认的上拉View,传入null则不使用底部刷新布局
      */
     init {
-        this.bottomRefreshView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        this.bottomRefreshView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         (this.bottomRefreshView as? ViewGroup)?.let {
             repeat(it.childCount) { index ->
                 bottomRefreshViewMap.put(index, it.getChildAt(index))
@@ -152,10 +164,11 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     }
 
     /**
-     * 设置条目的点击事件监听,请注意不要给holder.itemView设置点击事件
+     * 设置条目的点击事件监听,设置此方法不为null后请注意不要给holder.itemView设置点击事件
      */
     fun setOnRvItemClickListener(onRvItemClickListener: OnRvItemClickListener?): LtAdapter<VH> {
         this.onRvItemClickListener = onRvItemClickListener
+        notifyDataSetChanged()
         return this
     }
 
@@ -282,7 +295,10 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
     }
 
     @Deprecated("一般情况下请勿重写该方法, 请复写:{@link LtAdapter#onLtCreateViewHolder}")
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { //顶部和底部返回特定的ViewHolder
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder { //顶部和底部返回特定的ViewHolder
         return try {
             when (viewType) {
                 TAG_BOTTOM_REFRESH_VIEW -> BottomRefreshViewHolder(bottomRefreshView) //底部刷新布局
@@ -306,7 +322,8 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
                 position == itemCount - 2 && tailList.isNotEmpty() -> TAG_TAIL_VIEW //表示尾部
                 position == itemCount - 1 -> TAG_BOTTOM_REFRESH_VIEW //表示是底部的上拉加载布局
                 else -> {//中间自定的布局
-                    val ltItemViewType = getLtItemViewType(position - (if (headList.isNotEmpty()) 1 else 0))
+                    val ltItemViewType =
+                        getLtItemViewType(position - (if (headList.isNotEmpty()) 1 else 0))
                     if (ltItemViewType == TAG_BOTTOM_REFRESH_VIEW || ltItemViewType == TAG_HEAD_VIEW || ltItemViewType == TAG_TAIL_VIEW)
                         throw RuntimeException("LtAdapter.getLtItemViewType请使用非 $TAG_BOTTOM_REFRESH_VIEW,$TAG_HEAD_VIEW,$TAG_TAIL_VIEW 的Type")
                     ltItemViewType
@@ -324,18 +341,20 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
             val itemCount = getLtItemCount()
             //如果调用了一次无数据,下次有数据的时候就调用有数据,如果之前没调过无数据,就不相应有数据
             if (noItemListenerState != false
-                    && itemCount == 0
-                    && !onNoItemListenerList.isNullOrEmpty()
-                    && (!headsIsItem || headList.isEmpty())
-                    && (!tailsIsItem || tailList.isEmpty())) {
+                && itemCount == 0
+                && !onNoItemListenerList.isNullOrEmpty()
+                && (!headsIsItem || headList.isEmpty())
+                && (!tailsIsItem || tailList.isEmpty())
+            ) {
                 //如果没数据,但是变成有数据了,就调用有数据的回调,并修改为有数据
                 noItemListenerState = false
                 onNoItemListenerList?.forEach { it.noItem() }
             } else if (noItemListenerState != true
-                    && !onNoItemListenerList.isNullOrEmpty()
-                    && ((headsIsItem && headList.isNotEmpty())
-                            || (tailsIsItem && tailList.isNotEmpty())
-                            || itemCount > 0)) {
+                && !onNoItemListenerList.isNullOrEmpty()
+                && ((headsIsItem && headList.isNotEmpty())
+                        || (tailsIsItem && tailList.isNotEmpty())
+                        || itemCount > 0)
+            ) {
                 noItemListenerState = true
                 onNoItemListenerList?.forEach { it.haveItem() }
             }
@@ -407,7 +426,8 @@ abstract class LtAdapter<VH : RecyclerView.ViewHolder> @JvmOverloads constructor
 
     @Deprecated("设置没有数据时的回调, 调用后, 则不会自动显示和隐藏没条目的view,并且set null 会清空掉数据,请使用{@link LtAdapter#addOnNoItemListener}")
     fun setOnNoItemListener(onNoItemListener: OnNoItemListener?): LtAdapter<VH> {
-        if (onNoItemListenerList == null) onNoItemListenerList = ArrayList() else onNoItemListenerList?.clear()
+        if (onNoItemListenerList == null) onNoItemListenerList =
+            ArrayList() else onNoItemListenerList?.clear()
         if (onNoItemListener != null)
             onNoItemListenerList?.add(onNoItemListener)
         return this
