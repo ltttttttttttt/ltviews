@@ -32,7 +32,7 @@ open class LTRecyclerView
     /**
      * 获得自定义控件中的RefreshLayout
      */
-    val refreshLayout: BaseRefreshLayout = getRefreshLayout(context)
+    val refreshLayout: BaseRefreshLayout = createRefreshLayout(context)
 
     /**
      * 获取到自定义控件中包含的RecyclerView
@@ -275,5 +275,5 @@ open class LTRecyclerView
     /**
      * 返回下拉刷新的View,可以重写该方法单独控制某个页面的下拉刷新
      */
-    open fun getRefreshLayout(context: Context): BaseRefreshLayout = LtRecyclerViewManager.refreshLayoutConstructorFunction(context, null, 0)
+    protected open fun createRefreshLayout(context: Context): BaseRefreshLayout = LtRecyclerViewManager.refreshLayoutConstructorFunction(context, null, 0)
 }
