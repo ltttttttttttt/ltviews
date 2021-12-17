@@ -15,6 +15,11 @@
             android:layout_height="wrap_content"
             android:onClick="onClickTestRefresh"
             android:text="下拉刷新"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickTestLtRecyclerView"
+            android:text="LtRecyclerView"/>
     </LinearLayout>
 
     <!--<com.lt.ltviews.lt_doubletextview.LtDoubleTextView-->

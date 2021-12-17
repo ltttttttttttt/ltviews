@@ -268,11 +268,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        app:dividerColor="@color/colorAccent"
 //        //设置图片分割线,和颜色,高度冲突
 //        app:dividerDrawable="@mipmap/ic_launcher"
+
+        onClickTestLtRecyclerView(rv);
     }
 
     //测试下拉刷新
     public void onClickTestRefresh(View view) {
         startActivity(new Intent(this, Main3Activity.class));
+    }
+
+    public void onClickTestLtRecyclerView(View view) {
+        startActivity(new Intent(this, Main2Activity.class));
     }
 
     class MViewHolder extends RecyclerView.ViewHolder {

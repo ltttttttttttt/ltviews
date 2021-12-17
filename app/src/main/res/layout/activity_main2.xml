@@ -5,15 +5,10 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.lt.ltviewsx.lt_recyclerview.LTRecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
-
-    <ImageView
-        android:src="#000"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:layout_height="match_parent"/>
 
     <com.lt.ltviewsx.lt_recyclerview.MTextRefreshLayout
         android:id="@+id/rl"
