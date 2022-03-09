@@ -15,12 +15,12 @@ import com.lt.ltviewsx.lt_listener.OnImageViewLoadUrlListener
 import com.lt.ltviewsx.lt_listener.OnRvItemClickListener
 import com.lt.ltviewsx.lt_listener.OnScrollListener
 import java.lang.Math.abs
-import java.util.*
 
 /**
  * 无限滚动广告栏组件
  */
-class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, View.OnTouchListener {
+class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener,
+    View.OnTouchListener {
     /**
      * 显示的Activity
      */
@@ -102,7 +102,11 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    )
 
     /**
      * 设置加载图片的监听,用户自己来加载图片
@@ -123,8 +127,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
      * @param focusedId  圆点选中时的背景ID,圆点容器可为空写0
      * @param normalId   圆点正常时的背景ID,圆点容器为空写0
      */
-    fun start(context: Context?, mris: List<String>?, switchTime: Int, aTime: Int,
-              ovalLayout: LinearLayout?, focusedId: Int, normalId: Int) {
+    fun start(
+        context: Context?, mris: List<String>?, switchTime: Int, aTime: Int,
+        ovalLayout: LinearLayout?, focusedId: Int, normalId: Int
+    ) {
         mContext = context
         mUris = mris
         mSwitchTime = switchTime
@@ -145,7 +151,8 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         // 不包含spacing会导致onKeyDown()失效!!! 失效onKeyDown()前先调用onScroll(null,1,0)可处理
         setSpacing(0)
         // 取靠近中间 图片数组的整倍数
-        setSelection(count / 2 / getImageUrlSize() * getImageUrlSize()) // 默认选中中间位置为起始位置
+        if (count > 0)
+            setSelection(count / 2 / getImageUrlSize() * getImageUrlSize()) // 默认选中中间位置为起始位置
         isFocusableInTouchMode = true
         initOvalLayout() // 初始化圆点
         startTimer() // 开始自动滚动任务
@@ -154,8 +161,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     /**
      * 圆点数量的文字
      */
-    fun start(context: Context?, mris: List<String>?, switchTime: Int,
-              tv_page: TextView?) {
+    fun start(
+        context: Context?, mris: List<String>?, switchTime: Int,
+        tv_page: TextView?
+    ) {
         mContext = context
         mUris = mris
         mSwitchTime = switchTime
@@ -174,14 +183,17 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         // 不包含spacing会导致onKeyDown()失效!!! 失效onKeyDown()前先调用onScroll(null,1,0)可处理
         setSpacing(0)
         // 取靠近中间 图片数组的整倍数
-        setSelection(count / 2 / getImageUrlSize() * getImageUrlSize()) // 默认选中中间位置为起始位置
+        if (count > 0)
+            setSelection(count / 2 / getImageUrlSize() * getImageUrlSize()) // 默认选中中间位置为起始位置
         isFocusableInTouchMode = true
         initOvalLayout() // 初始化圆点
         startTimer() // 开始自动滚动任务
     }
 
-    fun start(context: Context?, mris: List<String>?, switchTime: Int,
-              tv_page: TextView?, img_video: ImageView?) {
+    fun start(
+        context: Context?, mris: List<String>?, switchTime: Int,
+        tv_page: TextView?, img_video: ImageView?
+    ) {
         mContext = context
         mUris = mris
         mSwitchTime = switchTime
@@ -201,7 +213,8 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         // 不包含spacing会导致onKeyDown()失效!!! 失效onKeyDown()前先调用onScroll(null,1,0)可处理
         setSpacing(0)
         // 取靠近中间 图片数组的整倍数
-        setSelection(count / 2 / getImageUrlSize() * getImageUrlSize()) // 默认选中中间位置为起始位置
+        if (count > 0)
+            setSelection(count / 2 / getImageUrlSize() * getImageUrlSize()) // 默认选中中间位置为起始位置
         isFocusableInTouchMode = true
         initOvalLayout() // 初始化圆点
         startTimer() // 开始自动滚动任务
@@ -227,8 +240,9 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         for (i in 0 until len) {
             val imageview = ImageView(mContext) // 实例化ImageView的对象
             imageview.layoutParams = LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT)
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT
+            )
             imageview.scaleType = ImageView.ScaleType.CENTER_CROP
             listener?.onLoad(imageview, mUris!![i])
             listImgs?.add(imageview)
@@ -250,7 +264,8 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
                 10
             }
             val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             layoutParams.setMargins(ovalmargin, 0, ovalmargin, 0)
             mOvalLayout?.removeAllViews()
             for (i in 0 until getImageUrlSize()) {
@@ -308,8 +323,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
         }
     }
 
-    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float,
-                         velocityY: Float): Boolean {
+    override fun onFling(
+        e1: MotionEvent, e2: MotionEvent, velocityX: Float,
+        velocityY: Float
+    ): Boolean {
         val kEvent: Int = if (isScrollingLeft(e1, e2)) { // 检查是否往左滑动
             KeyEvent.KEYCODE_DPAD_LEFT
         } else { // 检查是否往右滑动
@@ -332,14 +349,16 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
                 firstX = event.rawX
                 firstY = event.rawY
             } else if (MotionEvent.ACTION_UP == event.action
-                    || MotionEvent.ACTION_CANCEL == event.action) {
+                || MotionEvent.ACTION_CANCEL == event.action
+            ) {
                 if (abs(event.rawX - firstX) <= dp8 && abs(event.rawY - firstY) <= dp8)
                     mOnRvItemClickListener?.onItemClick(listImgs!![0], 0)
             }
             return true
         }
         if (MotionEvent.ACTION_UP == event.action
-                || MotionEvent.ACTION_CANCEL == event.action) {
+            || MotionEvent.ACTION_CANCEL == event.action
+        ) {
             startTimer() // 开始自动滚动任务
         } else {
             stopTimer() // 停止自动滚动任务
@@ -350,8 +369,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     /**
      * 图片切换事件
      */
-    override fun onItemSelected(arg0: AdapterView<*>?, arg1: View?, position: Int,
-                                arg3: Long) {
+    override fun onItemSelected(
+        arg0: AdapterView<*>?, arg1: View?, position: Int,
+        arg3: Long
+    ) {
         curIndex = position % getImageUrlSize()
         if (mOvalLayout != null && getImageUrlSize() > 1) { // 切换圆点
             (mOvalLayout?.getChildAt(oldIndex) as? ImageView)?.setImageResource(mNormalId) // 圆点取消
@@ -378,8 +399,10 @@ class LtAdGallery : Gallery, AdapterView.OnItemClickListener, AdapterView.OnItem
     /**
      * 项目点击事件
      */
-    override fun onItemClick(arg0: AdapterView<*>?, arg1: View, position: Int,
-                             arg3: Long) {
+    override fun onItemClick(
+        arg0: AdapterView<*>?, arg1: View, position: Int,
+        arg3: Long
+    ) {
         if (mOnRvItemClickListener != null) {
             mOnRvItemClickListener!!.onItemClick(arg1, curIndex)
         }
