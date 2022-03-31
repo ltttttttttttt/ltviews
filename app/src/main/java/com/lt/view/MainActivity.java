@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,11 +21,14 @@ import com.lt.ltviewsx.lt_listener.OnRvItemLongClickListener;
 import com.lt.ltviewsx.lt_listener.OnUpAndDownListener;
 import com.lt.ltviewsx.lt_recyclerview.LTRecyclerView;
 import com.lt.ltviewsx.lt_recyclerview.LtAdapter;
-import com.lt.ltviewsx.lt_scrollimageview.LtPosition;
+import com.lt.ltviewsx.lt_scrollimageview.LtAdImageView;
 import com.lt.ltviewsx.lt_scrollimageview.LtScrollImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -36,6 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     TextView tv;
     LTRecyclerView rv;
     LtScrollImageView siv;
+    LtAdImageView adIv;
     int count = 100;
 
     //private Lt3LinkageManager linkageManager;
@@ -54,36 +59,74 @@ public class MainActivity extends Activity implements View.OnClickListener {
         siv = (LtScrollImageView) findViewById(R.id.siv);
 //        view = (LTRecyclerView) findViewById(R.id.view);
         tv = (TextView) findViewById(R.id.tv);
+        adIv = (LtAdImageView) findViewById(R.id.adIv);
         tv.setOnClickListener(this);
 
         initRv();
         initSiv();
+        initAd();
     }
 
-    private void initSiv() {
+    private void initAd() {
         List<String> srr = new ArrayList<String>();
-        srr.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584264257088&di=b2e7e2c573de3652e650128d5fdb5a49&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D86853839%2C3576305254%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D750%26h%3D390");
-        srr.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584264269138&di=a791f08b13b1d6a36e9d7d10ad1d20c0&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D1307125826%2C3433407105%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D5760%26h%3D3240");
         srr.add("http://img.zcool.cn/community/01711b59426ca1a8012193a31e5398.gif");
-        srr.add("http://pic4.nipic.com/20091217/3885730_124701000519_2.jpg");
-        siv.init(srr, 3000, 500, R.drawable.banner_xuanzhong, R.drawable.banner_weixuanzhong, new OnImageViewLoadUrlListener() {
+        srr.add("https://img1.baidu.com/it/u=1728076300,3153537570&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375");
+        srr.add("https://img1.baidu.com/it/u=1407750889,3441968730&fm=253&fmt=auto&app=120&f=JPEG?w=1200&h=799");
+        srr.add("https://img1.baidu.com/it/u=4020015307,4170910140&fm=253&fmt=auto&app=138&f=JPEG?w=499&h=312");
+        srr.add("https://img1.baidu.com/it/u=3796593454,4087161325&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500");
+        adIv.initData(srr, 3000, new OnImageViewLoadUrlListener() {
             @Override
-            public void onLoad(ImageView iv, String url) {
+            public void onLoad(@NonNull ImageView iv, String url) {
                 Glide.with(MainActivity.this)
                         .load(url)
                         .error(R.drawable.ic_launcher_background)
                         .centerCrop()
                         .into(iv);
             }
-        })
-                .setIvMargin(10)
-                .setPosition(LtPosition.CENTER_BOTTOM_OUT)
-                .setOnRvItemClickListener(new OnRvItemClickListener() {
+        }, new OnRvItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Log.e("lllttt", itemView.toString() + "   " + position);
+            }
+        }, new Function1<Integer, Unit>() {
+            @Override
+            public Unit invoke(Integer integer) {
+                //Log.e("lllttt", integer.toString());
+                return Unit.INSTANCE;
+            }
+        });
+    }
+
+    private void initSiv() {
+        List<String> srr = new ArrayList<String>();
+        srr.add("http://img.zcool.cn/community/01711b59426ca1a8012193a31e5398.gif");
+        srr.add("https://img1.baidu.com/it/u=1728076300,3153537570&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375");
+        srr.add("https://img1.baidu.com/it/u=1407750889,3441968730&fm=253&fmt=auto&app=120&f=JPEG?w=1200&h=799");
+        srr.add("https://img1.baidu.com/it/u=4020015307,4170910140&fm=253&fmt=auto&app=138&f=JPEG?w=499&h=312");
+        srr.add("https://img1.baidu.com/it/u=3796593454,4087161325&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500");
+        siv.setIvMargin(10)
+                .init(srr, 3000, R.drawable.banner_xuanzhong, R.drawable.banner_weixuanzhong, new OnImageViewLoadUrlListener() {
+                    @Override
+                    public void onLoad(ImageView iv, String url) {
+                        Glide.with(MainActivity.this)
+                                .load(url)
+                                .error(R.drawable.ic_launcher_background)
+                                .centerCrop()
+                                .into(iv);
+                    }
+                }, new OnRvItemClickListener() {
                     @Override
                     public void onItemClick(View itemView, int position) {
                         LogUtil.e("lllttt", "MainActivity.onItemClick : " + position);
                     }
-                });
+                }, new Function1<Integer, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer) {
+                        LogUtil.e("lllttt", "MainActivity.onItemChangeListener : " + integer);
+                        return Unit.INSTANCE;
+                    }
+                })
+                /*.setPosition(LtPosition.CENTER_BOTTOM_OUT)*/;
     }
 
     private void initRv() {
@@ -269,7 +312,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        //设置图片分割线,和颜色,高度冲突
 //        app:dividerDrawable="@mipmap/ic_launcher"
 
-        onClickTestLtRecyclerView(rv);
+        //onClickTestLtRecyclerView(rv);
     }
 
     //测试下拉刷新
