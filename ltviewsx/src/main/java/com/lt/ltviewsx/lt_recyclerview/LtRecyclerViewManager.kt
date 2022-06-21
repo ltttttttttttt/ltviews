@@ -3,6 +3,7 @@ package com.lt.ltviewsx.lt_recyclerview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.lt.ltviewsx.R
 import com.lt.ltviewsx.lt_listener.OnLtViewsCatchHandler
@@ -17,7 +18,8 @@ object LtRecyclerViewManager {
     /**
      * 初始化,在application的onCreate中调用
      */
-    fun init(context: Context): LtRecyclerViewManager {
+    internal fun init(context: Context): LtRecyclerViewManager {
+        Log.w("lllttt","初始化")
         this.context = context
         refreshThreshold = 80 * context.resources.displayMetrics.density
         noItemTextColor = context.resources.getColor(R.color.color_333)
