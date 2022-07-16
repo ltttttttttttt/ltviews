@@ -1,6 +1,6 @@
 # ltviews    
 implementation 'com.github.ltttttttttttt:ltviews:[![](https://jitpack.io/v/ltttttttttttt/ltviews.svg)](https://jitpack.io/#ltttttttttttt/ltviews)'
-<h1>Android开发常用View</h1>
+<h1>Android开发常用View: 非常简单使用的RecyclerView, 图片banner, 通用的下拉刷新Layout</h1>
 <h3>LtRecyclerView以及LtAdapter,功能:</h3>
 <h5>1.带有上拉加载和下拉刷新和回调</h5>
 <h5>2.设置条目点击事件和条目长按事件</h5>
